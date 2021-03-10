@@ -3,16 +3,21 @@
  */
 package PreciousPhotographyShop.start;
 
+import PreciousPhotographyShop.databaseInterface.BadExampleDatabase;
+import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-// check in localhost:8080
-// https://stackoverflow.com/questions/11345193/gradle-does-not-find-tools-jar
-// if run from the JAR file, Spring will run in the background.
-// you will need to kill the java subprocess of the terminal to shut Spring down
 @SpringBootApplication
 public class Main {
+    /*
+    Look at this: any part of the program can access the database interface
+    through Main.DATABASE, without needing to know exactly which implementation
+    is used, so we can easilly swap between implementations by simply changing
+    this file.
+    */
+    public static final DatabaseInterface DATABASE = new BadExampleDatabase();
+    
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
         System.out.println("Program started");
