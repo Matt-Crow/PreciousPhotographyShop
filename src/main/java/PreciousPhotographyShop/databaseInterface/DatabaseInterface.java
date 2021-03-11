@@ -10,7 +10,8 @@ import PreciousPhotographyShop.model.User;
  */
 public interface DatabaseInterface {
     public void storeUser(User user);
-    public User getUser(String name);
+    public User getUser(String id);
     public void storePhotograph(Photograph photo);
-    public Photograph getPhotograph(String name, boolean withWatermark);
+    public Photograph getPhotograph(String id, boolean withWatermark);
+    public Photograph[] getPhotographsByCategory(String[] categories);
 }
