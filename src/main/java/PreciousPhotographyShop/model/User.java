@@ -2,7 +2,7 @@ package PreciousPhotographyShop.model;
 
 /**
  *
- * @author Matt
+ * @author Matt Crow
  */
 public class User {
     private final String name;
