@@ -6,3 +6,4 @@
 !**/build/libs 
 !**/build/docs
 gradle.properties
+**application.properties
