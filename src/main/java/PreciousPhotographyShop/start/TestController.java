@@ -23,7 +23,13 @@ public class TestController {
         bad, but I think this is the only way to
         do it.
         */
-        User theUser = Main.DATABASE.getUser(name);
+        User theUser = null;
+        try {
+            theUser = Main.DATABASE.getUser(name);
+        } catch(NullPointerException ex){
+            System.err.printf("Couldn't find user with name \"%s\"\n", name);
+        }
+        
         if(theUser == null){
             model.addAttribute("email", "Unknown");
         } else {

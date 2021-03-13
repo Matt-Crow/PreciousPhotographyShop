@@ -5,6 +5,7 @@ package PreciousPhotographyShop;
 
 import PreciousPhotographyShop.databaseInterface.BadExampleDatabase;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,7 +17,7 @@ public class Main {
     is used, so we can easilly swap between implementations by simply changing
     this file.
     */
-    public static final DatabaseInterface DATABASE = new BadExampleDatabase();
+    public static final DatabaseInterface DATABASE = new RealDatabaseInterface();
     
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
