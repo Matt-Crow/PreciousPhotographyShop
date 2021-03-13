@@ -11,10 +11,10 @@ if run from the JAR file, Spring will run in the background.
 you will need to kill the java subprocess of the terminal to shut Spring down
 (or maybe just close the terminal)
 
-## Configuring the Database
+# Configuring the Database
 Before running the project, you'll need to set up a database on your computer.
 
-# Using mySQL as a Database
+## Using mySQL as a Database
 1. First, create the database in the mySQL console using `create database [DB_NAME];`
    where [DB_NAME] is the name you want the database to have.
 2. Create the Spring user with `create user '[NAME]'@'%' identified by '[PASSWORD]';`
@@ -28,7 +28,7 @@ Before running the project, you'll need to set up a database on your computer.
    in your commits. NO COMMIT DATABASE CREDENTIALS! AAAAHHHHHHHHHHHHHHHHHH!
 
 
-## Getting Ready for Distribution
+# Getting Ready for Distribution
 In mySQL, do the following...
 ```
 revoke all on [DB_NAME].* from '[NAME]'@'%';
