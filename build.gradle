@@ -13,7 +13,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-project.mainClassName = "PreciousPhotographyShop.start.Main"
+project.mainClassName = "PreciousPhotographyShop.Main"
 project.version = "0.1"
 
 if (!hasProperty('mainClass')) {

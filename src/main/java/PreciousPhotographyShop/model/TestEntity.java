@@ -26,19 +26,20 @@ public class TestEntity {
         
     }
     
-    public final Integer getId(){
+    // Hibernate doesn't allow final
+    public Integer getId(){
         return id;
     }
     
-    public final String getMessage(){
+    public String getMessage(){
         return message;
     }
     
-    public final void setId(Integer id){
+    public void setId(Integer id){
         this.id = id;
     }
     
-    public final void setMessage(String message){
+    public void setMessage(String message){
         this.message = message;
     }
 }
