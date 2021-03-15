@@ -1,7 +1,9 @@
 package PreciousPhotographyShop.databaseInterface;
 
+import PreciousPhotographyShop.databaseRepositories.CategoryRepository;
 import PreciousPhotographyShop.databaseRepositories.PhotographRepository;
 import PreciousPhotographyShop.databaseRepositories.UserRepository;
+import PreciousPhotographyShop.model.CategoryEntity;
 import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.PhotographEntity;
 import PreciousPhotographyShop.model.User;
@@ -10,6 +12,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,6 +27,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Autowired
     PhotographRepository photographRepository;
+    
+    @Autowired
+    CategoryRepository categoryRepository;
     
     @Override
     public void storeUser(User user) {
@@ -53,6 +60,22 @@ public class RealDatabaseInterface implements DatabaseInterface {
     public void storePhotograph(Photograph photo){
         PhotographEntity pe = new PhotographEntity();
         pe.setId(photo.getId());
+        
+        /*
+        Find entities for the categories this photo belongs to
+        */
+        Collection<CategoryEntity> catEnts = photo.getCategories().stream().map((categoryName)->{
+            // todo categoryName formatting
+            CategoryEntity catEnt = this.categoryRepository.findById(categoryName).orElse(null);
+            if(catEnt == null){
+                catEnt = new CategoryEntity();
+                catEnt.setName(categoryName);
+            }
+            return catEnt;
+        }).collect(Collectors.toList());
+        pe.setCategories(catEnts);
+        
+        
         //https://www.tutorialspoint.com/How-to-convert-Image-to-Byte-Array-in-java
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         BufferedImage buffy = new BufferedImage(photo.getPhoto().getWidth(null), photo.getPhoto().getHeight(null), BufferedImage.TYPE_INT_ARGB);
@@ -66,6 +89,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
             ex.printStackTrace();
         }
         
+        this.photographRepository.save(pe);
     }
 
     @Override
