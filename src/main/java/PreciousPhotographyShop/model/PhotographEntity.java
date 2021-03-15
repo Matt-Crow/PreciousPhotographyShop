@@ -1,9 +1,12 @@
 package PreciousPhotographyShop.model;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -20,11 +23,11 @@ public class PhotographEntity {
     // or we could do
     //private String localFilePath;
     
-    // probably do a categories table? 
-    // many-to-many relationship between categories and photos
+    @ManyToMany
+    private Collection<CategoryEntity> categories;
     
     public PhotographEntity(){
-        
+        categories = new LinkedList<>();
     }
     
     public void setId(String id){
@@ -33,6 +36,10 @@ public class PhotographEntity {
     
     public void setPhoto(byte[] photo){
         this.photo = photo;
+    }
+    
+    public void setCategories(Collection<CategoryEntity> categories){
+        this.categories = categories;
     }
     
     /*
@@ -47,6 +54,10 @@ public class PhotographEntity {
     
     public byte[] getPhoto(){
         return photo;
+    }
+    
+    public Collection<CategoryEntity> getCategories(){
+        return categories;
     }
     
     /*
