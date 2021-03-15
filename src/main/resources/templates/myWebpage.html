@@ -1,11 +1,16 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head> 
-    <title>Example Webpage</title> 
+    <title>Precious Photography Shop</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
     <p th:text="'Hello, ' + ${name} + '!'" />
     <p th:text="'Your email is ' + ${email}" />
+
+    <form method="get" action="SellProduct">
+        <button>Create new sale</button>
+    </form>
+
 </body>
 </html>

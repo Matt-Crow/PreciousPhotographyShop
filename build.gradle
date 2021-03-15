@@ -13,7 +13,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 }
 
-project.mainClassName = "PreciousPhotographyShop.start.Main"
+project.mainClassName = "PreciousPhotographyShop.Main"
 project.version = "0.1"
 
 if (!hasProperty('mainClass')) {
@@ -48,7 +48,9 @@ dependencies {
     implementation 'com.google.guava:guava:28.0-jre'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    runtimeOnly('com.h2database:h2')
+
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

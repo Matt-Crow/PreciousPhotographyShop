@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.start;
 
+import PreciousPhotographyShop.Main;
 import PreciousPhotographyShop.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,6 @@ public class TestController {
             model.addAttribute("email", theUser.getEmail());
         }
         
-		return "myWebpage";
+		return "newSaleStart";
 	}
 }
