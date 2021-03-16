@@ -52,10 +52,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Override
     public void storeUser(User user) {
         UserEntity asEntity = new UserEntity();
-        asEntity.setId(user.getId());
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
-        this.userRepository.save(asEntity);
+        asEntity = this.userRepository.save(asEntity);
+        user.setId(asEntity.getId()); // update user ID
     }
 
     @Override
@@ -77,7 +77,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Override
     public void storePhotograph(Photograph photo){
         PhotographEntity pe = new PhotographEntity();
-        //pe.setId(photo.getId());
         
         /*
         Find entities for the categories this photo belongs to
@@ -101,6 +100,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         
         try {            
             pe = this.photographRepository.save(pe); // save() returns the changed pe
+            photo.setId(pe.getId());
             File newFile = Paths.get(root.getAbsolutePath(), pe.getId()).toFile();
             ImageIO.write(photo.getPhoto(), "jpg", newFile);
         } catch (IOException ex) { 

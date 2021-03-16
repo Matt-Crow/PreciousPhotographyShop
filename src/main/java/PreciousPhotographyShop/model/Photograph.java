@@ -11,7 +11,7 @@ import java.util.Collection;
 public class Photograph {
     private final String name;
     private final BufferedImage photo;
-    private final String id;
+    private String id;
     private final String[] categories;
     
     public Photograph(String name, BufferedImage photo, String id, String[] categories){
@@ -31,6 +31,10 @@ public class Photograph {
     
     public final String getId(){
         return id;
+    }
+    
+    public final void setId(String id){
+        this.id = id;
     }
     
     public final Collection<String> getCategories(){
