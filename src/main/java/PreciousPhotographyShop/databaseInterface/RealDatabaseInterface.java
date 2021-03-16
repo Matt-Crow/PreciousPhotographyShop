@@ -98,10 +98,11 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Create new file for the photo
         */
         File root = this.getPhotoFolder();
-        File newFile = Paths.get(root.getAbsolutePath(), photo.getId()).toFile();
-        try {
+        
+        try {            
+            pe = this.photographRepository.save(pe); // save() returns the changed pe
+            File newFile = Paths.get(root.getAbsolutePath(), pe.getId()).toFile();
             ImageIO.write(photo.getPhoto(), "jpg", newFile);
-            this.photographRepository.save(pe);
         } catch (IOException ex) { 
             ex.printStackTrace();
         }
