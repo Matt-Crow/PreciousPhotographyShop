@@ -88,6 +88,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
             if(catEnt == null){
                 catEnt = new CategoryEntity();
                 catEnt.setName(categoryName);
+                categoryRepository.save(catEnt); // maybe this?
             }
             return catEnt;
         }).collect(Collectors.toList());
