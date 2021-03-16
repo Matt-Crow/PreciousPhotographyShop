@@ -1,3 +1,5 @@
+java.sql.SQLIntegrityConstraintViolationException: Cannot add or update a child row: a foreign key constraint fails (`csc130precious`.`photograph_entity_categories`, CONSTRAINT `FKjl27riy632qcxhl20hrwvk7rg` FOREIGN KEY (`categories_category_name`) REFERENCES `category_entity` (`category_name`))
+
 HOW TO RUN:
 1. Run from your IDE, or via the command line with "gradle bootRun"
 chances are good, you will experience a problem...
