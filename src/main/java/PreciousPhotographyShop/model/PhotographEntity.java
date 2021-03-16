@@ -9,7 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 /**
- *
+ * File path is just
+ *     fileFolder/ID
  * @author Matt
  */
 
@@ -18,8 +19,6 @@ public class PhotographEntity {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private String id;
-    
-    private String localFilePath;
     
     @ManyToMany
     private Collection<CategoryEntity> categories;
@@ -36,20 +35,11 @@ public class PhotographEntity {
         this.categories = categories;
     }
     
-    
-    public void setLocalFilePath(String localFilePath){
-        this.localFilePath = localFilePath;
-    }
-    
     public String getId(){
         return id;
     }
     
     public Collection<CategoryEntity> getCategories(){
         return categories;
-    }
-    
-    public String getLocalFilePath(){
-        return localFilePath;
     }
 }

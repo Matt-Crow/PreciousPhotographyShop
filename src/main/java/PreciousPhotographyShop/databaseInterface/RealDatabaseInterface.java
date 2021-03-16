@@ -94,19 +94,16 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Create new file for the photo
         */
         File root = this.getPhotoFolder();
-        File newFile = Paths.get(root.getAbsolutePath(), photo.getName()).toFile();
+        File newFile = Paths.get(root.getAbsolutePath(), photo.getId()).toFile();
         try {
             ImageIO.write(photo.getPhoto(), "jpg", newFile);
+            this.photographRepository.save(pe);
         } catch (IOException ex) { 
             ex.printStackTrace();
         }
-        
-        pe.setLocalFilePath(newFile.getAbsolutePath());
-        
-        this.photographRepository.save(pe);
     }
 
-    @Override
+    @Override // image data is under FILE_SYS_PHOTO_REPO/id
     public Photograph getPhotograph(String id, boolean withWatermark) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
