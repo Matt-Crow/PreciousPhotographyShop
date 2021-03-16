@@ -8,15 +8,9 @@ import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.PhotographEntity;
 import PreciousPhotographyShop.model.User;
 import PreciousPhotographyShop.model.UserEntity;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -31,7 +25,7 @@ import org.springframework.stereotype.Service;
 
 @Service // "Yo! Spring! This class can be used when I Autowire a DatabaseInterface!"
 public class RealDatabaseInterface implements DatabaseInterface {
-    @Autowired // Autowiring is causing issues, null b/c using new keyword
+    @Autowired
     UserRepository userRepository;
     
     @Autowired
@@ -40,6 +34,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired
     CategoryRepository categoryRepository;
     
+    // move to LocalFileSystem class later?
     private static final String FILE_SYS_PHOTO_REPO = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
     
     private File getPhotoFolder(){
@@ -49,6 +44,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         }
         return f;
     }
+    
     @Override
     public void storeUser(User user) {
         UserEntity asEntity = new UserEntity();
@@ -72,11 +68,11 @@ public class RealDatabaseInterface implements DatabaseInterface {
         
         return u;
     }
-
-    // untested, and I doubt it works. Probably just save bufferedimage in photo
+    
     @Override
     public void storePhotograph(Photograph photo){
         PhotographEntity pe = new PhotographEntity();
+        pe.setName(photo.getName());
         
         /*
         Find entities for the categories this photo belongs to
@@ -87,7 +83,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
             if(catEnt == null){
                 catEnt = new CategoryEntity();
                 catEnt.setName(categoryName);
-                categoryRepository.save(catEnt); // maybe this?
+                categoryRepository.save(catEnt);
             }
             return catEnt;
         }).collect(Collectors.toList());
@@ -110,7 +106,24 @@ public class RealDatabaseInterface implements DatabaseInterface {
 
     @Override // image data is under FILE_SYS_PHOTO_REPO/id
     public Photograph getPhotograph(String id, boolean withWatermark) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PhotographEntity asEntity = this.photographRepository.findById(id).get();
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, id).toFile());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        Photograph photo = new Photograph(
+            asEntity.getName(),
+            img,
+            asEntity.getId(),
+            asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
+        );
+        
+        System.err.println("Todo: add watermarking");
+        
+        return photo;
     }
 
     @Override

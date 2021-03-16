@@ -25,6 +25,8 @@ public class PhotographEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
+    private String name;
+    
     @ManyToMany
     @JoinColumn(name="categoryName")
     private Collection<CategoryEntity> categories;
@@ -37,12 +39,20 @@ public class PhotographEntity {
         this.id = id;
     }
     
+    public void setName(String name){
+        this.name = name;
+    }
+    
     public void setCategories(Collection<CategoryEntity> categories){
         this.categories = categories;
     }
     
     public String getId(){
         return id;
+    }
+    
+    public String getName(){
+        return name;
     }
     
     public Collection<CategoryEntity> getCategories(){
