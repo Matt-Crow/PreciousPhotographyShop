@@ -20,9 +20,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class PhotographEntity {
     @Id
+    @Column(name="photoId")
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
-    @Column(name="photoId")
     private String id;
     
     @ManyToMany
