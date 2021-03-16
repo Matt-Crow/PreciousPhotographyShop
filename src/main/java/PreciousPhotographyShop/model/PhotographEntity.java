@@ -19,9 +19,7 @@ public class PhotographEntity {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private String id;
     
-    private byte[] photo;
-    // or we could do
-    //private String localFilePath;
+    private String localFilePath;
     
     @ManyToMany
     private Collection<CategoryEntity> categories;
@@ -34,35 +32,24 @@ public class PhotographEntity {
         this.id = id;
     }
     
-    public void setPhoto(byte[] photo){
-        this.photo = photo;
-    }
-    
     public void setCategories(Collection<CategoryEntity> categories){
         this.categories = categories;
     }
     
-    /*
+    
     public void setLocalFilePath(String localFilePath){
         this.localFilePath = localFilePath;
     }
-    */
     
     public String getId(){
         return id;
-    }
-    
-    public byte[] getPhoto(){
-        return photo;
     }
     
     public Collection<CategoryEntity> getCategories(){
         return categories;
     }
     
-    /*
     public String getLocalFilePath(){
         return localFilePath;
     }
-    */
 }

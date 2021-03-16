@@ -10,8 +10,14 @@ import PreciousPhotographyShop.model.User;
 import PreciousPhotographyShop.model.UserEntity;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
@@ -31,6 +37,15 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired
     CategoryRepository categoryRepository;
     
+    private static final String FILE_SYS_PHOTO_REPO = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
+    
+    private File getPhotoFolder(){
+        File f = new File(FILE_SYS_PHOTO_REPO);
+        if(!f.exists()){
+            f.mkdirs();
+        }
+        return f;
+    }
     @Override
     public void storeUser(User user) {
         UserEntity asEntity = new UserEntity();
@@ -75,19 +90,18 @@ public class RealDatabaseInterface implements DatabaseInterface {
         }).collect(Collectors.toList());
         pe.setCategories(catEnts);
         
-        
-        //https://www.tutorialspoint.com/How-to-convert-Image-to-Byte-Array-in-java
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        BufferedImage buffy = new BufferedImage(photo.getPhoto().getWidth(null), photo.getPhoto().getHeight(null), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = buffy.createGraphics();
-        g2d.drawImage(photo.getPhoto(), 0, 0, null);
+        /*
+        Create new file for the photo
+        */
+        File root = this.getPhotoFolder();
+        File newFile = Paths.get(root.getAbsolutePath(), photo.getName()).toFile();
         try {
-            ImageIO.write(buffy, "jpg", bout);
-            pe.setPhoto(bout.toByteArray());
-            this.photographRepository.save(pe);
-        } catch (IOException ex) {
+            ImageIO.write(photo.getPhoto(), "jpg", newFile);
+        } catch (IOException ex) { 
             ex.printStackTrace();
         }
+        
+        pe.setLocalFilePath(newFile.getAbsolutePath());
         
         this.photographRepository.save(pe);
     }
