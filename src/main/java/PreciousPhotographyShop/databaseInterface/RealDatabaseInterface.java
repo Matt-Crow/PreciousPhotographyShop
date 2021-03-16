@@ -28,7 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Matt
  */
 public class RealDatabaseInterface implements DatabaseInterface {
-    @Autowired
+    @Autowired // Autowiring is causing issues, null b/c using new keyword
     UserRepository userRepository;
     
     @Autowired

@@ -6,6 +6,11 @@ package PreciousPhotographyShop;
 import PreciousPhotographyShop.databaseInterface.BadExampleDatabase;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
+import PreciousPhotographyShop.model.Photograph;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -22,5 +27,13 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
         System.out.println("Program started");
+        
+        try {
+            BufferedImage buff = ImageIO.read(new File("C:\\Users\\Matt\\Pictures\\batmanParametric.jpg"));
+            DATABASE.storePhotograph(new Photograph("Test photo", buff, "01010100", new String[]{"test"}));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
     }
 }
