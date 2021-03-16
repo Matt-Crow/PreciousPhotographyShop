@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * File path is just
@@ -17,7 +18,8 @@ import javax.persistence.ManyToMany;
 @Entity
 public class PhotographEntity {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
     @ManyToMany

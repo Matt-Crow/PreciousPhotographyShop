@@ -22,11 +22,14 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Matt
  */
+
+@Service // "Yo! Spring! This class can be used when I Autowire a DatabaseInterface!"
 public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired // Autowiring is causing issues, null b/c using new keyword
     UserRepository userRepository;
@@ -74,7 +77,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Override
     public void storePhotograph(Photograph photo){
         PhotographEntity pe = new PhotographEntity();
-        pe.setId(photo.getId());
+        //pe.setId(photo.getId());
         
         /*
         Find entities for the categories this photo belongs to

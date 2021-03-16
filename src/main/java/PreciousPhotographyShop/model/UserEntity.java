@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -12,8 +13,10 @@ import javax.persistence.Id;
 
 @Entity
 public class UserEntity {
+    // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
     private String name;

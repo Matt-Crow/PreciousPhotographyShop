@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  * not sure if needs ID, as name is a good primary key
@@ -16,7 +17,8 @@ import javax.persistence.ManyToMany;
 @Entity
 public class CategoryEntity {
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE)
+    @GeneratedValue(generator="system-uuid")
+    @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String name;
     
     @ManyToMany
