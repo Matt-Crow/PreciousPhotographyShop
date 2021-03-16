@@ -29,6 +29,6 @@ public class TestController {
             model.addAttribute("email", theUser.getEmail());
         }
         
-		return "myWebpage";
+		return "index";
 	}
 }
