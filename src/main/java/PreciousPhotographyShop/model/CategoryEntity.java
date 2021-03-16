@@ -2,13 +2,11 @@ package PreciousPhotographyShop.model;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * not sure if needs ID, as name is a good primary key
@@ -17,11 +15,11 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 public class CategoryEntity {
     @Id
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Column(name="categoryName")
     private String name;
     
     @ManyToMany
+    @JoinColumn(name="photoId")
     private Collection<PhotographEntity> photos;
     
     public CategoryEntity(){

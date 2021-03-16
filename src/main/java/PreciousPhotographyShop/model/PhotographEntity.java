@@ -2,10 +2,12 @@ package PreciousPhotographyShop.model;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,9 +22,11 @@ public class PhotographEntity {
     @Id
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @Column(name="photoId")
     private String id;
     
     @ManyToMany
+    @JoinColumn(name="categoryName")
     private Collection<CategoryEntity> categories;
     
     public PhotographEntity(){
