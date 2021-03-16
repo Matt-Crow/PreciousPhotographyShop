@@ -1,13 +1,12 @@
 package PreciousPhotographyShop.start;
 
 import PreciousPhotographyShop.Main;
-import static PreciousPhotographyShop.Main.DATABASE;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.User;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.util.Arrays;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -90,6 +89,6 @@ public class TestController {
             ex.printStackTrace();
         }
         
-        return databaseInterface.toString();
+        return Arrays.toString(databaseInterface.getPhotographsByCategory(new String[]{"test"}));
     }
 }

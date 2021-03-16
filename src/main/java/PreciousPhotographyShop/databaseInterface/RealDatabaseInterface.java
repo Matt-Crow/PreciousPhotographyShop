@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,32 +105,63 @@ public class RealDatabaseInterface implements DatabaseInterface {
             ex.printStackTrace();
         }
     }
-
-    @Override // image data is under FILE_SYS_PHOTO_REPO/id
-    public Photograph getPhotograph(String id, boolean withWatermark) {
-        PhotographEntity asEntity = this.photographRepository.findById(id).get();
-        BufferedImage img = null;
+    
+    // image data is under FILE_SYS_PHOTO_REPO/id
+    private Photograph tryConvert(PhotographEntity asEntity){
+        Photograph ret = null;
         try {
-            img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, id).toFile());
+            BufferedImage img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, asEntity.getId()).toFile());
+            ret = new Photograph(
+                asEntity.getName(),
+                img,
+                asEntity.getId(),
+                asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
+            );
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return ret;
+    }
+    
+    @Override 
+    public Photograph getPhotograph(String id, boolean withWatermark) {
+        Photograph photo = tryConvert(photographRepository.findById(id).get());
         
-        Photograph photo = new Photograph(
-            asEntity.getName(),
-            img,
-            asEntity.getId(),
-            asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
-        );
-        
-        System.err.println("Todo: add watermarking");
+        System.err.println("Todo: add watermarking"); // maybe in tryConvert
         
         return photo;
     }
 
     @Override
     public Photograph[] getPhotographsByCategory(String[] categories) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // we'll have to decide how exactly this works.
+        // for now, I'll treat it as "get all photographs belonging to at least one of these categories"
+        // no categories = get all
+        HashSet<Photograph> ret = new HashSet<>();
+        Photograph curr = null;
+        
+        Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator(); // how to SELECT WHERE category IN categories?
+        while(iter.hasNext()){
+            curr = this.tryConvert(iter.next());
+            if(curr != null){
+                ret.add(curr);
+            }
+        }
+        
+        // would like to check category before converting
+        if(categories.length != 0){
+            HashSet<Photograph> filtered = new HashSet<>();
+            ret.stream().filter((Photograph photo)->{
+                boolean b = false;
+                for(int i = 0; i < categories.length && !b; i++){
+                    b = photo.isInCategory(categories[i]);
+                }
+                return b;
+            }).forEach(filtered::add);
+            ret = filtered;
+        }
+        
+        return ret.toArray(new Photograph[ret.size()]);
     }
 
 }
