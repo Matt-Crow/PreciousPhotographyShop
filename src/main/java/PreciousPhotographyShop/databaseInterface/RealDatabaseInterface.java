@@ -101,7 +101,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         try {            
             pe = this.photographRepository.save(pe); // save() returns the changed pe
             photo.setId(pe.getId());
-            File newFile = Paths.get(root.getAbsolutePath(), pe.getId()).toFile();
+            File newFile = Paths.get(root.getAbsolutePath(), pe.getId() + ".jpg").toFile();
             ImageIO.write(photo.getPhoto(), "jpg", newFile);
         } catch (IOException ex) { 
             ex.printStackTrace();
@@ -112,7 +112,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     private Photograph tryConvert(PhotographEntity asEntity){
         Photograph ret = null;
         try {
-            BufferedImage img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, asEntity.getId()).toFile());
+            BufferedImage img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, asEntity.getId() + ".jpg").toFile());
             ret = new Photograph(
                 asEntity.getName(),
                 img,
@@ -171,7 +171,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         List<String> ret = new LinkedList<>();
         Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();
         while(iter.hasNext()){
-            ret.add(Paths.get(FILE_SYS_PHOTO_REPO, iter.next().getId()).toString());
+            ret.add(Paths.get(FILE_SYS_PHOTO_REPO, iter.next().getId() + ".jpg").toString());
         }
         return ret;
     }
