@@ -2,6 +2,7 @@ package PreciousPhotographyShop.start.model;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,6 +22,11 @@ public class UserController {
     @GetMapping
     public List<User> getUser() {
         return userService.getUser();
+    }
+
+    @PostMapping
+    public void registerNewUser(User user){
+        userService.getUser();
     }
 
 }
