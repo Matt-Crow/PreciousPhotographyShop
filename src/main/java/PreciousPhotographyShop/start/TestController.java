@@ -8,12 +8,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,24 +58,27 @@ public class TestController {
 	}
     
     @GetMapping("/newPhoto")
-    public String newPhotoForm(){
-        // todo: add category chooser
+    public String newPhotoForm(Model model){
+        List<String> categoryNames = databaseInterface.getAllCategories();
+        model.addAttribute("categoryNames", categoryNames);
         return "postPhotographFormPage";
     }
     
     @PostMapping("/testPostPhoto")
     public String postNewPhoto(
-        @RequestParam("photo") MultipartFile file,
-        @RequestParam("name") String name,
+        @RequestBody("photo") MultipartFile file,
+        @RequestBody("name") String name,
+        @RequestBody("category") List<String> categories,
         RedirectAttributes redirectAttributes
     ){
+        System.out.println("received form");
         try {
             BufferedImage buff = ImageIO.read(file.getInputStream());
             Photograph photo = new Photograph(
                 name,
                 buff,
                 null,
-                new String[0]
+                categories.toArray(new String[categories.size()])
             );
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {

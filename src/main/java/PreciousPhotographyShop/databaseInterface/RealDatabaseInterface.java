@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -162,6 +164,16 @@ public class RealDatabaseInterface implements DatabaseInterface {
         }
         
         return ret.toArray(new Photograph[ret.size()]);
+    }
+
+    @Override
+    public List<String> getAllCategories() {
+        Iterator<CategoryEntity> cats = this.categoryRepository.findAll().iterator();
+        LinkedList<String> catNames = new LinkedList<>();
+        while(cats.hasNext()){
+            catNames.add(cats.next().getName());
+        }
+        return catNames;
     }
 
 }

@@ -4,6 +4,8 @@ import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.User;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -46,5 +48,14 @@ public class BadExampleDatabase implements DatabaseInterface {
         return photos.values().stream().filter((photo)->{
             return Arrays.stream(categories).anyMatch(photo::isInCategory);
         }).toArray((size)->new Photograph[size]);
+    }
+
+    @Override
+    public List<String> getAllCategories() {
+        return photos.values().stream().flatMap((photograph)->{
+            return photograph.getCategories().stream();
+        }).map((catName)->{
+            return catName.toUpperCase();
+        }).distinct().collect(Collectors.toList());
     }
 }
