@@ -6,14 +6,18 @@ import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.User;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * This TestController serves as a general example of how Spring works
@@ -50,6 +54,33 @@ public class TestController {
         
 		return "myWebpage";
 	}
+    
+    @GetMapping("/newPhoto")
+    public String newPhotoForm(){
+        // todo: add category chooser
+        return "postPhotographFormPage";
+    }
+    
+    @PostMapping("/testPostPhoto")
+    public String postNewPhoto(
+        @RequestParam("photo") MultipartFile file,
+        @RequestParam("name") String name,
+        RedirectAttributes redirectAttributes
+    ){
+        try {
+            BufferedImage buff = ImageIO.read(file.getInputStream());
+            Photograph photo = new Photograph(
+                name,
+                buff,
+                null,
+                new String[0]
+            );
+            databaseInterface.storePhotograph(photo);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return "redirect:/";
+    }
     
     @GetMapping("/main")
     public @ResponseBody String main(){

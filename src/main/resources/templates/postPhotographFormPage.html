@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head> 
+        <title>Post a new Photograph</title> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <form method="POST" action="/testPostPhoto" enctype="multipart/form-data">
+            <div>
+                <label for="photo">Choose a photograph to post</label>
+                <input type="file" id="photo" name="photo" accept="image/jpg"/>
+            </div>
+            <div>
+                <label for="name">Name this photo</label>
+                <input name="name" type="text"/>
+            </div>
+            <div>
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </body>
+</html>
