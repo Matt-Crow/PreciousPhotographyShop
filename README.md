@@ -1,6 +1,9 @@
 Pro-tip: put testing code in start/TestController::main
     view in localhost:8080/main
 
+/newPhoto
+/allPhotos
+
 HOW TO RUN:
 1. Run from your IDE, or via the command line with "gradle bootRun"
 chances are good, you will experience a problem...

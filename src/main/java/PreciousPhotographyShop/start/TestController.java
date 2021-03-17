@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.start;
 
+import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
 import PreciousPhotographyShop.Main;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.model.Photograph;
@@ -90,6 +91,13 @@ public class TestController {
             ex.printStackTrace();
         }
         return "redirect:/";
+    }
+    
+    @GetMapping("/allPhotos")
+    public String allPhotos(Model model){
+        //temp
+        model.addAttribute("photos", ((RealDatabaseInterface)this.databaseInterface).getAllPhotoPaths());
+        return "allPhotos";
     }
     
     @GetMapping("/main")

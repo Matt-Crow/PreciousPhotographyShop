@@ -165,6 +165,16 @@ public class RealDatabaseInterface implements DatabaseInterface {
         
         return ret.toArray(new Photograph[ret.size()]);
     }
+    
+    //temp
+    public final List<String> getAllPhotoPaths(){
+        List<String> ret = new LinkedList<>();
+        Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();
+        while(iter.hasNext()){
+            ret.add(Paths.get(FILE_SYS_PHOTO_REPO, iter.next().getId()).toString());
+        }
+        return ret;
+    }
 
     @Override
     public List<String> getAllCategories() {
