@@ -1,10 +1,10 @@
-package PreciousPhotographyShop.model;
+package PreciousPhotographyShop.start.model;
 
 import java.util.Objects;
 
 /**
  *
- * @author Matt
+ * @author Daniel
  */
 
 public class User {
@@ -36,6 +36,7 @@ public class User {
 
     public void setEmail(String email) { this.email = email; }
 
+    @Override
     public boolean equals(Object o) {
         if( this == o) return true;
         if(!(o instanceof User))
@@ -46,6 +47,12 @@ public class User {
 
     }
 
-
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }
