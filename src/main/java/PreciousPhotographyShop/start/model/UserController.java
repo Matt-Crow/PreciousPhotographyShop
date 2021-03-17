@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.start.model;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,11 +11,16 @@ import java.util.List;
 @RequestMapping("api/v1/user")
 public class UserController {
 
+    private final UserService userService;
+
+    @Autowired
+    public UserController( UserService userService) {
+        this.userService = userService;
+    }
+
     @GetMapping
-    public List<User> getUser(){
-        return List.of(
-                new User("Daniel", "dany.villavicencio30@gmail.com", "1010")
-        );
+    public List<User> getUser() {
+        return userService.getUser();
     }
 
 }
