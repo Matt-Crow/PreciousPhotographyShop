@@ -167,11 +167,11 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     //temp
-    public final List<String> getAllPhotoPaths(){
+    public final List<String> getAllPhotoIds(){
         List<String> ret = new LinkedList<>();
         Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();
         while(iter.hasNext()){
-            ret.add(Paths.get(FILE_SYS_PHOTO_REPO, iter.next().getId() + ".jpg").toString());
+            ret.add(iter.next().getId());
         }
         return ret;
     }

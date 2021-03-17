@@ -6,6 +6,7 @@ import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.User;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -96,8 +97,22 @@ public class TestController {
     @GetMapping("/allPhotos")
     public String allPhotos(Model model){
         //temp
-        model.addAttribute("photos", ((RealDatabaseInterface)this.databaseInterface).getAllPhotoPaths());
+        model.addAttribute("photos", ((RealDatabaseInterface)this.databaseInterface).getAllPhotoIds());
         return "allPhotos";
+    }
+    
+    @GetMapping("/photo")
+    public @ResponseBody byte[] photo(@RequestParam String id){
+        byte[] ret = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            BufferedImage buff = this.databaseInterface.getPhotograph(id, true).getPhoto();
+            ImageIO.write(buff, "jpg", baos);
+            ret = baos.toByteArray();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return ret;
     }
     
     @GetMapping("/main")

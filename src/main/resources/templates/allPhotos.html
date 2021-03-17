@@ -6,9 +6,9 @@
 </head>
 <body>
     <h1>All Photographs</h1>
-    <div th:each="photo : ${photos}">
+    <div th:each="photoId : ${photos}">
         <hr/>
-        <img th:src="${photo}"/>
+        <img th:src="${'/photo?id=' + photoId}"/>
         <hr/>
     </div>
 </body>
