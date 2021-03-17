@@ -5,14 +5,14 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body>
-        <form method="POST" action="/testPostPhoto" enctype="multipart/form-data">
+        <form method="POST" action="#" th:action="@{/testPostPhoto}" enctype="multipart/form-data" th:object="${formResponse}">
             <div>
                 <label for="photo">Choose a photograph to post</label>
-                <input type="file" id="photo" name="photo" accept="image/jpg"/>
+                <input th:field="*{file}" type="file" id="photo" name="photo" accept="image/jpg"/>
             </div>
             <div>
                 <label for="name">Name this photo</label>
-                <input name="name" type="text"/>
+                <input th:field="*{name}" name="name" type="text"/>
             </div>
             <div>
                 <label for="price">Choose base photograph price (in dollars)</label>
@@ -28,9 +28,10 @@
                 </select>
             </div>
             <div>
-                <label for="categories">Categorize this photo</label>
-                <select name="categories" id="categories" multiple="">
-                    <option th:each="categoryName : ${categoryNames}" name="category" th:value="${categoryName}" th:text="${categoryName}"></option>
+                <label for="categories">Categorize this photo (shift click to select multiple)</label>
+                <select name="categories" id="categories" multiple>
+                    <!--https://stackoverflow.com/questions/36500731/how-to-bind-an-object-list-with-thymeleaf-->
+                    <option th:each="categoryName, idxInfo : ${categoryNames}" th:name="|categoryNames[${idxInfo.index}]|" th:value="${categoryName}" th:text="${categoryName}"></option>
                 </select>
                 <p>TODO: add ability to make new categories</p>
             </div>

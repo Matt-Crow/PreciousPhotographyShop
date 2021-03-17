@@ -15,11 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
  * This TestController serves as a general example of how Spring works
@@ -60,19 +59,25 @@ public class TestController {
     @GetMapping("/newPhoto")
     public String newPhotoForm(Model model){
         List<String> categoryNames = databaseInterface.getAllCategories();
+        categoryNames.add("still life");
+        categoryNames.add("animals");
+        categoryNames.add("black and white");
         model.addAttribute("categoryNames", categoryNames);
+        model.addAttribute("formResponse", new PhotoFormResponse());
         return "postPhotographFormPage";
     }
     
     @PostMapping("/testPostPhoto")
     public String postNewPhoto(
-        @RequestBody("photo") MultipartFile file,
-        @RequestBody("name") String name,
-        @RequestBody("category") List<String> categories,
-        RedirectAttributes redirectAttributes
+        @ModelAttribute PhotoFormResponse photoFormResp,
+        Model model
     ){
         System.out.println("received form");
         try {
+            MultipartFile file = photoFormResp.getFile();
+            String name = photoFormResp.getName();
+            List<String> categories = photoFormResp.getCategories();
+            
             BufferedImage buff = ImageIO.read(file.getInputStream());
             Photograph photo = new Photograph(
                 name,
