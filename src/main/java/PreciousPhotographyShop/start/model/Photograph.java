@@ -1,4 +1,4 @@
-package PreciousPhotographyShop.model;
+package PreciousPhotographyShop.start.model;
 
 import java.awt.Image;
 import java.util.Arrays;
