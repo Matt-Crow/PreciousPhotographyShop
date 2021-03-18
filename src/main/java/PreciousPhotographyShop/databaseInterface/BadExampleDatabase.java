@@ -8,12 +8,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Matt
  */
-@Repository("userDB")
+//@Repository("userDB")
 public class BadExampleDatabase implements DatabaseInterface {
     private final HashMap<UUID, User> users;
     private final HashMap<UUID, Photograph> photos;
@@ -22,12 +24,13 @@ public class BadExampleDatabase implements DatabaseInterface {
         users = new HashMap<>();
         photos = new HashMap<>();
         
-        storeUser(new User("John Doe", "johndoe@nonexistant.com", UUID.randomUUID() ));
+        //storeUser(new User("John Doe", "johndoe@nonexistant.com", UUID.randomUUID() ));
     }
 
     @Override
     public void storeUser(User user) {
-        users.put(user.getId(), user);
+        throw new UnsupportedOperationException();
+        //users.put(user.getId(), user);
     }
 
     @Override
@@ -37,7 +40,8 @@ public class BadExampleDatabase implements DatabaseInterface {
 
     @Override
     public void storePhotograph(Photograph photo) {
-        photos.put(photo.getId(), photo);
+        throw new UnsupportedOperationException();
+        //photos.put(photo.getId(), photo);
     }
 
     @Override
@@ -77,6 +81,19 @@ public class BadExampleDatabase implements DatabaseInterface {
     @Override
     public int updatePhotoByID(UUID id, Photograph photograph){
         return 0; // Implement later
+    }
+    
+    @Override
+    public List<String> getAllCategories() {
+        return photos.values().stream().flatMap((photograph)->{
+            return photograph.getCategories().stream();
+        }).map((catName)->{
+            return catName.toUpperCase();
+        }).distinct().collect(Collectors.toList());
+    }
 
+    @Override
+    public Photograph getPhotograph(String id, boolean withWatermark) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

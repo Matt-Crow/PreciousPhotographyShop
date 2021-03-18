@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.HashMap;
 import java.util.UUID;
 
-@Service
+//@Service
 public class PhotoService {
 
     private final DatabaseInterface photoDB;
