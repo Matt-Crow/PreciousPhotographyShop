@@ -1,7 +1,8 @@
 package PreciousPhotographyShop.model;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  *
@@ -9,11 +10,11 @@ import java.util.Arrays;
  */
 public class Photograph {
     private final String name;
-    private final Image photo;
-    private final String id;
+    private final BufferedImage photo;
+    private String id;
     private final String[] categories;
     
-    public Photograph(String name, Image photo, String id, String[] categories){
+    public Photograph(String name, BufferedImage photo, String id, String[] categories){
         this.name = name;
         this.photo = photo;
         this.id = id;
@@ -24,12 +25,20 @@ public class Photograph {
         return name;
     }
     
-    public final Image getPhoto(){
+    public final BufferedImage getPhoto(){
         return photo;
     }
     
     public final String getId(){
         return id;
+    }
+    
+    public final void setId(String id){
+        this.id = id;
+    }
+    
+    public final Collection<String> getCategories(){
+        return Arrays.asList(categories);
     }
     
     public final boolean isInCategory(String category){

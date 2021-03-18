@@ -2,12 +2,12 @@ package PreciousPhotographyShop.model;
 
 /**
  *
- * @author Matt
+ * @author Matt Crow
  */
 public class User {
     private final String name;
     private final String email;
-    private final String id;
+    private String id;
     
     public User(String name, String email, String id){
         this.name = name;
@@ -25,5 +25,10 @@ public class User {
     
     public final String getId(){
         return id;
+    }
+    
+    // needed for after returning from DB
+    public final void setId(String id){
+        this.id = id;
     }
 }
