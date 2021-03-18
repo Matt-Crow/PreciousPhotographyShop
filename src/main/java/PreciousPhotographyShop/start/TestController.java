@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.start;
 
+import PreciousPhotographyShop.model.PhotoFormResponse;
 import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
 import PreciousPhotographyShop.Main;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;

@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.databaseInterface;
 
+
 import PreciousPhotographyShop.model.Photograph;
 import PreciousPhotographyShop.model.User;
 import java.util.List;
