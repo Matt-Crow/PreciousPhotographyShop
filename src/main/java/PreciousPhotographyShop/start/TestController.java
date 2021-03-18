@@ -56,7 +56,7 @@ public class TestController {
             model.addAttribute("email", theUser.getEmail());
         }
         
-		return "newSaleStart";
+		return "index";
 	}
     
     @GetMapping("/newPhoto")
