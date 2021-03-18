@@ -1,8 +1,10 @@
 **/.gradle
 **/.nb-gradle
 *.class
+/.idea/
 # Ignore all /build/ subfolders except libs and docs
 **/build/*
-!**/build/libs 
-!**/build/docs
+#!**/build/libs 
+#!**/build/docs
 gradle.properties
+**application.properties
