@@ -56,7 +56,7 @@ public class TestController {
             model.addAttribute("email", theUser.getEmail());
         }
         
-		return "myWebpage";
+		return "newSaleStart";
 	}
     
     @GetMapping("/newPhoto")
@@ -85,7 +85,7 @@ public class TestController {
             Photograph photo = new Photograph(
                 name,
                 buff,
-                null,
+                (String)null,
                 categories.toArray(new String[categories.size()])
             );
             databaseInterface.storePhotograph(photo);

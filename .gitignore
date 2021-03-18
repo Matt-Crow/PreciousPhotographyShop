@@ -1,7 +1,7 @@
 **/.gradle
 **/.nb-gradle
 *.class
-/.idea/
+**/.idea/
 # Ignore all /build/ subfolders except libs and docs
 **/build/*
 #!**/build/libs 

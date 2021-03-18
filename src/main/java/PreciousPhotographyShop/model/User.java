@@ -1,14 +1,20 @@
 package PreciousPhotographyShop.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.UUID;
 import java.util.Objects;
 
 /**
  *
  * @author Matt Crow, Daniel
  */
+
+
 public class User {
     private String name;
     private String email;
+    //private final UUID id;
     private String id;
     
     public User(String name, String email, String id){
@@ -16,6 +22,12 @@ public class User {
         this.email = email;
         this.id = id;
     }
+    /*
+    public User(String name, String email, UUID id){
+        this.name = name;
+        this.email = email;
+        this.id = id;
+    }*/
     
     public final String getName(){
         return name;
@@ -24,14 +36,18 @@ public class User {
     public final String getEmail(){
         return email;
     }
-    
-    public final String getId(){
+    /*
+    public final UUID getId(){
         return id;
-    }
+    }*/
     
     // needed for after returning from DB
     public final void setId(String id){
         this.id = id;
+    }
+    
+    public String getId(){
+        return id;
     }
     
     public void setName(String name) { this.name = name; }
