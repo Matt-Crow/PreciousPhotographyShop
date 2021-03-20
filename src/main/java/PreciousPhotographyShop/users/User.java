@@ -13,10 +13,10 @@ public class User {
     private final String email;
     private String id;
     
-    public User(String name, String email, String id){
+    public User(String name, String email){
         this.name = name;
         this.email = email;
-        this.id = id;
+        this.id = null;
     }
     
     public final String getName(){

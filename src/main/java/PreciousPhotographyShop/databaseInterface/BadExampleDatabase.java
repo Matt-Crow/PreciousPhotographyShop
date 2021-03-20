@@ -24,7 +24,7 @@ public class BadExampleDatabase implements DatabaseInterface {
         users = new HashMap<>();
         photos = new HashMap<>();
         
-        storeUser(new User("John Doe", "johndoe@nonexistant.com", UUID.randomUUID().toString() ));
+        storeUser(new User("John Doe", "johndoe@nonexistant.com"));
     }
 
     @Override

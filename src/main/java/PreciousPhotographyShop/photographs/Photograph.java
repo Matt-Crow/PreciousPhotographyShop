@@ -17,10 +17,10 @@ public class Photograph {
     
     //private final String[] categories;
     
-    public Photograph(String name, BufferedImage photo, String id, String[] categories){
+    public Photograph(String name, BufferedImage photo, String[] categories){
         this.name = name;
         this.photo = photo;
-        this.id = id;
+        this.id = null;
         this.categories = Arrays.copyOfRange(categories, 0, categories.length);
     }
 

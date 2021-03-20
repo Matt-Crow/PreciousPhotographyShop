@@ -67,9 +67,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
         
         u = new User(
             e.getName(),
-            e.getEmail(),
-            e.getId()
+            e.getEmail()
         );
+        u.setId(e.getId());
         
         return u;
     }
@@ -117,9 +117,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
             ret = new Photograph(
                 asEntity.getName(),
                 img,
-                asEntity.getId(),
                 asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
             );
+            ret.setId(asEntity.getId());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

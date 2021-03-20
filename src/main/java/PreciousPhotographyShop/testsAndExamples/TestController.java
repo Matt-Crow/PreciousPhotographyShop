@@ -1,27 +1,18 @@
 package PreciousPhotographyShop.testsAndExamples;
 
-import PreciousPhotographyShop.photographs.PhotoFormResponse;
-import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
-import PreciousPhotographyShop.Main;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.users.User;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 /**
  * This TestController serves as a general example of how Spring works
@@ -45,8 +36,8 @@ public class TestController {
         */
         User theUser = null;
         try {
-            theUser = Main.DATABASE.getUser(name);
-        } catch(NullPointerException ex){
+            theUser = databaseInterface.getUser(name);
+        } catch(Exception ex){
             System.err.printf("Couldn't find user with name \"%s\"\n", name);
         }
         
@@ -59,63 +50,6 @@ public class TestController {
 		return "index";
 	}
     
-    @GetMapping("/newPhoto")
-    public String newPhotoForm(Model model){
-        List<String> categoryNames = databaseInterface.getAllCategories();
-        categoryNames.add("still life");
-        categoryNames.add("animals");
-        categoryNames.add("black and white");
-        model.addAttribute("categoryNames", categoryNames);
-        model.addAttribute("formResponse", new PhotoFormResponse());
-        return "postPhotographFormPage";
-    }
-    
-    @PostMapping("/testPostPhoto")
-    public String postNewPhoto(
-        @ModelAttribute PhotoFormResponse photoFormResp,
-        Model model
-    ){
-        System.out.println("received form");
-        try {
-            MultipartFile file = photoFormResp.getFile();
-            String name = photoFormResp.getName();
-            List<String> categories = photoFormResp.getCategories();
-            
-            BufferedImage buff = ImageIO.read(file.getInputStream());
-            Photograph photo = new Photograph(
-                name,
-                buff,
-                (String)null,
-                categories.toArray(new String[categories.size()])
-            );
-            databaseInterface.storePhotograph(photo);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return "redirect:/";
-    }
-    
-    @GetMapping("/allPhotos")
-    public String allPhotos(Model model){
-        //temp
-        model.addAttribute("photos", ((RealDatabaseInterface)this.databaseInterface).getAllPhotoIds());
-        return "allPhotos";
-    }
-    
-    @GetMapping("/photo")
-    public @ResponseBody byte[] photo(@RequestParam String id){
-        byte[] ret = null;
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            BufferedImage buff = this.databaseInterface.getPhotograph(id, true).getPhoto();
-            ImageIO.write(buff, "jpg", baos);
-            ret = baos.toByteArray();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return ret;
-    }
-    
     @GetMapping("/main")
     public @ResponseBody String main(){
         /*
@@ -123,7 +57,7 @@ public class TestController {
         */
         
         // Create user
-        User u = new User("Fakey McDon'texist", "fakey@aol.com", null);
+        User u = new User("Fakey McDon'texist", "fakey@aol.com");
         try {
             databaseInterface.storeUser(u);
         } catch(Exception ex){
@@ -141,7 +75,7 @@ public class TestController {
         Photograph p = null;
         try {
             BufferedImage buff = ImageIO.read(new File("C:\\Users\\Matt\\Pictures\\batmanParametric.jpg"));
-            p = new Photograph("Test photo", buff, null, new String[]{"test"});
+            p = new Photograph("Test photo", buff, new String[]{"test"});
             databaseInterface.storePhotograph(p);
         } catch (Exception ex) {
             ex.printStackTrace();
