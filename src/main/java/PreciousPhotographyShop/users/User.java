@@ -1,8 +1,5 @@
 package PreciousPhotographyShop.users;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.UUID;
 import java.util.Objects;
 
 /**
@@ -12,9 +9,8 @@ import java.util.Objects;
 
 
 public class User {
-    private String name;
-    private String email;
-    //private final UUID id;
+    private final String name;
+    private final String email;
     private String id;
     
     public User(String name, String email, String id){
@@ -22,12 +18,6 @@ public class User {
         this.email = email;
         this.id = id;
     }
-    /*
-    public User(String name, String email, UUID id){
-        this.name = name;
-        this.email = email;
-        this.id = id;
-    }*/
     
     public final String getName(){
         return name;
@@ -36,10 +26,6 @@ public class User {
     public final String getEmail(){
         return email;
     }
-    /*
-    public final UUID getId(){
-        return id;
-    }*/
     
     // needed for after returning from DB
     public final void setId(String id){
@@ -50,10 +36,6 @@ public class User {
         return id;
     }
     
-    public void setName(String name) { this.name = name; }
-
-    public void setEmail(String email) { this.email = email; }
-
     @Override
     public boolean equals(Object o) {
         if( this == o) return true;

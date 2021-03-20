@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,27 +188,17 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     @Override
-    public Photograph getPhotograph(UUID id, boolean withWatermark) {
+    public HashMap<String, Photograph> getAllPhotos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Photograph getPhotograph(UUID id) {
+    public int deletePhotoByID(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public HashMap<UUID, Photograph> getAllPhotos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int deletePhotoByID(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int updatePhotoByID(UUID id, Photograph photograph) {
+    public int updatePhotoByID(String id, Photograph photograph) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

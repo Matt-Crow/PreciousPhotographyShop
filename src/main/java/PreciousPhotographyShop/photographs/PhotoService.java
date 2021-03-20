@@ -27,19 +27,19 @@ public class PhotoService {
 
     // However Matt designs database
     @GetMapping
-    public HashMap<UUID, Photograph> getAllPhotos(){
+    public HashMap<String, Photograph> getAllPhotos(){
         return photoDB.getAllPhotos();
     }
 
-    public Photograph getPhotoByID(UUID id){
-        return photoDB.getPhotograph(id);
+    public Photograph getPhotoByID(String id){
+        return photoDB.getPhotograph(id, true);
     }
 
-    public int deletePhotograph(UUID id){
+    public int deletePhotograph(String id){
         return photoDB.deletePhotoByID(id);
     }
 
-    public int updatePhotograph(UUID id, Photograph newPhoto){
+    public int updatePhotograph(String id, Photograph newPhoto){
         return photoDB.updatePhotoByID(id, newPhoto);
     }
 
