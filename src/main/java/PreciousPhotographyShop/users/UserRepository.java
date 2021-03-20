@@ -1,6 +1,5 @@
-package PreciousPhotographyShop.databaseRepositories;
+package PreciousPhotographyShop.users;
 
-import PreciousPhotographyShop.model.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

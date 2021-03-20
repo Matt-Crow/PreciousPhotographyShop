@@ -1,7 +1,7 @@
-package PreciousPhotographyShop.start;
+package PreciousPhotographyShop.testsAndExamples;
 
-import PreciousPhotographyShop.databaseRepositories.TestRepository;
-import PreciousPhotographyShop.model.TestEntity;
+import PreciousPhotographyShop.testsAndExamples.TestRepository;
+import PreciousPhotographyShop.testsAndExamples.TestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

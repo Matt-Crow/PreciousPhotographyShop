@@ -1,6 +1,5 @@
-package PreciousPhotographyShop.databaseRepositories;
+package PreciousPhotographyShop.testsAndExamples;
 
-import PreciousPhotographyShop.model.TestEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

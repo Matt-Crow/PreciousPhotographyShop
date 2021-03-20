@@ -1,5 +1,6 @@
-package PreciousPhotographyShop.model;
+package PreciousPhotographyShop.photographs;
 
+import PreciousPhotographyShop.categories.CategoryEntity;
 import java.util.Collection;
 import java.util.LinkedList;
 import javax.persistence.Column;

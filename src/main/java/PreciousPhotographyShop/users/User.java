@@ -1,4 +1,4 @@
-package PreciousPhotographyShop.model;
+package PreciousPhotographyShop.users;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

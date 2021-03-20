@@ -1,6 +1,6 @@
-package PreciousPhotographyShop.start;
+package PreciousPhotographyShop.users;
 
-import PreciousPhotographyShop.model.User;
+import PreciousPhotographyShop.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

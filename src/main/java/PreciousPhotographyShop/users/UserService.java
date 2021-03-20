@@ -1,6 +1,6 @@
-package PreciousPhotographyShop.start;
+package PreciousPhotographyShop.users;
 
-import PreciousPhotographyShop.model.User;
+import PreciousPhotographyShop.users.User;
 import java.util.Arrays;
 import org.springframework.stereotype.Service;
 

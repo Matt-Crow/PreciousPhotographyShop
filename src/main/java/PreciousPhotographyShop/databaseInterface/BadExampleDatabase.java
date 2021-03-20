@@ -1,7 +1,7 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.User;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.users.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;

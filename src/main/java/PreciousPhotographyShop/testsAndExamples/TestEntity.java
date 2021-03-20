@@ -1,4 +1,4 @@
-package PreciousPhotographyShop.model;
+package PreciousPhotographyShop.testsAndExamples;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

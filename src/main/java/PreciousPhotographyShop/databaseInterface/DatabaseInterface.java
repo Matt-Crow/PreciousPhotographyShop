@@ -1,8 +1,8 @@
 package PreciousPhotographyShop.databaseInterface;
 
 
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.User;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.users.User;
 import java.util.List;
 
 import java.util.HashMap;

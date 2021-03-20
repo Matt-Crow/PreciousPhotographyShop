@@ -1,11 +1,11 @@
-package PreciousPhotographyShop.start;
+package PreciousPhotographyShop.testsAndExamples;
 
-import PreciousPhotographyShop.model.PhotoFormResponse;
+import PreciousPhotographyShop.photographs.PhotoFormResponse;
 import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
 import PreciousPhotographyShop.Main;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.User;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.users.User;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;

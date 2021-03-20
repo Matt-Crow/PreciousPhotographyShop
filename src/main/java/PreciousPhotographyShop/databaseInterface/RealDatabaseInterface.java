@@ -1,13 +1,13 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.databaseRepositories.CategoryRepository;
-import PreciousPhotographyShop.databaseRepositories.PhotographRepository;
-import PreciousPhotographyShop.databaseRepositories.UserRepository;
-import PreciousPhotographyShop.model.CategoryEntity;
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.PhotographEntity;
-import PreciousPhotographyShop.model.User;
-import PreciousPhotographyShop.model.UserEntity;
+import PreciousPhotographyShop.categories.CategoryRepository;
+import PreciousPhotographyShop.photographs.PhotographRepository;
+import PreciousPhotographyShop.users.UserRepository;
+import PreciousPhotographyShop.categories.CategoryEntity;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.photographs.PhotographEntity;
+import PreciousPhotographyShop.users.User;
+import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
