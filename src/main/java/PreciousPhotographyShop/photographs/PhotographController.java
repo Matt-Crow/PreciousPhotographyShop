@@ -60,7 +60,7 @@ public class PhotographController {
     @GetMapping("/allPhotos")
     public String allPhotos(Model model){
         //temp
-        model.addAttribute("photos", ((RealDatabaseInterface)this.databaseInterface).getAllPhotoIds());
+        model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
         return "allPhotos";
     }
     

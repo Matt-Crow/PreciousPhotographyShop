@@ -51,12 +51,13 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override
-    public void storeUser(User user) {
+    public String storeUser(User user) {
         UserEntity asEntity = new UserEntity();
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
         asEntity = this.userRepository.save(asEntity);
         user.setId(asEntity.getId()); // update user ID
+        return asEntity.getId();
     }
 
     @Override
@@ -75,7 +76,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override
-    public void storePhotograph(Photograph photo){
+    public String storePhotograph(Photograph photo){
         PhotographEntity pe = new PhotographEntity();
         pe.setName(photo.getName());
         
@@ -107,6 +108,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
         } catch (IOException ex) { 
             ex.printStackTrace();
         }
+        
+        return pe.getId();
     }
     
     // image data is under FILE_SYS_PHOTO_REPO/id
@@ -168,6 +171,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     //temp
+    @Override
     public final List<String> getAllPhotoIds(){
         List<String> ret = new LinkedList<>();
         Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();

@@ -28,11 +28,12 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public void storeUser(User user) {
+    public String storeUser(User user) {
         if(user.getId() == null){
             user.setId(UUID.randomUUID().toString());
         }
         users.put(user.getId(), user);
+        return user.getId();
     }
 
     @Override
@@ -41,11 +42,12 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public void storePhotograph(Photograph photo) {
+    public String storePhotograph(Photograph photo) {
         if(photo.getId() == null){
             photo.setId(UUID.randomUUID().toString());
         }
         photos.put(photo.getId(), photo);
+        return photo.getId();
     }
 
     @Override
@@ -55,6 +57,8 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     // added by Daniel R, unsure about the method with boolean withWatermark
+    // Matt: I've updated the documentation for getPhotograph(String, boolean) to
+    //       make it clearer.
     public Photograph getPhotograph(String id){
          return getPhotograph(id, true);
     }
@@ -93,5 +97,10 @@ public class BadExampleDatabase implements DatabaseInterface {
         }).map((catName)->{
             return catName.toUpperCase();
         }).distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllPhotoIds() {
+        return photos.keySet().stream().collect(Collectors.toList());
     }
 }
