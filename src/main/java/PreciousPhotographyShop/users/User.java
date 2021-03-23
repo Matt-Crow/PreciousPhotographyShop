@@ -1,5 +1,11 @@
 package PreciousPhotographyShop.users;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.annotation.processing.Generated;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Objects;
 
 /**
@@ -7,18 +13,28 @@ import java.util.Objects;
  * @author Matt Crow, Daniel
  */
 
-
+@Entity
 public class User {
-    private final String name;
-    private final String email;
+    @Id
+    @GeneratedValue(generator = "system-uuid")
+    @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
-    
+    private String name;
+    private String email;
+
+    // Default Constructor
     public User(String name, String email){
         this.name = name;
         this.email = email;
         this.id = null;
     }
-    
+
+    // Empty Constructor
+    public User() {
+        this.name = "";
+        this.email = "";
+    }
+
     public final String getName(){
         return name;
     }
@@ -26,16 +42,13 @@ public class User {
     public final String getEmail(){
         return email;
     }
-    
-    // needed for after returning from DB
-    public final void setId(String id){
-        this.id = id;
-    }
-    
-    public String getId(){
-        return id;
-    }
-    
+
+    public String getId(){ return id; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public void setName(String name) { this.name = name; }
+
     @Override
     public boolean equals(Object o) {
         if( this == o) return true;
@@ -55,4 +68,6 @@ public class User {
                 ", id='" + id + '\'' +
                 '}';
     }
+
+    public void setId(String id) { this.id = id; }
 }

@@ -7,7 +7,7 @@ import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.User;
-import PreciousPhotographyShop.users.UserEntity;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +52,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Override
     public String storeUser(User user) {
-        UserEntity asEntity = new UserEntity();
+
+
+        User asEntity = new User();
+
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
         asEntity = this.userRepository.save(asEntity);
@@ -63,7 +66,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Override
     public User getUser(String id) {
         User u = null;
-        UserEntity e = this.userRepository.findById(id).get();
+        User e = this.userRepository.findById(id).get();
         // throws error if not found
         
         u = new User(
