@@ -12,5 +12,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author Matt
  */
 public interface PhotoToCategoryBridgeTable extends CrudRepository<PhotographToCategoryTableEntry, String>{
-    
+    Iterable<PhotographToCategoryTableEntry> findAllByPhotographId(String photographId);
+    Iterable<PhotographToCategoryTableEntry> findAllByCategoryId(String categoryId);
 }

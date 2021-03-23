@@ -115,29 +115,35 @@ public class RealDatabaseInterface implements DatabaseInterface {
         */
         Collection<PhotographToCategoryTableEntry> bridgeTableEntries = catEnts.stream().map((catEnt)->{
             PhotographToCategoryTableEntry bte = new PhotographToCategoryTableEntry();
-            bte.setCategory(catEnt);
-            bte.setPhotograph(pe);
+            bte.setCategoryId(catEnt.getName());
+            bte.setPhotographId(pe.getId());
             bte = this.photoToCategoryBridgeTable.save(bte);
             return bte;
         }).collect(Collectors.toList());
+        
+        
+        
         
         /*
         Add the photo's ID to all the categories it belongs to after setting its
         ID
         */
+        /*
         bridgeTableEntries.forEach((bte)->{
-            CategoryEntity updated = this.categoryRepository.findById(bte.getCategory().getName()).get();
+            CategoryEntity updated = this.categoryRepository.findById(bte.getCategoryId()).get();
             updated.getPhotoIdMappings().add(bte);
             this.categoryRepository.save(updated);
         });
+        */
+        
+        
         
         /*
         Add the entity names to the photograph's database representation.
         May eventually change this to IDs
         */
-        withId.setCategoryMappings(bridgeTableEntries);
-        
-        withId = this.photographRepository.save(withId);
+        //withId.setCategoryMappings(bridgeTableEntries);
+        //withId = this.photographRepository.save(withId);
         
         return withId.getId();
     }
@@ -147,10 +153,15 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Photograph ret = null;
         try {
             BufferedImage img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, asEntity.getId() + ".jpg").toFile());
+            Iterator<PhotographToCategoryTableEntry> bte = this.photoToCategoryBridgeTable.findAllByPhotographId(asEntity.getId()).iterator();
+            List<String> catNames = new LinkedList<>();
+            while(bte.hasNext()){
+                catNames.add(bte.next().getCategoryId());
+            }
             ret = new Photograph(
                 asEntity.getName(),
                 img,
-                asEntity.getCategoryMappings().stream().map((mapping)->mapping.getCategory().getName()).toArray((s)->new String[s])
+                catNames.toArray(new String[catNames.size()])
             );
             ret.setId(asEntity.getId());
         } catch (IOException ex) {
@@ -176,25 +187,17 @@ public class RealDatabaseInterface implements DatabaseInterface {
         HashSet<Photograph> ret = new HashSet<>();
         Photograph curr = null;
         
-        Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator(); // how to SELECT WHERE category IN categories?
+        Iterable<PhotographToCategoryTableEntry> photosInCat = (categories.length != 0) 
+            ? this.photoToCategoryBridgeTable.findAllByCategoryId(categories[0])
+            : this.photoToCategoryBridgeTable.findAll();
+        
+        Iterator<PhotographToCategoryTableEntry> iter = photosInCat.iterator();
         while(iter.hasNext()){
-            curr = this.tryConvert(iter.next());
+            PhotographEntity pe = this.photographRepository.findById(iter.next().getPhotographId()).orElse(null);
+            curr = this.tryConvert(pe);
             if(curr != null){
                 ret.add(curr);
             }
-        }
-        
-        // would like to check category before converting
-        if(categories.length != 0){
-            HashSet<Photograph> filtered = new HashSet<>();
-            ret.stream().filter((Photograph photo)->{
-                boolean b = false;
-                for(int i = 0; i < categories.length && !b; i++){
-                    b = photo.isInCategory(categories[i]);
-                }
-                return b;
-            }).forEach(filtered::add);
-            ret = filtered;
         }
         
         return ret.toArray(new Photograph[ret.size()]);

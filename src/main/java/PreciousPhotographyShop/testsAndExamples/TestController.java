@@ -6,6 +6,7 @@ import PreciousPhotographyShop.users.User;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
+import java.util.List;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -56,6 +57,7 @@ public class TestController {
         Testing all database capabilities
         */
         
+        /*
         // Create user
         User u = new User("Fakey McDon'texist", "fakey@aol.com");
         try {
@@ -89,5 +91,15 @@ public class TestController {
         }
         
         return Arrays.toString(databaseInterface.getPhotographsByCategory(new String[]{"test"}));
+        */
+        StringBuilder sb = new StringBuilder();
+        List<String> cats = this.databaseInterface.getAllCategories();
+        for(String cat : cats){
+            sb.append(cat).append("\n");
+            for(Photograph photo : this.databaseInterface.getPhotographsByCategory(new String[]{cat})){
+                sb.append(String.format("* %s</br>", photo.getName()));
+            }
+        }
+        return sb.toString();
     }
 }
