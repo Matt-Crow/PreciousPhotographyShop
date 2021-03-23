@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.photographs;
 
 import PreciousPhotographyShop.categories.CategoryEntity;
+import PreciousPhotographyShop.databaseInterface.PhotographToCategoryTableEntry;
 import java.util.Collection;
 import java.util.LinkedList;
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -28,12 +30,11 @@ public class PhotographEntity {
     
     private String name;
     
-    @ManyToMany
-    @JoinColumn(name="categoryName")
-    private Collection<CategoryEntity> categories;
+    @OneToMany()
+    private Collection<PhotographToCategoryTableEntry> categoryMappings;
     
     public PhotographEntity(){
-        categories = new LinkedList<>();
+        categoryMappings = new LinkedList<>();
     }
     
     public void setId(String id){
@@ -44,8 +45,8 @@ public class PhotographEntity {
         this.name = name;
     }
     
-    public void setCategories(Collection<CategoryEntity> categories){
-        this.categories = categories;
+    public void setCategoryMappings(Collection<PhotographToCategoryTableEntry> categoryMappings){
+        this.categoryMappings = categoryMappings;
     }
     
     public String getId(){
@@ -56,7 +57,7 @@ public class PhotographEntity {
         return name;
     }
     
-    public Collection<CategoryEntity> getCategories(){
-        return categories;
+    public Collection<PhotographToCategoryTableEntry> getCategoryMappings(){
+        return categoryMappings;
     }
 }

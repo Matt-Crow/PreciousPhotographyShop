@@ -39,6 +39,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired
     CategoryRepository categoryRepository;
     
+    @Autowired
+    PhotoToCategoryBridgeTable photoToCategoryBridgeTable;
+    
     // move to LocalFileSystem class later?
     private static final String FILE_SYS_PHOTO_REPO = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
     
@@ -81,6 +84,19 @@ public class RealDatabaseInterface implements DatabaseInterface {
         pe.setName(photo.getName());
         
         /*
+        Create new file for the photo
+        */
+        File root = this.getPhotoFolder();
+        PhotographEntity withId = this.photographRepository.save(pe); // save() returns the changed pe
+        try { 
+            photo.setId(withId.getId());
+            File newFile = Paths.get(root.getAbsolutePath(), withId.getId() + ".jpg").toFile();
+            ImageIO.write(photo.getPhoto(), "jpg", newFile);
+        } catch (IOException ex) { 
+            ex.printStackTrace();
+        }
+        
+        /*
         Find entities for the categories this photo belongs to
         */
         Collection<CategoryEntity> catEnts = photo.getCategories().stream().map((categoryName)->{
@@ -93,23 +109,37 @@ public class RealDatabaseInterface implements DatabaseInterface {
             }
             return catEnt;
         }).collect(Collectors.toList());
-        pe.setCategories(catEnts);
         
         /*
-        Create new file for the photo
+        Create bridge table entries 
         */
-        File root = this.getPhotoFolder();
+        Collection<PhotographToCategoryTableEntry> bridgeTableEntries = catEnts.stream().map((catEnt)->{
+            PhotographToCategoryTableEntry bte = new PhotographToCategoryTableEntry();
+            bte.setCategory(catEnt);
+            bte.setPhotograph(pe);
+            bte = this.photoToCategoryBridgeTable.save(bte);
+            return bte;
+        }).collect(Collectors.toList());
         
-        try {            
-            pe = this.photographRepository.save(pe); // save() returns the changed pe
-            photo.setId(pe.getId());
-            File newFile = Paths.get(root.getAbsolutePath(), pe.getId() + ".jpg").toFile();
-            ImageIO.write(photo.getPhoto(), "jpg", newFile);
-        } catch (IOException ex) { 
-            ex.printStackTrace();
-        }
+        /*
+        Add the photo's ID to all the categories it belongs to after setting its
+        ID
+        */
+        bridgeTableEntries.forEach((bte)->{
+            CategoryEntity updated = this.categoryRepository.findById(bte.getCategory().getName()).get();
+            updated.getPhotoIdMappings().add(bte);
+            this.categoryRepository.save(updated);
+        });
         
-        return pe.getId();
+        /*
+        Add the entity names to the photograph's database representation.
+        May eventually change this to IDs
+        */
+        withId.setCategoryMappings(bridgeTableEntries);
+        
+        withId = this.photographRepository.save(withId);
+        
+        return withId.getId();
     }
     
     // image data is under FILE_SYS_PHOTO_REPO/id
@@ -120,7 +150,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
             ret = new Photograph(
                 asEntity.getName(),
                 img,
-                asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
+                asEntity.getCategoryMappings().stream().map((mapping)->mapping.getCategory().getName()).toArray((s)->new String[s])
             );
             ret.setId(asEntity.getId());
         } catch (IOException ex) {

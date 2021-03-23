@@ -1,4 +1,4 @@
-Pro-tip: put testing code in start/TestController::main
+Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 
 /newPhoto

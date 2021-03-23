@@ -1,13 +1,12 @@
 package PreciousPhotographyShop.categories;
 
-import PreciousPhotographyShop.photographs.PhotographEntity;
+import PreciousPhotographyShop.databaseInterface.PhotographToCategoryTableEntry;
 import java.util.Collection;
 import java.util.LinkedList;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 /**
  * not sure if needs ID, as name is a good primary key
@@ -19,27 +18,26 @@ public class CategoryEntity {
     @Column(name="categoryName")
     private String name;
     
-    @ManyToMany
-    @JoinColumn(name="photoId")
-    private Collection<PhotographEntity> photos;
+    @OneToMany()
+    private Collection<PhotographToCategoryTableEntry> photoIdMappings;
     
     public CategoryEntity(){
-        photos = new LinkedList<>();
+        photoIdMappings = new LinkedList<>();
     }
     
     public void setName(String name){
         this.name = name;
     }
     
-    public void setPhotos(Collection<PhotographEntity> photos){
-        this.photos = photos;
+    public void setPhotoIdMappings(Collection<PhotographToCategoryTableEntry> photoIdMappings){
+        this.photoIdMappings = photoIdMappings;
     }
     
     public String getName(){
         return name;
     }
     
-    public Collection<PhotographEntity> getPhotos(){
-        return photos;
+    public Collection<PhotographToCategoryTableEntry> getPhotoIdMappings(){
+        return photoIdMappings;
     }
 }
