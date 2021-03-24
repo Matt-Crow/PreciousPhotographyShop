@@ -8,6 +8,7 @@ import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.User;
 import PreciousPhotographyShop.users.UserEntity;
+import PreciousPhotographyShop.users.UserWithPhotos;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired
     PhotoToCategoryBridgeTable photoToCategoryBridgeTable;
     
+    @Autowired
+    UserToPhotographBridgeTable userToPhotographBridgeTable;
+    
     // move to LocalFileSystem class later?
     private static final String FILE_SYS_PHOTO_REPO = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
     
@@ -60,20 +64,43 @@ public class RealDatabaseInterface implements DatabaseInterface {
         asEntity.setEmail(user.getEmail());
         asEntity = this.userRepository.save(asEntity);
         user.setId(asEntity.getId()); // update user ID
+        
+        if(user instanceof UserWithPhotos){
+            ((UserWithPhotos)user).getPhotos().forEach((Photograph photo)->{
+                if(photo.getId() != null){
+                    UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
+                    entry.setPhotographId(photo.getId());
+                    entry.setUserId(user.getId());
+                    this.userToPhotographBridgeTable.save(entry);
+                }
+            });
+        }
+        
+        
         return asEntity.getId();
     }
 
     @Override
     public User getUser(String id) {
-        User u = null;
+        UserWithPhotos u = null;
         UserEntity e = this.userRepository.findById(id).get();
-        // throws error if not found
         
-        u = new User(
+        u = new UserWithPhotos(
             e.getName(),
             e.getEmail()
         );
         u.setId(e.getId());
+        
+        Iterator<UserToPhotographBridgeTableEntry> ownerships = this.userToPhotographBridgeTable.findAllByUserId(e.getId()).iterator();
+        Photograph photo = null;
+        while(ownerships.hasNext()){
+            try {
+                photo = this.getPhotograph(ownerships.next().getPhotographId(), true);
+                u.addPhotograph(photo);
+            } catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
         
         return u;
     }
@@ -113,37 +140,12 @@ public class RealDatabaseInterface implements DatabaseInterface {
         /*
         Create bridge table entries 
         */
-        Collection<PhotographToCategoryTableEntry> bridgeTableEntries = catEnts.stream().map((catEnt)->{
+        catEnts.stream().forEach((catEnt)->{
             PhotographToCategoryTableEntry bte = new PhotographToCategoryTableEntry();
             bte.setCategoryId(catEnt.getName());
             bte.setPhotographId(pe.getId());
-            bte = this.photoToCategoryBridgeTable.save(bte);
-            return bte;
-        }).collect(Collectors.toList());
-        
-        
-        
-        
-        /*
-        Add the photo's ID to all the categories it belongs to after setting its
-        ID
-        */
-        /*
-        bridgeTableEntries.forEach((bte)->{
-            CategoryEntity updated = this.categoryRepository.findById(bte.getCategoryId()).get();
-            updated.getPhotoIdMappings().add(bte);
-            this.categoryRepository.save(updated);
-        });
-        */
-        
-        
-        
-        /*
-        Add the entity names to the photograph's database representation.
-        May eventually change this to IDs
-        */
-        //withId.setCategoryMappings(bridgeTableEntries);
-        //withId = this.photographRepository.save(withId);
+            this.photoToCategoryBridgeTable.save(bte);
+        });        
         
         return withId.getId();
     }
@@ -238,5 +240,4 @@ public class RealDatabaseInterface implements DatabaseInterface {
     public int updatePhotoByID(String id, Photograph photograph) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
