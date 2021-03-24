@@ -18,9 +18,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @PostMapping
     public void registerNewUser(@RequestBody User user){
         userService.addNewUser(user);
+    }
+
+    @PutMapping(path = "{userID}")
+    public void updateUser(
+        @PathVariable("userID") String id,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) String email){
+        userService.updateUser(id, name, email);
     }
 
     @DeleteMapping(path = "{userId}")
