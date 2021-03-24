@@ -95,7 +95,7 @@ public class TestController {
         StringBuilder sb = new StringBuilder();
         List<String> cats = this.databaseInterface.getAllCategories();
         for(String cat : cats){
-            sb.append(cat).append("\n");
+            sb.append(cat).append("</br>");
             for(Photograph photo : this.databaseInterface.getPhotographsByCategory(new String[]{cat})){
                 sb.append(String.format("* %s</br>", photo.getName()));
             }
