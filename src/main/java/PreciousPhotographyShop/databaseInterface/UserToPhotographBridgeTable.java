@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.databaseInterface;
 
+import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -8,5 +9,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface UserToPhotographBridgeTable extends CrudRepository<UserToPhotographBridgeTableEntry, String> {
     Iterable<UserToPhotographBridgeTableEntry> findAllByUserId(String userId);
-    UserToPhotographBridgeTableEntry findByPhotographId(String photographId);
+    Optional<UserToPhotographBridgeTableEntry> findByPhotographId(String photographId);
 }

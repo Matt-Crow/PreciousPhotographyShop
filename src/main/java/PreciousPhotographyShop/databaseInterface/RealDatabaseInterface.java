@@ -4,6 +4,7 @@ import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import PreciousPhotographyShop.users.UserRepository;
 import PreciousPhotographyShop.categories.CategoryEntity;
+import PreciousPhotographyShop.photographs.OwnedPhotograph;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.User;
@@ -145,7 +146,17 @@ public class RealDatabaseInterface implements DatabaseInterface {
             bte.setCategoryId(catEnt.getName());
             bte.setPhotographId(pe.getId());
             this.photoToCategoryBridgeTable.save(bte);
-        });        
+        });
+
+        if(photo instanceof OwnedPhotograph){
+            User owner = ((OwnedPhotograph)photo).getOwner();
+            if(owner.getId() != null){
+                UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
+                entry.setPhotographId(withId.getId());
+                entry.setUserId(owner.getId());
+                this.userToPhotographBridgeTable.save(entry);
+            }
+        }
         
         return withId.getId();
     }
@@ -160,11 +171,22 @@ public class RealDatabaseInterface implements DatabaseInterface {
             while(bte.hasNext()){
                 catNames.add(bte.next().getCategoryId());
             }
-            ret = new Photograph(
-                asEntity.getName(),
-                img,
-                catNames.toArray(new String[catNames.size()])
-            );
+            String[] catNameArray = catNames.toArray(new String[catNames.size()]);
+            UserToPhotographBridgeTableEntry ownership = this.userToPhotographBridgeTable.findByPhotographId(asEntity.getId()).orElse(null);
+            if(ownership == null){
+                ret = new Photograph(
+                    asEntity.getName(),
+                    img,
+                    catNameArray
+                );
+            } else {
+                ret = new OwnedPhotograph(
+                    asEntity.getName(),
+                    img,
+                    catNameArray,
+                    this.getUser(ownership.getUserId())
+                );
+            }
             ret.setId(asEntity.getId());
         } catch (IOException ex) {
             ex.printStackTrace();
