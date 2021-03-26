@@ -1,14 +1,21 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.User;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.users.User;
+
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Matt
  */
+//@Repository("userDB")
+//@Service
 public class BadExampleDatabase implements DatabaseInterface {
     private final HashMap<String, User> users;
     private final HashMap<String, Photograph> photos;
@@ -17,12 +24,16 @@ public class BadExampleDatabase implements DatabaseInterface {
         users = new HashMap<>();
         photos = new HashMap<>();
         
-        storeUser(new User("John Doe", "johndoe@nonexistant.com", "John Doe"));
+        storeUser(new User("John Doe", "johndoe@nonexistant.com"));
     }
 
     @Override
-    public void storeUser(User user) {
+    public String storeUser(User user) {
+        if(user.getId() == null){
+            user.setId(UUID.randomUUID().toString());
+        }
         users.put(user.getId(), user);
+        return user.getId();
     }
 
     @Override
@@ -31,8 +42,12 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public void storePhotograph(Photograph photo) {
+    public String storePhotograph(Photograph photo) {
+        if(photo.getId() == null){
+            photo.setId(UUID.randomUUID().toString());
+        }
         photos.put(photo.getId(), photo);
+        return photo.getId();
     }
 
     @Override
@@ -41,10 +56,51 @@ public class BadExampleDatabase implements DatabaseInterface {
         return photos.get(id);
     }
 
+    // added by Daniel R, unsure about the method with boolean withWatermark
+    // Matt: I've updated the documentation for getPhotograph(String, boolean) to
+    //       make it clearer.
+    public Photograph getPhotograph(String id){
+         return getPhotograph(id, true);
+    }
+
     @Override
     public Photograph[] getPhotographsByCategory(String[] categories) {
         return photos.values().stream().filter((photo)->{
             return Arrays.stream(categories).anyMatch(photo::isInCategory);
         }).toArray((size)->new Photograph[size]);
+    }
+
+    @Override
+    public HashMap<String, Photograph> getAllPhotos() {
+        return photos;
+    }
+
+    @Override
+    public int deletePhotoByID(String id) {
+        Photograph temp = getPhotograph(id);
+        if(temp == null)
+            return 0;
+        else
+            photos.remove(id);
+        return 1;
+    }
+
+    @Override
+    public int updatePhotoByID(String id, Photograph photograph){
+        return 0; // Implement later
+    }
+    
+    @Override
+    public List<String> getAllCategories() {
+        return photos.values().stream().flatMap((photograph)->{
+            return photograph.getCategories().stream();
+        }).map((catName)->{
+            return catName.toUpperCase();
+        }).distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllPhotoIds() {
+        return photos.keySet().stream().collect(Collectors.toList());
     }
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Example Photograph Listing</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>All Photographs</h1>
+    <div th:each="photoId : ${photos}">
+        <hr/>
+        <img th:src="${'/photo?id=' + photoId}"/>
+        <hr/>
+    </div>
+</body>
+</html>
