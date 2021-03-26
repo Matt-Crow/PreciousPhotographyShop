@@ -11,9 +11,7 @@ import PreciousPhotographyShop.users.User;
 import PreciousPhotographyShop.users.UserEntity;
 import PreciousPhotographyShop.users.UserWithPhotos;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,7 +19,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,20 +29,11 @@ import org.springframework.stereotype.Service;
 
 @Service // "Yo! Spring! This class can be used when I Autowire a DatabaseInterface!"
 public class RealDatabaseInterface implements DatabaseInterface {
-    @Autowired
-    UserRepository userRepository;
-    
-    @Autowired
-    PhotographRepository photographRepository;
-    
-    @Autowired
-    CategoryRepository categoryRepository;
-    
-    @Autowired
-    PhotoToCategoryBridgeTable photoToCategoryBridgeTable;
-    
-    @Autowired
-    UserToPhotographBridgeTable userToPhotographBridgeTable;
+    @Autowired UserRepository userRepository;
+    @Autowired PhotographRepository photographRepository;
+    @Autowired CategoryRepository categoryRepository;
+    @Autowired PhotoToCategoryBridgeTable photoToCategoryBridgeTable;
+    @Autowired UserToPhotographBridgeTable userToPhotographBridgeTable;
     
     @Override
     public String storeUser(User user) {
@@ -148,7 +136,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
         return withId.getId();
     }
     
-    // image data is under FILE_SYS_PHOTO_REPO/id
     private Photograph tryConvert(PhotographEntity asEntity){
         Photograph ret = null;
         try {

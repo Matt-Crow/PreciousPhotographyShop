@@ -18,6 +18,7 @@ class LocalFileSystem {
     
     private LocalFileSystem(){
         photoPath = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
+        getPhotoFolder(); // create folder if it does not yet exist
     }
     
     public static final LocalFileSystem getInstance(){
@@ -35,12 +36,16 @@ class LocalFileSystem {
         return f;
     }
     
+    private String idToFilePath(String id){
+        return Paths.get(this.photoPath, String.format("%s.jpg", id)).toString();
+    }
+    
     void store(Photograph photo) throws IOException{
-        File newFile = Paths.get(getPhotoFolder().getAbsolutePath(), photo.getId() + ".jpg").toFile();
+        File newFile = new File(idToFilePath(photo.getId()));
         ImageIO.write(photo.getPhoto(), "jpg", newFile);
     }
     
     BufferedImage load(String id) throws IOException{
-        return ImageIO.read(Paths.get(this.photoPath, id + ".jpg").toFile());
+        return ImageIO.read(new File(idToFilePath(id)));
     }
 }

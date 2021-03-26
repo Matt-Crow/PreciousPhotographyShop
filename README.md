@@ -7,6 +7,8 @@ Pro-tip: put testing code in testsAndExamples/TestController::main
 Might be able to use without the database by commenting out the "@Service" in 
 RealDatabaseInterface, and uncommenting "@Service" in BadExampleDatabase
 
+Probably want to make the bridge tables use composite key
+
 HOW TO RUN:
 1. Run from your IDE, or via the command line with "gradle bootRun"
 chances are good, you will experience a problem...
