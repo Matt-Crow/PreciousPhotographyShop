@@ -47,17 +47,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired
     UserToPhotographBridgeTable userToPhotographBridgeTable;
     
-    // move to LocalFileSystem class later?
-    private static final String FILE_SYS_PHOTO_REPO = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
-    
-    private File getPhotoFolder(){
-        File f = new File(FILE_SYS_PHOTO_REPO);
-        if(!f.exists()){
-            f.mkdirs();
-        }
-        return f;
-    }
-    
     @Override
     public String storeUser(User user) {
         UserEntity asEntity = new UserEntity();
@@ -114,12 +103,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
         /*
         Create new file for the photo
         */
-        File root = this.getPhotoFolder();
         PhotographEntity withId = this.photographRepository.save(pe); // save() returns the changed pe
         try { 
             photo.setId(withId.getId());
-            File newFile = Paths.get(root.getAbsolutePath(), withId.getId() + ".jpg").toFile();
-            ImageIO.write(photo.getPhoto(), "jpg", newFile);
+            LocalFileSystem.getInstance().store(photo);
         } catch (IOException ex) { 
             ex.printStackTrace();
         }
@@ -165,7 +152,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     private Photograph tryConvert(PhotographEntity asEntity){
         Photograph ret = null;
         try {
-            BufferedImage img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, asEntity.getId() + ".jpg").toFile());
+            BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId());
             Iterator<PhotographToCategoryTableEntry> bte = this.photoToCategoryBridgeTable.findAllByPhotographId(asEntity.getId()).iterator();
             List<String> catNames = new LinkedList<>();
             while(bte.hasNext()){
