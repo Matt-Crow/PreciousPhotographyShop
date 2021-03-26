@@ -250,16 +250,28 @@ public class RealDatabaseInterface implements DatabaseInterface {
 
     @Override
     public HashMap<String, Photograph> getAllPhotos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        HashMap<String, Photograph> ret = new HashMap<>();
+        this.photographRepository.findAll().forEach((photoEntity)->{
+            ret.put(photoEntity.getId(), getPhotograph(photoEntity.getId(), true));
+        });        
+        return ret;
     }
 
     @Override
     public int deletePhotoByID(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int found = 0;
+        if(this.photographRepository.findById(id).orElse(null) != null){
+            found = 1;
+            this.photographRepository.deleteById(id);
+            this.userToPhotographBridgeTable.deleteAllByPhotographId(id);
+            this.photoToCategoryBridgeTable.deleteAllByPhotographId(id);
+        }
+        return found;
     }
 
     @Override
     public int updatePhotoByID(String id, Photograph photograph) {
+        int found = 0;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

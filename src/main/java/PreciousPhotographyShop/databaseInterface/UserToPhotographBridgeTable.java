@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
  * @author Matt
  */
 public interface UserToPhotographBridgeTable extends CrudRepository<UserToPhotographBridgeTableEntry, String> {
-    Iterable<UserToPhotographBridgeTableEntry> findAllByUserId(String userId);
-    Optional<UserToPhotographBridgeTableEntry> findByPhotographId(String photographId);
+    public Iterable<UserToPhotographBridgeTableEntry> findAllByUserId(String userId);
+    public Optional<UserToPhotographBridgeTableEntry> findByPhotographId(String photographId);
+    public void deleteAllByPhotographId(String photographId);
 }
