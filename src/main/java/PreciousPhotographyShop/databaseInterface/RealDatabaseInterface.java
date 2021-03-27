@@ -205,20 +205,18 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Override
     public final List<String> getAllPhotoIds(){
         List<String> ret = new LinkedList<>();
-        Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();
-        while(iter.hasNext()){
-            ret.add(iter.next().getId());
-        }
+        this.photographRepository.findAll().forEach((PhotographEntity pe)->{
+            ret.add(pe.getId());
+        });
         return ret;
     }
 
     @Override
     public List<String> getAllCategories() {
-        Iterator<CategoryEntity> cats = this.categoryRepository.findAll().iterator();
         LinkedList<String> catNames = new LinkedList<>();
-        while(cats.hasNext()){
-            catNames.add(cats.next().getName());
-        }
+        this.categoryRepository.findAll().forEach((CategoryEntity catEnt)->{
+            catNames.add(catEnt.getName());
+        });
         return catNames;
     }
 
