@@ -1,36 +1,39 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.User;
-import org.springframework.stereotype.Repository;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.users.User;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Matt
  */
 //@Repository("userDB")
+//@Service
 public class BadExampleDatabase implements DatabaseInterface {
-    private final HashMap<UUID, User> users;
-    private final HashMap<UUID, Photograph> photos;
+    private final HashMap<String, User> users;
+    private final HashMap<String, Photograph> photos;
     
     public BadExampleDatabase(){
         users = new HashMap<>();
         photos = new HashMap<>();
         
-        //storeUser(new User("John Doe", "johndoe@nonexistant.com", UUID.randomUUID() ));
+        storeUser(new User("John Doe", "johndoe@nonexistant.com"));
     }
 
     @Override
-    public void storeUser(User user) {
-        throw new UnsupportedOperationException();
-        //users.put(user.getId(), user);
+    public String storeUser(User user) {
+        if(user.getId() == null){
+            user.setId(UUID.randomUUID().toString());
+        }
+        users.put(user.getId(), user);
+        return user.getId();
     }
 
     @Override
@@ -39,21 +42,25 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public void storePhotograph(Photograph photo) {
-        throw new UnsupportedOperationException();
-        //photos.put(photo.getId(), photo);
+    public String storePhotograph(Photograph photo) {
+        if(photo.getId() == null){
+            photo.setId(UUID.randomUUID().toString());
+        }
+        photos.put(photo.getId(), photo);
+        return photo.getId();
     }
 
     @Override
-    public Photograph getPhotograph(UUID id, boolean withWatermark) {
+    public Photograph getPhotograph(String id, boolean withWatermark) {
         // todo: do stuff if withWatermark is true
         return photos.get(id);
     }
 
     // added by Daniel R, unsure about the method with boolean withWatermark
-    @Override
-    public Photograph getPhotograph(UUID id){
-         return photos.get(id);
+    // Matt: I've updated the documentation for getPhotograph(String, boolean) to
+    //       make it clearer.
+    public Photograph getPhotograph(String id){
+         return getPhotograph(id, true);
     }
 
     @Override
@@ -64,12 +71,12 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public HashMap<UUID, Photograph> getAllPhotos() {
+    public HashMap<String, Photograph> getAllPhotos() {
         return photos;
     }
 
     @Override
-    public int deletePhotoByID(UUID id) {
+    public int deletePhotoByID(String id) {
         Photograph temp = getPhotograph(id);
         if(temp == null)
             return 0;
@@ -79,7 +86,7 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public int updatePhotoByID(UUID id, Photograph photograph){
+    public int updatePhotoByID(String id, Photograph photograph){
         return 0; // Implement later
     }
     
@@ -93,7 +100,7 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public Photograph getPhotograph(String id, boolean withWatermark) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<String> getAllPhotoIds() {
+        return photos.keySet().stream().collect(Collectors.toList());
     }
 }

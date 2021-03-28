@@ -1,6 +1,5 @@
-package PreciousPhotographyShop.databaseRepositories;
+package PreciousPhotographyShop.categories;
 
-import PreciousPhotographyShop.model.CategoryEntity;
 import org.springframework.data.repository.CrudRepository;
 
 /**

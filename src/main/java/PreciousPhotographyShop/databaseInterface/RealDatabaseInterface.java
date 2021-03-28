@@ -1,13 +1,13 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.databaseRepositories.CategoryRepository;
-import PreciousPhotographyShop.databaseRepositories.PhotographRepository;
-import PreciousPhotographyShop.databaseRepositories.UserRepository;
-import PreciousPhotographyShop.model.CategoryEntity;
-import PreciousPhotographyShop.model.Photograph;
-import PreciousPhotographyShop.model.PhotographEntity;
-import PreciousPhotographyShop.model.User;
-import PreciousPhotographyShop.model.UserEntity;
+import PreciousPhotographyShop.categories.CategoryRepository;
+import PreciousPhotographyShop.photographs.PhotographRepository;
+import PreciousPhotographyShop.users.UserRepository;
+import PreciousPhotographyShop.categories.CategoryEntity;
+import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.photographs.PhotographEntity;
+import PreciousPhotographyShop.users.User;
+import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +51,13 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override
-    public void storeUser(User user) {
+    public String storeUser(User user) {
         UserEntity asEntity = new UserEntity();
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
         asEntity = this.userRepository.save(asEntity);
         user.setId(asEntity.getId()); // update user ID
+        return asEntity.getId();
     }
 
     @Override
@@ -68,15 +68,15 @@ public class RealDatabaseInterface implements DatabaseInterface {
         
         u = new User(
             e.getName(),
-            e.getEmail(),
-            e.getId()
+            e.getEmail()
         );
+        u.setId(e.getId());
         
         return u;
     }
     
     @Override
-    public void storePhotograph(Photograph photo){
+    public String storePhotograph(Photograph photo){
         PhotographEntity pe = new PhotographEntity();
         pe.setName(photo.getName());
         
@@ -108,6 +108,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
         } catch (IOException ex) { 
             ex.printStackTrace();
         }
+        
+        return pe.getId();
     }
     
     // image data is under FILE_SYS_PHOTO_REPO/id
@@ -118,9 +120,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
             ret = new Photograph(
                 asEntity.getName(),
                 img,
-                asEntity.getId(),
                 asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
             );
+            ret.setId(asEntity.getId());
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -169,6 +171,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     //temp
+    @Override
     public final List<String> getAllPhotoIds(){
         List<String> ret = new LinkedList<>();
         Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();
@@ -189,27 +192,17 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     @Override
-    public Photograph getPhotograph(UUID id, boolean withWatermark) {
+    public HashMap<String, Photograph> getAllPhotos() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Photograph getPhotograph(UUID id) {
+    public int deletePhotoByID(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public HashMap<UUID, Photograph> getAllPhotos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int deletePhotoByID(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public int updatePhotoByID(UUID id, Photograph photograph) {
+    public int updatePhotoByID(String id, Photograph photograph) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

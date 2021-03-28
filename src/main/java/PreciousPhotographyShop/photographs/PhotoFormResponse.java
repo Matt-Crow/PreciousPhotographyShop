@@ -1,4 +1,4 @@
-package PreciousPhotographyShop.model;
+package PreciousPhotographyShop.photographs;
 
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
