@@ -4,9 +4,7 @@ package PreciousPhotographyShop.databaseInterface;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.users.User;
 import java.util.List;
-
 import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * Notice how this specifies WHAT the system can do, not HOW it does it.

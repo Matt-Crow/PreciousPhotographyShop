@@ -52,10 +52,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Override
     public String storeUser(User user) {
-
-
         User asEntity = new User();
-
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
         asEntity = this.userRepository.save(asEntity);
@@ -67,8 +64,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
     public User getUser(String id) {
         User u = null;
         User e = this.userRepository.findById(id).get();
+
         // throws error if not found
-        
         u = new User(
             e.getName(),
             e.getEmail()

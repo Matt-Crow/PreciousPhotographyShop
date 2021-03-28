@@ -3,8 +3,15 @@ package PreciousPhotographyShop.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+/**
+ * @Author: Daniel V
+ * Contains all the business logic within the HTTP calls in @UserController
+ */
 
 @Service
 public class UserService {
@@ -12,6 +19,28 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    public User getSingleUser(String id) {
+
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException((
+                "User with id " + id + " cannot be found"
+                )));
+        return user;
+    }
+
+    /**
+     * This is an @GET HTTP call
+     * @return Returns a list of all user by name and email
+     */
+    public List<User> getAllUsers(){
+        List<User> users = (List<User>) userRepository.findAll();
+        return users;
+    }
+
+    /**
+     * This is an @POST HTTP call, additionally it checks to see if
+     * the email is taken
+     * @param user The user to be stored in the database
+     */
     public void addNewUser(User user) {
         Optional<User> UserOptional = userRepository.findUserByEmail(user.getEmail());
         if(UserOptional.isPresent()) {
@@ -20,6 +49,10 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * This is an @DELETE HTTP call, it deletes a user in the database by id
+     * @param id The id of the user that will be deleted
+     */
     public void deleteUser(String id) {
         boolean exists = userRepository.existsById(id);
         if(!exists){
@@ -28,6 +61,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    /**
+     * This is an @PUT HTTP call that updates either the name, email, or both entries on a user.
+     * @param id The id for searching in the Database
+     * @param name The name that potentially will be updated
+     * @param email The email that potentially will be updated
+     */
     @Transactional
     public void updateUser(String id, String name, String email){
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException(
@@ -46,4 +85,5 @@ public class UserService {
             user.setEmail(email);
         }
     }
+
 }
