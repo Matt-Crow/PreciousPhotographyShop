@@ -1,6 +1,10 @@
 package PreciousPhotographyShop.users;
 
+import PreciousPhotographyShop.photographs.Photograph;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -11,11 +15,14 @@ import java.util.Objects;
 public class User {
     private final String name;
     private final String email;
+    // may remove
+    private final HashSet<Photograph> ownedPhotographs;
     private String id;
     
     public User(String name, String email){
         this.name = name;
         this.email = email;
+        ownedPhotographs = new HashSet<>();
         this.id = null;
     }
     
@@ -34,6 +41,14 @@ public class User {
     
     public String getId(){
         return id;
+    }
+    
+    public final void addPhotograph(Photograph photo){
+        this.ownedPhotographs.add(photo);
+    }
+
+    public final List<Photograph> getPhotos(){
+        return this.ownedPhotographs.stream().collect(Collectors.toList());
     }
     
     @Override

@@ -8,7 +8,6 @@ import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.User;
 import PreciousPhotographyShop.users.UserEntity;
-import PreciousPhotographyShop.users.UserWithPhotos;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collection;
@@ -45,27 +44,24 @@ public class RealDatabaseInterface implements DatabaseInterface {
         user.setId(asEntity.getId()); // update user ID
         
         // create bridge table records
-        if(user instanceof UserWithPhotos){
-            ((UserWithPhotos)user).getPhotos().forEach((Photograph photo)->{
-                if(photo.getId() != null){
-                    UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
-                    entry.setPhotographId(photo.getId());
-                    entry.setUserId(user.getId());
-                    this.userToPhotographBridgeTable.save(entry);
-                }
-            });
-        }
-        
+        user.getPhotos().forEach((Photograph photo)->{
+            if(photo.getId() != null){
+                UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
+                entry.setPhotographId(photo.getId());
+                entry.setUserId(user.getId());
+                this.userToPhotographBridgeTable.save(entry);
+            }
+        });
         
         return asEntity.getId();
     }
 
     @Override
     public User getUser(String id) {
-        UserWithPhotos u = null;
+        User u = null;
         UserEntity e = this.userRepository.findById(id).get();
         
-        u = new UserWithPhotos(
+        u = new User(
             e.getName(),
             e.getEmail()
         );
