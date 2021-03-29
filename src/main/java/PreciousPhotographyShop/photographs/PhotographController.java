@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ public class PhotographController {
     
     @GetMapping("/newPhoto")
     public String newPhotoForm(Model model){
-        List<String> categoryNames = databaseInterface.getAllCategories();
+        Set<String> categoryNames = databaseInterface.getAllCategories();
         categoryNames.add("still life");
         categoryNames.add("animals");
         categoryNames.add("black and white");

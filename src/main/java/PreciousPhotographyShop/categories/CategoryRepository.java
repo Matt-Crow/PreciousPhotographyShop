@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Matt
  */
 public interface CategoryRepository extends CrudRepository<CategoryEntity, String> {
-
+    public Iterable<CategoryEntity> getAllByParentName(String parentName); 
 }

@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,12 +38,14 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Override
     public String storeUser(User user) {
+        // create user table record 
         UserEntity asEntity = new UserEntity();
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
         asEntity = this.userRepository.save(asEntity);
         user.setId(asEntity.getId()); // update user ID
         
+        // create bridge table records
         if(user instanceof UserWithPhotos){
             ((UserWithPhotos)user).getPhotos().forEach((Photograph photo)->{
                 if(photo.getId() != null){
@@ -178,15 +181,12 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     @Override
-    public Photograph[] getPhotographsByCategory(String[] categories) {
-        // we'll have to decide how exactly this works.
-        // for now, I'll treat it as "get all photographs belonging to at least one of these categories"
-        // no categories = get all
+    public Set<Photograph> getPhotographsByCategory(String category) {
         HashSet<Photograph> ret = new HashSet<>();
         Photograph curr = null;
         
-        Iterable<PhotographToCategoryTableEntry> photosInCat = (categories.length != 0) 
-            ? this.photoToCategoryBridgeTable.findAllByCategoryId(categories[0])
+        Iterable<PhotographToCategoryTableEntry> photosInCat = (category != null) 
+            ? this.photoToCategoryBridgeTable.findAllByCategoryId(category)
             : this.photoToCategoryBridgeTable.findAll();
         
         Iterator<PhotographToCategoryTableEntry> iter = photosInCat.iterator();
@@ -198,7 +198,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
             }
         }
         
-        return ret.toArray(new Photograph[ret.size()]);
+        return ret;
     }
     
     //temp
@@ -212,8 +212,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     @Override
-    public List<String> getAllCategories() {
-        LinkedList<String> catNames = new LinkedList<>();
+    public Set<String> getAllCategories() {
+        Set<String> catNames = new HashSet<>();
         this.categoryRepository.findAll().forEach((CategoryEntity catEnt)->{
             catNames.add(catEnt.getName());
         });
@@ -234,9 +234,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
         int found = 0;
         if(this.photographRepository.findById(id).orElse(null) != null){
             found = 1;
-            this.photographRepository.deleteById(id);
             this.userToPhotographBridgeTable.deleteAllByPhotographId(id);
             this.photoToCategoryBridgeTable.deleteAllByPhotographId(id);
+            // delete photo table record after bridge table entries
+            this.photographRepository.deleteById(id);
         }
         return found;
     }

@@ -1,13 +1,13 @@
 package PreciousPhotographyShop.testsAndExamples;
 
+import PreciousPhotographyShop.categories.Category;
+import PreciousPhotographyShop.categories.CategoryEntity;
+import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.users.User;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import javax.imageio.ImageIO;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +25,8 @@ public class TestController {
     
     @Autowired
     private DatabaseInterface databaseInterface;
+    
+    @Autowired private CategoryRepository catRepo;
     
     @GetMapping("/")
 	public String index(@RequestParam(name="name", required=false, defaultValue="Someone") String name, Model model) {
@@ -92,11 +94,17 @@ public class TestController {
         
         return Arrays.toString(databaseInterface.getPhotographsByCategory(new String[]{"test"}));
         */
+        
+        Category animal = new Category("Animal");
+        Category catCat = new Category("Cat", animal);
+        this.catRepo.save(new CategoryEntity(animal));
+        this.catRepo.save(new CategoryEntity(catCat));
+        
         StringBuilder sb = new StringBuilder();
-        List<String> cats = this.databaseInterface.getAllCategories();
+        Set<String> cats = this.databaseInterface.getAllCategories();
         for(String cat : cats){
             sb.append(cat).append("</br>");
-            for(Photograph photo : this.databaseInterface.getPhotographsByCategory(new String[]{cat})){
+            for(Photograph photo : this.databaseInterface.getPhotographsByCategory(cat)){
                 sb.append(String.format("* %s</br>", photo.getName()));
             }
         }

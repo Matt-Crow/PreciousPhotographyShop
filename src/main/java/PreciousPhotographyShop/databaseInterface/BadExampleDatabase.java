@@ -6,6 +6,7 @@ import PreciousPhotographyShop.users.User;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -64,10 +65,10 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public Photograph[] getPhotographsByCategory(String[] categories) {
+    public Set<Photograph> getPhotographsByCategory(String category) {
         return photos.values().stream().filter((photo)->{
-            return Arrays.stream(categories).anyMatch(photo::isInCategory);
-        }).toArray((size)->new Photograph[size]);
+            return category == null || photo.isInCategory(category);
+        }).collect(Collectors.toSet());
     }
 
     @Override
@@ -91,12 +92,12 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
     
     @Override
-    public List<String> getAllCategories() {
+    public Set<String> getAllCategories() {
         return photos.values().stream().flatMap((photograph)->{
             return photograph.getCategories().stream();
         }).map((catName)->{
             return catName.toUpperCase();
-        }).distinct().collect(Collectors.toList());
+        }).collect(Collectors.toSet());
     }
 
     @Override

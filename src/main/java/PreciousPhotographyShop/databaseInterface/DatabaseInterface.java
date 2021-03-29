@@ -6,6 +6,7 @@ import PreciousPhotographyShop.users.User;
 import java.util.List;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Notice how this specifies WHAT the system can do, not HOW it does it.
@@ -63,13 +64,27 @@ public interface DatabaseInterface {
     // Temporary method added by Daniel R
     public int updatePhotoByID(String id, Photograph photograph);
     
-    public Photograph[] getPhotographsByCategory(String[] categories);
+    /*
+    Category methods
+    */
+    
+    /**
+     * returns all Photographs belonging to the category with the given name.
+     * @param categoryName the name of the category to get photographs from, <b>
+     * or null to get all photographs</b>
+     * 
+     * @return the photographs belonging to the given category 
+     */
+    public Set<Photograph> getPhotographsByCategory(String categoryName);
+    
+    public Set<String> getAllCategories();
 
+    
     // Temporary method added by Daniel R
     // Matt: probably a List or HashSet of Photographs is all we need this to return
     public HashMap<String, Photograph> getAllPhotos();
     
     //temp
     public List<String> getAllPhotoIds();
-    public List<String> getAllCategories();
+    
 }
