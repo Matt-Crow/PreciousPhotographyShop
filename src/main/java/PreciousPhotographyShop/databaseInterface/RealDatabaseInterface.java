@@ -179,14 +179,32 @@ public class RealDatabaseInterface implements DatabaseInterface {
         
         return photo;
     }
-
+    
+    /**
+     * Gets all PhotographToCategoryTableEntrys with a category that is (or is
+     * the descendant of) the given category.
+     * 
+     * @param topmost the topmost category to search under
+     * 
+     * @return all the PhotographToCategoryTableEntrys as described above
+     */
+    private Set<PhotographToCategoryTableEntry> getPhotoToCatBySupercategory(String topmost){
+        HashSet<PhotographToCategoryTableEntry> ret = new HashSet<>();
+        this.photoToCategoryBridgeTable.findAllByCategoryId(topmost).forEach(ret::add);
+        // recursively call on each direct child category
+        this.categoryRepository.findAllByParentName(topmost).forEach((catEnt)->{
+            ret.addAll(this.getPhotoToCatBySupercategory(catEnt.getName()));
+        });
+        return ret;
+    }
+    
     @Override
     public Set<Photograph> getPhotographsByCategory(String category) {
         HashSet<Photograph> ret = new HashSet<>();
         Photograph curr = null;
         
         Iterable<PhotographToCategoryTableEntry> photosInCat = (category != null) 
-            ? this.photoToCategoryBridgeTable.findAllByCategoryId(category)
+            ? this.getPhotoToCatBySupercategory(category)
             : this.photoToCategoryBridgeTable.findAll();
         
         Iterator<PhotographToCategoryTableEntry> iter = photosInCat.iterator();
