@@ -4,7 +4,6 @@ import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import PreciousPhotographyShop.users.UserRepository;
 import PreciousPhotographyShop.categories.CategoryEntity;
-import PreciousPhotographyShop.photographs.OwnedPhotograph;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.User;
@@ -126,14 +125,12 @@ public class RealDatabaseInterface implements DatabaseInterface {
             this.photoToCategoryBridgeTable.save(bte);
         });
 
-        if(photo instanceof OwnedPhotograph){
-            User owner = ((OwnedPhotograph)photo).getOwner();
-            if(owner.getId() != null){
-                UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
-                entry.setPhotographId(withId.getId());
-                entry.setUserId(owner.getId());
-                this.userToPhotographBridgeTable.save(entry);
-            }
+        User owner = photo.getOwner();
+        if(owner.getId() != null){
+            UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
+            entry.setPhotographId(withId.getId());
+            entry.setUserId(owner.getId());
+            this.userToPhotographBridgeTable.save(entry);
         }
         
         return withId.getId();
@@ -144,26 +141,20 @@ public class RealDatabaseInterface implements DatabaseInterface {
         try {
             BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId());
             Iterator<PhotographToCategoryTableEntry> bte = this.photoToCategoryBridgeTable.findAllByPhotographId(asEntity.getId()).iterator();
-            List<String> catNames = new LinkedList<>();
+            Set<String> catNames = new HashSet<>();
             while(bte.hasNext()){
                 catNames.add(bte.next().getCategoryId());
             }
-            String[] catNameArray = catNames.toArray(new String[catNames.size()]);
             UserToPhotographBridgeTableEntry ownership = this.userToPhotographBridgeTable.findByPhotographId(asEntity.getId()).orElse(null);
-            if(ownership == null){
-                ret = new Photograph(
-                    asEntity.getName(),
-                    img,
-                    catNameArray
-                );
-            } else {
-                ret = new OwnedPhotograph(
-                    asEntity.getName(),
-                    img,
-                    catNameArray,
-                    this.getUser(ownership.getUserId())
-                );
-            }
+            ret = new Photograph(
+                (ownership == null) ? null : getUser(ownership.getUserId()),
+                asEntity.getName(),
+                img,
+                asEntity.getDescription(),
+                asEntity.getPrice(),
+                catNames,
+                asEntity.getIsRecurring()
+            );
             ret.setId(asEntity.getId());
         } catch (IOException ex) {
             ex.printStackTrace();

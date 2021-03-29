@@ -1,12 +1,12 @@
 package PreciousPhotographyShop.photographs;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +39,7 @@ public class PhotographController {
         @ModelAttribute PhotoFormResponse photoFormResp,
         Model model
     ){
-        System.out.println("received form");
+        System.out.println("received form: todo get logged in user");
         try {
             MultipartFile file = photoFormResp.getFile();
             String name = photoFormResp.getName();
@@ -47,9 +47,13 @@ public class PhotographController {
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
             Photograph photo = new Photograph(
+                null,
                 name,
                 buff,
-                categories.toArray(new String[categories.size()])
+                "no description",
+                20.0, // todo set price
+                categories.stream().collect(Collectors.toSet()),
+                false // todo set recurring
             );
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {
