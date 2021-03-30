@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author Matt
  */
-public interface TestRepository extends CrudRepository<TestEntity, Integer>{
+public interface TestRepository extends CrudRepository<TestEntity, String>{
     
 }
