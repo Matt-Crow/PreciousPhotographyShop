@@ -4,6 +4,9 @@ Pro-tip: put testing code in testsAndExamples/TestController::main
 /newPhoto
 /allPhotos
 
+Having issues with Entity classes after changing them? Spring has issues with 
+changing primary key columns, so might need to rename or drop things
+
 Might be able to use without the database by commenting out the "@Service" in 
 RealDatabaseInterface, and uncommenting "@Service" in BadExampleDatabase
 

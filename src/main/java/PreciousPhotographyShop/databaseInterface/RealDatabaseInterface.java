@@ -132,10 +132,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
         return withId.getId();
     }
     
-    private Photograph tryConvert(PhotographEntity asEntity){
+    private Photograph tryConvert(PhotographEntity asEntity, boolean withWatermark){
         Photograph ret = null;
         try {
-            BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId());
+            BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
             Iterator<PhotographToCategoryTableEntry> bte = this.photoToCategoryBridgeTable.findAllByPhotographId(asEntity.getId()).iterator();
             Set<String> catNames = new HashSet<>();
             while(bte.hasNext()){
@@ -160,11 +160,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Override 
     public Photograph getPhotograph(String id, boolean withWatermark) {
-        Photograph photo = tryConvert(photographRepository.findById(id).get());
-        
-        System.err.println("Todo: add watermarking"); // maybe in tryConvert
-        
-        return photo;
+        return tryConvert(photographRepository.findById(id).get(), withWatermark);
     }
     
     /**
@@ -197,7 +193,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Iterator<PhotographToCategoryTableEntry> iter = photosInCat.iterator();
         while(iter.hasNext()){
             PhotographEntity pe = this.photographRepository.findById(iter.next().getPhotographId()).orElse(null);
-            curr = this.tryConvert(pe);
+            curr = this.tryConvert(pe, true);
             if(curr != null){
                 ret.add(curr);
             }

@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.users;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,11 +16,15 @@ import org.hibernate.annotations.GenericGenerator;
 public class UserEntity {
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
+    @Column(name="id")
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
+    @Column(name="name", nullable=false)
     private String name;
+    
+    @Column(name="email", nullable=false)
     private String email;
     
     public UserEntity(){

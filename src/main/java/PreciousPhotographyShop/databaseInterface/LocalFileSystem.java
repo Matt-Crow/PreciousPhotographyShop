@@ -1,6 +1,8 @@
 package PreciousPhotographyShop.databaseInterface;
 
 import PreciousPhotographyShop.photographs.Photograph;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +47,13 @@ class LocalFileSystem {
         ImageIO.write(photo.getPhoto(), "jpg", newFile);
     }
     
-    BufferedImage load(String id) throws IOException{
-        return ImageIO.read(new File(idToFilePath(id)));
+    BufferedImage load(String id, boolean withWatermark) throws IOException{
+        BufferedImage orig = ImageIO.read(new File(idToFilePath(id)));
+        if(withWatermark){
+            Graphics vandalizeMe = orig.createGraphics();
+            vandalizeMe.setColor(Color.PINK);
+            vandalizeMe.drawString("Precious Photography Shop", orig.getWidth() / 2, orig.getHeight() / 2);
+        }
+        return orig;
     }
 }
