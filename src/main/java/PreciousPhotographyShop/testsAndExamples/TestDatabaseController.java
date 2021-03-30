@@ -75,7 +75,7 @@ public class TestDatabaseController {
         te3.setRelatedIds(s3);
         te3 = testRepository.save(te3);
         */
-        System.out.println(testRepository.findById("4028818b7885045d017885048c6c0001"));
+        System.out.println(testRepository.findAllByRelatedId("4028818b7885045d017885048b9a0000").size());
         
         return getAll();
     }

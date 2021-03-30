@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -18,6 +19,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author Matt
  */
 @Entity // create a database table for this
+@Table(name = "test_entity")
 public class TestEntity {
     @Column(name = "test_id")
     @Id
