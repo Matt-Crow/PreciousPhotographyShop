@@ -40,7 +40,7 @@ public class TestDatabaseController {
         return testRepository.findAll();
     }
     
-    @GetMapping(path="/map")
+    @GetMapping(path="/map/write")
     public @ResponseBody Iterable<EntityA> testMapping(){
         aRepo.deleteAll();
         bRepo.deleteAll();
@@ -64,9 +64,20 @@ public class TestDatabaseController {
         bs[1].setAIds(ids);
         bs[1] = bRepo.save(bs[1]);
         
+        System.out.println("new");
+        as[0] = aRepo.findById(as[0].getId()).get();
+        System.out.println(as[0]);
+        
         aRepo.findAll().forEach(System.out::println);
         bRepo.findAll().forEach(System.out::println);
         
+        return aRepo.findAll();
+    }
+    
+    @GetMapping(path="/map/read")
+    public @ResponseBody Iterable<EntityA> testLoading(){
+        aRepo.findAll().forEach(System.out::println);
+        bRepo.findAll().forEach(System.out::println);
         return aRepo.findAll();
     }
     
