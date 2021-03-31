@@ -31,7 +31,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired UserRepository userRepository;
     @Autowired PhotographRepository photographRepository;
     @Autowired CategoryRepository categoryRepository;
-    @Autowired PhotoToCategoryBridgeTable photoToCategoryBridgeTable;
     @Autowired UserToPhotographBridgeTable userToPhotographBridgeTable;
     
     @Override
@@ -114,13 +113,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
         /*
         Create bridge table entries 
         */
-        catEnts.stream().forEach((catEnt)->{
-            PhotographToCategoryTableEntry bte = new PhotographToCategoryTableEntry();
-            bte.setCategoryId(catEnt.getName());
-            bte.setPhotographId(pe.getId());
-            this.photoToCategoryBridgeTable.save(bte);
-        });
-
         User owner = photo.getOwner();
         if(owner.getId() != null){
             UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
@@ -136,11 +128,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Photograph ret = null;
         try {
             BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
-            Iterator<PhotographToCategoryTableEntry> bte = this.photoToCategoryBridgeTable.findAllByPhotographId(asEntity.getId()).iterator();
-            Set<String> catNames = new HashSet<>();
-            while(bte.hasNext()){
-                catNames.add(bte.next().getCategoryId());
-            }
             UserToPhotographBridgeTableEntry ownership = this.userToPhotographBridgeTable.findByPhotographId(asEntity.getId()).orElse(null);
             ret = new Photograph(
                 (ownership == null) ? null : getUser(ownership.getUserId()),
@@ -148,7 +135,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
                 img,
                 asEntity.getDescription(),
                 asEntity.getPrice(),
-                catNames,
+                asEntity.getCategoryNames(),
                 asEntity.getIsRecurring()
             );
             ret.setId(asEntity.getId());
@@ -169,14 +156,14 @@ public class RealDatabaseInterface implements DatabaseInterface {
      * 
      * @param topmost the topmost category to search under
      * 
-     * @return all the PhotographToCategoryTableEntrys as described above
+     * @return all the PhotographEntitys as described above
      */
-    private Set<PhotographToCategoryTableEntry> getPhotoToCatBySupercategory(String topmost){
-        HashSet<PhotographToCategoryTableEntry> ret = new HashSet<>();
-        this.photoToCategoryBridgeTable.findAllByCategoryId(topmost).forEach(ret::add);
+    private Set<PhotographEntity> getPhotoBySupercategory(String topmost){
+        HashSet<PhotographEntity> ret = new HashSet<>();
+        this.photographRepository.findAllByCategoryNames(topmost).forEach(ret::add);
         // recursively call on each direct child category
         this.categoryRepository.findAllByParentName(topmost).forEach((catEnt)->{
-            ret.addAll(this.getPhotoToCatBySupercategory(catEnt.getName()));
+            ret.addAll(this.getPhotoBySupercategory(catEnt.getName()));
         });
         return ret;
     }
@@ -186,18 +173,14 @@ public class RealDatabaseInterface implements DatabaseInterface {
         HashSet<Photograph> ret = new HashSet<>();
         Photograph curr = null;
         
-        Iterable<PhotographToCategoryTableEntry> photosInCat = (category != null) 
-            ? this.getPhotoToCatBySupercategory(category)
-            : this.photoToCategoryBridgeTable.findAll();
-        
-        Iterator<PhotographToCategoryTableEntry> iter = photosInCat.iterator();
-        while(iter.hasNext()){
-            PhotographEntity pe = this.photographRepository.findById(iter.next().getPhotographId()).orElse(null);
+        for(PhotographEntity pe : getPhotoBySupercategory(category)){
             curr = this.tryConvert(pe, true);
             if(curr != null){
                 ret.add(curr);
             }
-        }
+        };
+        
+        
         
         return ret;
     }
@@ -236,7 +219,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
         if(this.photographRepository.findById(id).orElse(null) != null){
             found = 1;
             this.userToPhotographBridgeTable.deleteAllByPhotographId(id);
-            this.photoToCategoryBridgeTable.deleteAllByPhotographId(id);
             // delete photo table record after bridge table entries
             this.photographRepository.deleteById(id);
         }

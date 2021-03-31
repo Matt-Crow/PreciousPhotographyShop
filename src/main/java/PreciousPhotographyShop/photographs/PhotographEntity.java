@@ -1,9 +1,14 @@
 package PreciousPhotographyShop.photographs;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -32,6 +37,21 @@ public class PhotographEntity {
     @Column(name="isRecurring", nullable=false)
     private boolean isRecurring;
     
+    /*
+    Creates a bridge table between PhotographEntity and CategoryEntity
+    photo_id is a foreign key to this class,
+    category_name is a foreign key to the category
+    
+    Setup will look similar in CategoryEntity
+    */
+    @ElementCollection
+    @CollectionTable(
+        name = "photo_to_category",
+        joinColumns = @JoinColumn(name = "photo_id")
+    )
+    @Column(name = "category_name")
+    Set<String> categoryNames = new HashSet<>();
+    
     public PhotographEntity(){
         
     }
@@ -56,6 +76,10 @@ public class PhotographEntity {
         this.isRecurring = isRecurring;
     }
     
+    public void setCategoryNames(Set<String> categoryNames){
+        this.categoryNames = categoryNames;
+    }
+    
     public String getId(){
         return id;
     }
@@ -74,5 +98,9 @@ public class PhotographEntity {
     
     public boolean getIsRecurring(){
         return isRecurring;
+    }
+    
+    public Set<String> getCategoryNames(){
+        return categoryNames;
     }
 }
