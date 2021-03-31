@@ -4,6 +4,8 @@ import PreciousPhotographyShop.testsAndExamples.TestRepository;
 import PreciousPhotographyShop.testsAndExamples.TestEntity;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(path="/testdb") // append /testdb to all paths this lists
 public class TestDatabaseController {
+    @Autowired
+    private EntityManager em;
+    
     @Autowired // Spring auto-generates this
     private TestRepository testRepository;
     
@@ -64,9 +69,9 @@ public class TestDatabaseController {
         bs[1].setAIds(ids);
         bs[1] = bRepo.save(bs[1]);
         
-        System.out.println("new");
-        as[0] = aRepo.findById(as[0].getId()).get();
-        System.out.println(as[0]);
+        // not working
+        //em.flush();
+        //em.clear();
         
         aRepo.findAll().forEach(System.out::println);
         bRepo.findAll().forEach(System.out::println);
