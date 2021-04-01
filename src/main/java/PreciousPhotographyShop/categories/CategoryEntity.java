@@ -40,12 +40,17 @@ public class CategoryEntity {
     
     public CategoryEntity(){}
     
-    public CategoryEntity(Category asObject){
-        this();
-        setName(asObject.getName());
-        if(asObject.hasParentCategory()){
-            setParentName(asObject.getParent().getName());
-        }
+    public CategoryEntity(String name, String parentName){
+        this.name = name;
+        this.parentName = parentName;
+    }
+    
+    public CategoryEntity(String name, CategoryEntity parent){
+        this(name, parent.getName());
+    }
+    
+    public CategoryEntity(String name){
+        this(name, (String)null);
     }
     
     public void setName(String name){

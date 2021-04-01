@@ -1,6 +1,5 @@
 package PreciousPhotographyShop.testsAndExamples;
 
-import PreciousPhotographyShop.categories.Category;
 import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
@@ -94,10 +93,10 @@ public class TestController {
         return Arrays.toString(databaseInterface.getPhotographsByCategory(new String[]{"test"}));
         */
         
-        Category animal = new Category("Animal");
-        Category catCat = new Category("Cat", animal);
-        this.catRepo.save(new CategoryEntity(animal));
-        this.catRepo.save(new CategoryEntity(catCat));
+        CategoryEntity animal = new CategoryEntity("Animal");
+        CategoryEntity catCat = new CategoryEntity("Cat", animal);
+        this.catRepo.save(animal);
+        this.catRepo.save(catCat);
         
         StringBuilder sb = new StringBuilder();
         Set<String> cats = this.databaseInterface.getAllCategories();
