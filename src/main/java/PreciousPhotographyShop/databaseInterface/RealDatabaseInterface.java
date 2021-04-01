@@ -55,8 +55,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
         User asEntity = new User();
         asEntity.setFirst_name(user.getFirst_name());
         asEntity.setLast_name(user.getLast_name());
+        asEntity.setUsername(user.getUsername());
         asEntity.setEmail(user.getEmail());
-        asEntity = this.userRepository.save(asEntity);
+        asEntity.setPassword(user.getPassword());
+                asEntity = this.userRepository.save(asEntity);
         user.setId(asEntity.getId()); // update user ID
         return asEntity.getId();
     }
