@@ -114,7 +114,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Create bridge table entries 
         */
         User owner = photo.getOwner();
-        if(owner.getId() != null){
+        if(owner != null && owner.getId() != null){
             UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
             entry.setPhotographId(withId.getId());
             entry.setUserId(owner.getId());

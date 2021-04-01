@@ -38,6 +38,11 @@ public class PhotographEntity {
     private boolean isRecurring;
     
     /*
+    I'm using this in lieu of @ManyToMany to minimize the amount
+    of memory used, as @ManyToMany requires storing all CategoryEntitys a photo 
+    belongs to, each of which stores all the PhotographEntitys belonging to it,
+    each of which stores all the CategoryEntitys they belong to...
+    
     Creates a bridge table between PhotographEntity and CategoryEntity
     photo_id is a foreign key to this class,
     category_name is a foreign key to the category
