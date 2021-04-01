@@ -6,7 +6,6 @@ import PreciousPhotographyShop.users.UserRepository;
 import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
-import PreciousPhotographyShop.users.User;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -32,45 +31,20 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired CategoryRepository categoryRepository;
     
     @Override
-    public String storeUser(User user) {
-        // create user table record 
-        UserEntity asEntity = new UserEntity();
-        asEntity.setId(user.getId()); // should allow us to update if already exists
-        asEntity.setName(user.getName());
-        asEntity.setEmail(user.getEmail());
-        asEntity.setPhotoIds(user.getPhotos().stream().map((photo)->{
-            return photo.getId();
-        }).collect(Collectors.toSet()));
-        asEntity = this.userRepository.save(asEntity);
-        user.setId(asEntity.getId()); // update user ID
-        
-        return asEntity.getId();
+    public String storeUser(UserEntity user) {
+        // create / update user table record 
+        user.setId(this.userRepository.save(user).getId());
+        return user.getId();
     }
 
+    /**
+     * 
+     * @param id the ID of the user to get
+     * @return the user with the given ID. If none is found, throws an exception
+     */
     @Override
-    public User getUser(String id) {
-        User u = null;
-        UserEntity e = this.userRepository.findById(id).get();
-        
-        u = new User(
-            e.getName(),
-            e.getEmail()
-        );
-        e.getPhotoIds().stream().map((photoId)->{
-            Photograph ret = null;
-            try {
-                ret = this.getPhotograph(photoId, true);
-            } catch(Exception ex){
-                ex.printStackTrace();
-            }
-            return ret;
-        }).filter((photo)->{
-            return photo != null;
-        }).forEach(u::addPhotograph);
-        
-        u.setId(e.getId());
-        
-        return u;
+    public UserEntity getUser(String id) {
+        return this.userRepository.findById(id).get();
     }
     
     @Override
@@ -106,9 +80,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
         /*
         Create bridge table entries 
         */
-        User owner = photo.getOwner();
+        UserEntity owner = photo.getOwner();
         if(owner != null && owner.getId() != null){
-            owner.addPhotograph(photo);
+            owner.getPhotoIds().add(withId.getId());
             owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
         }
         

@@ -1,6 +1,6 @@
 package PreciousPhotographyShop.photographs;
 
-import PreciousPhotographyShop.users.User;
+import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.Set;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * @author Matt Crow
  */
 public class Photograph {
-    private final User owner;
+    private final UserEntity owner;
     private final String name;
     private final BufferedImage photo;
     private final String description;
@@ -25,7 +25,7 @@ public class Photograph {
     // set by database interface
     private String id;
     
-    public Photograph(User owner, String name, BufferedImage photo, String description, double basePrice, Set<String> categories, boolean isRecurringSale){
+    public Photograph(UserEntity owner, String name, BufferedImage photo, String description, double basePrice, Set<String> categories, boolean isRecurringSale){
         this.owner = owner;
         this.name = name;
         this.photo = photo;
@@ -46,7 +46,7 @@ public class Photograph {
         return name;
     }
     
-    public final User getOwner(){
+    public final UserEntity getOwner(){
         return owner;
     }
     

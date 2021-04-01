@@ -5,7 +5,7 @@ import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.photographs.Photograph;
-import PreciousPhotographyShop.users.User;
+import PreciousPhotographyShop.users.UserEntity;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +36,7 @@ public class TestController {
         bad, but I think this is the only way to
         do it.
         */
-        User theUser = null;
+        UserEntity theUser = null;
         try {
             theUser = databaseInterface.getUser(name);
         } catch(Exception ex){

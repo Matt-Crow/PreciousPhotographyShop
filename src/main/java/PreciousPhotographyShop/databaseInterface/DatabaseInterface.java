@@ -2,7 +2,7 @@ package PreciousPhotographyShop.databaseInterface;
 
 
 import PreciousPhotographyShop.photographs.Photograph;
-import PreciousPhotographyShop.users.User;
+import PreciousPhotographyShop.users.UserEntity;
 import java.util.List;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public interface DatabaseInterface {
      * 
      * @return the user's ID in the database 
      */
-    public String storeUser(User user);
+    public String storeUser(UserEntity user);
     
     /**
      * 
@@ -33,7 +33,7 @@ public interface DatabaseInterface {
      * @return the user with the given ID. May return null or throw an exception
      * if none exists.
      */
-    public User getUser(String id);
+    public UserEntity getUser(String id);
     
     
     /*

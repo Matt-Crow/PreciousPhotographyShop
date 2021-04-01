@@ -1,15 +1,13 @@
 package PreciousPhotographyShop.databaseInterface;
 
 import PreciousPhotographyShop.photographs.Photograph;
-import PreciousPhotographyShop.users.User;
+import PreciousPhotographyShop.users.UserEntity;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
 
 /**
  *
@@ -18,18 +16,18 @@ import org.springframework.stereotype.Service;
 //@Repository("userDB")
 //@Service
 public class BadExampleDatabase implements DatabaseInterface {
-    private final HashMap<String, User> users;
+    private final HashMap<String, UserEntity> users;
     private final HashMap<String, Photograph> photos;
     
     public BadExampleDatabase(){
         users = new HashMap<>();
         photos = new HashMap<>();
         
-        storeUser(new User("John Doe", "johndoe@nonexistant.com"));
+        storeUser(new UserEntity("John Doe", "johndoe@nonexistant.com"));
     }
 
     @Override
-    public String storeUser(User user) {
+    public String storeUser(UserEntity user) {
         if(user.getId() == null){
             user.setId(UUID.randomUUID().toString());
         }
@@ -38,7 +36,7 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public User getUser(String id) {
+    public UserEntity getUser(String id) {
         return users.get(id);
     }
 
