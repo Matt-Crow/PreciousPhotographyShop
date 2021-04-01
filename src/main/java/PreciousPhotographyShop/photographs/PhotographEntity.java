@@ -57,6 +57,13 @@ public class PhotographEntity {
     @Column(name = "category_name")
     Set<String> categoryNames = new HashSet<>();
     
+    /*
+    Is there some way of inserting this into the seller_to_photo table
+    with a foreign key for this?
+    */
+    @Column(name = "owner_id")
+    String ownerId;
+    
     public PhotographEntity(){
         
     }
@@ -85,6 +92,10 @@ public class PhotographEntity {
         this.categoryNames = categoryNames;
     }
     
+    public void setOwnerId(String ownerId){
+        this.ownerId = ownerId;
+    }
+    
     public String getId(){
         return id;
     }
@@ -107,5 +118,9 @@ public class PhotographEntity {
     
     public Set<String> getCategoryNames(){
         return categoryNames;
+    }
+    
+    public String getOwnerId(){
+        return ownerId;
     }
 }

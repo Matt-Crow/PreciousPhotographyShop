@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -31,26 +30,19 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Autowired UserRepository userRepository;
     @Autowired PhotographRepository photographRepository;
     @Autowired CategoryRepository categoryRepository;
-    @Autowired UserToPhotographBridgeTable userToPhotographBridgeTable;
     
     @Override
     public String storeUser(User user) {
         // create user table record 
         UserEntity asEntity = new UserEntity();
+        asEntity.setId(user.getId()); // should allow us to update if already exists
         asEntity.setName(user.getName());
         asEntity.setEmail(user.getEmail());
+        asEntity.setPhotoIds(user.getPhotos().stream().map((photo)->{
+            return photo.getId();
+        }).collect(Collectors.toSet()));
         asEntity = this.userRepository.save(asEntity);
         user.setId(asEntity.getId()); // update user ID
-        
-        // create bridge table records
-        user.getPhotos().forEach((Photograph photo)->{
-            if(photo.getId() != null){
-                UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
-                entry.setPhotographId(photo.getId());
-                entry.setUserId(user.getId());
-                this.userToPhotographBridgeTable.save(entry);
-            }
-        });
         
         return asEntity.getId();
     }
@@ -64,18 +56,19 @@ public class RealDatabaseInterface implements DatabaseInterface {
             e.getName(),
             e.getEmail()
         );
-        u.setId(e.getId());
-        
-        Iterator<UserToPhotographBridgeTableEntry> ownerships = this.userToPhotographBridgeTable.findAllByUserId(e.getId()).iterator();
-        Photograph photo = null;
-        while(ownerships.hasNext()){
+        e.getPhotoIds().stream().map((photoId)->{
+            Photograph ret = null;
             try {
-                photo = this.getPhotograph(ownerships.next().getPhotographId(), true);
-                u.addPhotograph(photo);
+                ret = this.getPhotograph(photoId, true);
             } catch(Exception ex){
                 ex.printStackTrace();
             }
-        }
+            return ret;
+        }).filter((photo)->{
+            return photo != null;
+        }).forEach(u::addPhotograph);
+        
+        u.setId(e.getId());
         
         return u;
     }
@@ -115,10 +108,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
         */
         User owner = photo.getOwner();
         if(owner != null && owner.getId() != null){
-            UserToPhotographBridgeTableEntry entry = new UserToPhotographBridgeTableEntry();
-            entry.setPhotographId(withId.getId());
-            entry.setUserId(owner.getId());
-            this.userToPhotographBridgeTable.save(entry);
+            owner.addPhotograph(photo);
+            owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
         }
         
         return withId.getId();
@@ -128,9 +119,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
         Photograph ret = null;
         try {
             BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
-            UserToPhotographBridgeTableEntry ownership = this.userToPhotographBridgeTable.findByPhotographId(asEntity.getId()).orElse(null);
             ret = new Photograph(
-                (ownership == null) ? null : getUser(ownership.getUserId()),
+                (asEntity.getOwnerId() == null) ? null : getUser(asEntity.getOwnerId()),
                 asEntity.getName(),
                 img,
                 asEntity.getDescription(),
@@ -218,7 +208,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
         int found = 0;
         if(this.photographRepository.findById(id).orElse(null) != null){
             found = 1;
-            this.userToPhotographBridgeTable.deleteAllByPhotographId(id);
             // delete photo table record after bridge table entries
             this.photographRepository.deleteById(id);
         }
