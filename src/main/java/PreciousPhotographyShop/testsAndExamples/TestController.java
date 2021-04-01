@@ -49,12 +49,13 @@ public class TestController {
         
 		return "index";
 	}
-    
+
+	/*
     @GetMapping("/main")
     public @ResponseBody String main(){
         /*
         Testing all database capabilities
-        */
+
         
         // Create user
         User u = new User("Fakey McDon'texist", "fakey@aol.com");
@@ -90,4 +91,5 @@ public class TestController {
         
         return Arrays.toString(databaseInterface.getPhotographsByCategory(new String[]{"test"}));
     }
+    */
 }

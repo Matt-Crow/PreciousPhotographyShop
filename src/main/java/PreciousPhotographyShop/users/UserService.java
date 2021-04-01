@@ -3,7 +3,6 @@ package PreciousPhotographyShop.users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -73,8 +72,8 @@ public class UserService {
                 "User with id " + id + " does not exist"
         ));
 
-        if(name != null && name.length() > 0 && !Objects.equals(user.getName(), name)){
-            user.setName(name);
+        if(name != null && name.length() > 0 && !Objects.equals(user.getFirst_name(), name)){
+            user.setFirst_name(name);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
