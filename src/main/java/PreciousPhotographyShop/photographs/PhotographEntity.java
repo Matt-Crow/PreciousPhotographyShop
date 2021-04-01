@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.photographs;
 
+import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CollectionTable;
@@ -9,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -64,6 +66,9 @@ public class PhotographEntity {
     @Column(name = "owner_id")
     String ownerId;
     
+    @Transient // "Don't store this in the database"
+    BufferedImage photo;
+    
     public PhotographEntity(){
         
     }
@@ -96,6 +101,10 @@ public class PhotographEntity {
         this.ownerId = ownerId;
     }
     
+    public void setPhoto(BufferedImage photo){
+        this.photo = photo;
+    }
+    
     public String getId(){
         return id;
     }
@@ -122,5 +131,14 @@ public class PhotographEntity {
     
     public String getOwnerId(){
         return ownerId;
+    }
+    
+    public BufferedImage getPhoto(){
+        return photo;
+    }
+    
+    public final boolean isInCategory(String catName){
+        // need to figure out where we want to put this
+        return this.categoryNames.stream().anyMatch((cat)->cat.equalsIgnoreCase(catName));
     }
 }

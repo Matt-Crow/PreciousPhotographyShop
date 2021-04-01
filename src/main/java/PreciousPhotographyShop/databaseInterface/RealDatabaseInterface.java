@@ -4,7 +4,6 @@ import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import PreciousPhotographyShop.users.UserRepository;
 import PreciousPhotographyShop.categories.CategoryEntity;
-import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
@@ -48,7 +47,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override
-    public String storePhotograph(Photograph photo){
+    public String storePhotograph(PhotographEntity photo){
         PhotographEntity pe = new PhotographEntity();
         pe.setName(photo.getName());
         
@@ -66,7 +65,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         /*
         Find entities for the categories this photo belongs to
         */
-        Collection<CategoryEntity> catEnts = photo.getCategories().stream().map((categoryName)->{
+        Collection<CategoryEntity> catEnts = photo.getCategoryNames().stream().map((categoryName)->{
             // todo categoryName formatting
             CategoryEntity catEnt = this.categoryRepository.findById(categoryName).orElse(null);
             if(catEnt == null){
@@ -80,7 +79,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
         /*
         Create bridge table entries 
         */
-        UserEntity owner = photo.getOwner();
+        UserEntity owner = null;
+        if(photo.getOwnerId() != null){
+            owner = getUser(photo.getOwnerId());
+        }
         if(owner != null && owner.getId() != null){
             owner.getPhotoIds().add(withId.getId());
             owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
@@ -89,10 +91,15 @@ public class RealDatabaseInterface implements DatabaseInterface {
         return withId.getId();
     }
     
-    private Photograph tryConvert(PhotographEntity asEntity, boolean withWatermark){
-        Photograph ret = null;
+    private PhotographEntity tryConvert(PhotographEntity asEntity, boolean withWatermark){
+        PhotographEntity ret = null;
+        
+        
         try {
             BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
+            asEntity.setPhoto(img);
+            ret = asEntity;
+            /*
             ret = new Photograph(
                 (asEntity.getOwnerId() == null) ? null : getUser(asEntity.getOwnerId()),
                 asEntity.getName(),
@@ -102,7 +109,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
                 asEntity.getCategoryNames(),
                 asEntity.getIsRecurring()
             );
-            ret.setId(asEntity.getId());
+            ret.setId(asEntity.getId());*/
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -110,7 +117,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override 
-    public Photograph getPhotograph(String id, boolean withWatermark) {
+    public PhotographEntity getPhotograph(String id, boolean withWatermark) {
         return tryConvert(photographRepository.findById(id).get(), withWatermark);
     }
     
@@ -133,9 +140,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override
-    public Set<Photograph> getPhotographsByCategory(String category) {
-        HashSet<Photograph> ret = new HashSet<>();
-        Photograph curr = null;
+    public Set<PhotographEntity> getPhotographsByCategory(String category) {
+        HashSet<PhotographEntity> ret = new HashSet<>();
+        PhotographEntity curr = null;
         
         for(PhotographEntity pe : getPhotoBySupercategory(category)){
             curr = this.tryConvert(pe, true);
@@ -143,8 +150,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
                 ret.add(curr);
             }
         };
-        
-        
         
         return ret;
     }
@@ -169,8 +174,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     @Override
-    public HashMap<String, Photograph> getAllPhotos() {
-        HashMap<String, Photograph> ret = new HashMap<>();
+    public HashMap<String, PhotographEntity> getAllPhotos() {
+        HashMap<String, PhotographEntity> ret = new HashMap<>();
         this.photographRepository.findAll().forEach((photoEntity)->{
             ret.put(photoEntity.getId(), getPhotograph(photoEntity.getId(), true));
         });        
@@ -189,7 +194,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     @Override
-    public int updatePhotoByID(String id, Photograph photograph) {
+    public int updatePhotoByID(String id, PhotographEntity photograph) {
         int found = 0;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

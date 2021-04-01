@@ -46,15 +46,14 @@ public class PhotographController {
             List<String> categories = photoFormResp.getCategories();
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
-            Photograph photo = new Photograph(
-                null,
-                name,
-                buff,
-                "no description",
-                20.0, // todo set price
-                categories.stream().collect(Collectors.toSet()),
-                false // todo set recurring
-            );
+            PhotographEntity photo = new PhotographEntity();
+            photo.setName(name);
+            photo.setPhoto(buff);
+            photo.setDescription("no description");
+            photo.setPrice(20.0); // todo set price
+            photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
+            photo.setIsRecurring(false); // todo set recurring
+            
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {
             ex.printStackTrace();

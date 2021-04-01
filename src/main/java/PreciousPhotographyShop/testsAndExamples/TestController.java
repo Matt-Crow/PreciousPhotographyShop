@@ -4,7 +4,7 @@ import PreciousPhotographyShop.categories.Category;
 import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +103,7 @@ public class TestController {
         Set<String> cats = this.databaseInterface.getAllCategories();
         for(String cat : cats){
             sb.append(cat).append("</br>");
-            for(Photograph photo : this.databaseInterface.getPhotographsByCategory(cat)){
+            for(PhotographEntity photo : this.databaseInterface.getPhotographsByCategory(cat)){
                 sb.append(String.format("* %s</br>", photo.getName()));
             }
         }

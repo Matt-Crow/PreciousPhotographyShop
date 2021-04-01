@@ -1,6 +1,6 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 //@Service
 public class BadExampleDatabase implements DatabaseInterface {
     private final HashMap<String, UserEntity> users;
-    private final HashMap<String, Photograph> photos;
+    private final HashMap<String, PhotographEntity> photos;
     
     public BadExampleDatabase(){
         users = new HashMap<>();
@@ -41,7 +41,7 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public String storePhotograph(Photograph photo) {
+    public String storePhotograph(PhotographEntity photo) {
         if(photo.getId() == null){
             photo.setId(UUID.randomUUID().toString());
         }
@@ -50,7 +50,7 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public Photograph getPhotograph(String id, boolean withWatermark) {
+    public PhotographEntity getPhotograph(String id, boolean withWatermark) {
         // todo: do stuff if withWatermark is true
         return photos.get(id);
     }
@@ -58,25 +58,25 @@ public class BadExampleDatabase implements DatabaseInterface {
     // added by Daniel R, unsure about the method with boolean withWatermark
     // Matt: I've updated the documentation for getPhotograph(String, boolean) to
     //       make it clearer.
-    public Photograph getPhotograph(String id){
+    public PhotographEntity getPhotograph(String id){
          return getPhotograph(id, true);
     }
 
     @Override
-    public Set<Photograph> getPhotographsByCategory(String category) {
+    public Set<PhotographEntity> getPhotographsByCategory(String category) {
         return photos.values().stream().filter((photo)->{
             return category == null || photo.isInCategory(category);
         }).collect(Collectors.toSet());
     }
 
     @Override
-    public HashMap<String, Photograph> getAllPhotos() {
+    public HashMap<String, PhotographEntity> getAllPhotos() {
         return photos;
     }
 
     @Override
     public int deletePhotoByID(String id) {
-        Photograph temp = getPhotograph(id);
+        PhotographEntity temp = getPhotograph(id);
         if(temp == null)
             return 0;
         else
@@ -85,14 +85,14 @@ public class BadExampleDatabase implements DatabaseInterface {
     }
 
     @Override
-    public int updatePhotoByID(String id, Photograph photograph){
+    public int updatePhotoByID(String id, PhotographEntity photograph){
         return 0; // Implement later
     }
     
     @Override
     public Set<String> getAllCategories() {
         return photos.values().stream().flatMap((photograph)->{
-            return photograph.getCategories().stream();
+            return photograph.getCategoryNames().stream();
         }).map((catName)->{
             return catName.toUpperCase();
         }).collect(Collectors.toSet());

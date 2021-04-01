@@ -1,6 +1,6 @@
 package PreciousPhotographyShop.databaseInterface;
 
-import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.photographs.PhotographEntity;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -42,7 +42,7 @@ class LocalFileSystem {
         return Paths.get(this.photoPath, String.format("%s.jpg", id)).toString();
     }
     
-    void store(Photograph photo) throws IOException{
+    void store(PhotographEntity photo) throws IOException{
         File newFile = new File(idToFilePath(photo.getId()));
         ImageIO.write(photo.getPhoto(), "jpg", newFile);
     }

@@ -1,7 +1,7 @@
 package PreciousPhotographyShop.databaseInterface;
 
 
-import PreciousPhotographyShop.photographs.Photograph;
+import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
 import java.util.List;
 
@@ -45,7 +45,7 @@ public interface DatabaseInterface {
      * @param photo the new photograph to store in the database
      * @return the photograph's ID in the database
      */
-    public String storePhotograph(Photograph photo);
+    public String storePhotograph(PhotographEntity photo);
     
     /**
      * 
@@ -56,13 +56,13 @@ public interface DatabaseInterface {
      * @return the photograph with the given ID. May return null or throw an
      *  Exception if none exists.
      */
-    public Photograph getPhotograph(String id, boolean withWatermark);
+    public PhotographEntity getPhotograph(String id, boolean withWatermark);
     
     // Temporary method added by Daniel R
     public int deletePhotoByID(String id);
     
     // Temporary method added by Daniel R
-    public int updatePhotoByID(String id, Photograph photograph);
+    public int updatePhotoByID(String id, PhotographEntity photograph);
     
     /*
     Category methods
@@ -75,14 +75,14 @@ public interface DatabaseInterface {
      * 
      * @return the photographs belonging to the given category 
      */
-    public Set<Photograph> getPhotographsByCategory(String categoryName);
+    public Set<PhotographEntity> getPhotographsByCategory(String categoryName);
     
     public Set<String> getAllCategories();
 
     
     // Temporary method added by Daniel R
     // Matt: probably a List or HashSet of Photographs is all we need this to return
-    public HashMap<String, Photograph> getAllPhotos();
+    public HashMap<String, PhotographEntity> getAllPhotos();
     
     //temp
     public List<String> getAllPhotoIds();
