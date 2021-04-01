@@ -1,6 +1,7 @@
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 
+/staticHome.html
 /newPhoto
 /allPhotos
 
