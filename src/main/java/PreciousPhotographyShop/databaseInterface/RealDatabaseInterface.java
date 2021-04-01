@@ -63,9 +63,9 @@ public class RealDatabaseInterface implements DatabaseInterface {
         }
         
         /*
-        Find entities for the categories this photo belongs to
+        create categories this photo belongs to
         */
-        Collection<CategoryEntity> catEnts = photo.getCategoryNames().stream().map((categoryName)->{
+        photo.getCategoryNames().stream().forEach((categoryName)->{
             // todo categoryName formatting
             CategoryEntity catEnt = this.categoryRepository.findById(categoryName).orElse(null);
             if(catEnt == null){
@@ -73,8 +73,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
                 catEnt.setName(categoryName);
                 categoryRepository.save(catEnt);
             }
-            return catEnt;
-        }).collect(Collectors.toList());
+        });
         
         /*
         Create bridge table entries 
@@ -93,23 +92,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     private PhotographEntity tryConvert(PhotographEntity asEntity, boolean withWatermark){
         PhotographEntity ret = null;
-        
-        
         try {
             BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
             asEntity.setPhoto(img);
             ret = asEntity;
-            /*
-            ret = new Photograph(
-                (asEntity.getOwnerId() == null) ? null : getUser(asEntity.getOwnerId()),
-                asEntity.getName(),
-                img,
-                asEntity.getDescription(),
-                asEntity.getPrice(),
-                asEntity.getCategoryNames(),
-                asEntity.getIsRecurring()
-            );
-            ret.setId(asEntity.getId());*/
         } catch (IOException ex) {
             ex.printStackTrace();
         }
