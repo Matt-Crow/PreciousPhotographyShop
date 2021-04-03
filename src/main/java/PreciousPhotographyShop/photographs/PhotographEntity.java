@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.SecondaryTable;
 import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -20,6 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
+@SecondaryTable(name = "seller_to_photo") // need this for bridge table
 public class PhotographEntity {
     @Id
     @Column(name="photo_id")
@@ -62,13 +64,20 @@ public class PhotographEntity {
     /*
     Is there some way of inserting this into the seller_to_photo table
     with a foreign key for this?
-    */
     
-    @CollectionTable(
-        name = "seller_to_photo",
-        joinColumns = @JoinColumn(name = "photo_id")
+    This might work.
+    
+    I think it will do the following:
+        Upon saving this entity, inserts the following record into the
+        seller_to_photo table:
+            photo_id | user_id
+            this.id  | this.ownerId
+        The foreign key is automatically set by @SecondaryTable above
+    */
+    @Column(
+        name = "user_id", //
+        table = "seller_to_photo" // only stored in bridge table
     )
-    @Column(name = "user_id")
     String ownerId;
     
     @Transient // "Don't store this in the database"
