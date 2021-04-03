@@ -30,7 +30,7 @@ public class UserEntity {
     
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
-    @Column(name="id")
+    @Column(name="user_id")
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
@@ -47,8 +47,9 @@ public class UserEntity {
     @ElementCollection
     @CollectionTable(
         name = "seller_to_photo",
-        joinColumns = @JoinColumn(name = "id")
+        joinColumns = @JoinColumn(name = "user_id")
     )
+    @Column(name="photo_id")
     Set<String> photoIds = new HashSet<>();
     
     public UserEntity(){

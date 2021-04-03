@@ -63,7 +63,12 @@ public class PhotographEntity {
     Is there some way of inserting this into the seller_to_photo table
     with a foreign key for this?
     */
-    @Column(name = "owner_id")
+    
+    @CollectionTable(
+        name = "seller_to_photo",
+        joinColumns = @JoinColumn(name = "photo_id")
+    )
+    @Column(name = "user_id")
     String ownerId;
     
     @Transient // "Don't store this in the database"
