@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>View Photograph</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+    <nav th:insert="fragments.html :: pages-nav"></nav>
+    <div th:object="${photo}">
+        <h1 th:text="*{name}"></h1>
+        <img th:src="@{'/photo?id=' + *{id}}"/>
+        <p th:text="*{description}"></p>
+        <!--<p th:text="${#numbers.formatCurrency(*{price})}"-->
+        <h2>Seller</h2>
+        <p th:text="*{ownerId}"></p>
+        <h2>Categories</h2>
+        <ul>
+            <li th:each="catName : ${categoryNames}">
+                <p th:text="${catName}"><p/>
+            </li>
+        </ul>
+        
+    </div>
+    
+    <div th:insert="fragments.html :: end"></div>
+</body>
+</html>

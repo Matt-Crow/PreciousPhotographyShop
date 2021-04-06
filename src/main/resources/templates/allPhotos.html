@@ -10,7 +10,9 @@
     <h1>All Photographs</h1>
     <div th:each="photoId : ${photos}">
         <hr/>
-        <img th:src="${'/photo?id=' + photoId}"/>
+        <a th:href="@{'/viewPhoto?id=' + ${photoId}}">
+            <img th:src="@{'/photo?id=' + ${photoId}}"/>
+        </a>
         <hr/>
     </div>
     <div th:insert="fragments.html :: end"></div>

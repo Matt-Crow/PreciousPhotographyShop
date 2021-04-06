@@ -17,12 +17,12 @@
 </head>
 <body>
     <nav class="pages-nav" th:fragment="pages-nav">
-        <div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{#page-home}">Home</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/allPhotos}">Photos</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/newPhoto}">Upload</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/api/users}">User</a></div>
-        <div class="pages-nav__item"><a class="link link--page" href="#page-training">About Us</a></div>
-        <div class="pages-nav__item"><a class="link link--page" href="#page-contact">Contact</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{#page-training}">About Us</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{#page-contact}">Contact</a></div>
         <div class="pages-nav__item pages-nav__item--social">
             <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
