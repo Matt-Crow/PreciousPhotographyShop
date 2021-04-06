@@ -18,16 +18,16 @@ public class User {
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid")
     private String id;
-    @Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")
+    /*@Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")*/
     private String first_name;
-    @Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")
+    /*@Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")*/
     private String last_name;
-    @Pattern(regexp = "^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$",
-            message = "Username should only contain alphanumeric characters, periods and underscores")
+    /*@Pattern(regexp = "^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$",
+            message = "Username should only contain alphanumeric characters, periods and underscores")*/
     private String username;
     private String password;
-    @Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
-    message = "Address is invalid")
+    /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
+    message = "Address is invalid")*/
     private String address;
     private String email;
 
