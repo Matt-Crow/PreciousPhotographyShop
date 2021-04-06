@@ -25,7 +25,7 @@ public class UserController {
      *  Returns a list of all users in the Database
      **/
     @GetMapping("/users")
-    public List<User> getUsers(){
+    public List<UserEntity> getUsers(){
         return userService.getAllUsers();
     }
 
@@ -35,7 +35,7 @@ public class UserController {
      * @return returns the user's information
      */
     @GetMapping("/findUser")
-    public User findUser(@PathVariable("userID") String id){
+    public UserEntity findUser(@PathVariable("userID") String id){
         return userService.getSingleUser(id);
     }
 
@@ -44,7 +44,7 @@ public class UserController {
      * @param user The user to be stored
      */
     @PostMapping
-    public void registerNewUser(@RequestBody User user){
+    public void registerNewUser(@RequestBody UserEntity user){
         userService.addNewUser(user);
     }
 

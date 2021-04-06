@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author Matt
  */
 public interface PhotographRepository extends CrudRepository<PhotographEntity, String> {
-
+    public Iterable<PhotographEntity> findAllByCategoryNames(String categoryName);
 }

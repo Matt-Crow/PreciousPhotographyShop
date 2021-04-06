@@ -18,9 +18,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User getSingleUser(String id) {
+    public UserEntity getSingleUser(String id) {
 
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException((
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException((
                 "User with id " + id + " cannot be found"
                 )));
         return user;
@@ -30,8 +30,8 @@ public class UserService {
      * This is an @GET HTTP call
      * @return Returns a list of all user by name and email
      */
-    public List<User> getAllUsers(){
-        List<User> users = (List<User>) userRepository.findAll();
+    public List<UserEntity> getAllUsers(){
+        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
         return users;
     }
 
@@ -40,8 +40,8 @@ public class UserService {
      * the email is taken
      * @param user The user to be stored in the database
      */
-    public void addNewUser(User user) {
-        Optional<User> UserOptional = userRepository.findUserByEmail(user.getEmail());
+    public void addNewUser(UserEntity user) {
+        Optional<UserEntity> UserOptional = userRepository.findUserByEmail(user.getEmail());
         if(UserOptional.isPresent()) {
             throw new IllegalStateException("Email is taken");
         }
@@ -68,7 +68,7 @@ public class UserService {
      */
     @Transactional
     public void updateUser(String id, String name, String email){
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException(
+        UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException(
                 "User with id " + id + " does not exist"
         ));
 
@@ -77,12 +77,11 @@ public class UserService {
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
-            Optional<User> userOptional = userRepository.findUserByEmail(email);
+            Optional<UserEntity> userOptional = userRepository.findUserByEmail(email);
             if(userOptional.isPresent()){
                 throw new IllegalStateException("Email taken");
             }
             user.setEmail(email);
         }
     }
-
 }
