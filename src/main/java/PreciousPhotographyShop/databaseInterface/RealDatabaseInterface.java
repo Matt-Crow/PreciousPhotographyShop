@@ -4,22 +4,17 @@ import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import PreciousPhotographyShop.users.UserRepository;
 import PreciousPhotographyShop.categories.CategoryEntity;
-import PreciousPhotographyShop.photographs.Photograph;
 import PreciousPhotographyShop.photographs.PhotographEntity;
-import PreciousPhotographyShop.users.User;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,60 +25,47 @@ import org.springframework.stereotype.Service;
 
 @Service // "Yo! Spring! This class can be used when I Autowire a DatabaseInterface!"
 public class RealDatabaseInterface implements DatabaseInterface {
-    @Autowired
-    UserRepository userRepository;
-    
-    @Autowired
-    PhotographRepository photographRepository;
-    
-    @Autowired
-    CategoryRepository categoryRepository;
-    
-    // move to LocalFileSystem class later?
-    private static final String FILE_SYS_PHOTO_REPO = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
-    
-    private File getPhotoFolder(){
-        File f = new File(FILE_SYS_PHOTO_REPO);
-        if(!f.exists()){
-            f.mkdirs();
-        }
-        return f;
-    }
+    @Autowired UserRepository userRepository;
+    @Autowired PhotographRepository photographRepository;
+    @Autowired CategoryRepository categoryRepository;
     
     @Override
-    public String storeUser(User user) {
-        UserEntity asEntity = new UserEntity();
-        asEntity.setName(user.getName());
-        asEntity.setEmail(user.getEmail());
-        asEntity = this.userRepository.save(asEntity);
-        user.setId(asEntity.getId()); // update user ID
-        return asEntity.getId();
+    public String storeUser(UserEntity user) {
+        // create / update user table record 
+        user.setId(this.userRepository.save(user).getId());
+        return user.getId();
     }
 
+    /**
+     * 
+     * @param id the ID of the user to get
+     * @return the user with the given ID. If none is found, throws an exception
+     */
     @Override
-    public User getUser(String id) {
-        User u = null;
-        UserEntity e = this.userRepository.findById(id).get();
-        // throws error if not found
-        
-        u = new User(
-            e.getName(),
-            e.getEmail()
-        );
-        u.setId(e.getId());
-        
-        return u;
+    public UserEntity getUser(String id) {
+        return this.userRepository.findById(id).get();
     }
     
     @Override
-    public String storePhotograph(Photograph photo){
+    public String storePhotograph(PhotographEntity photo){
         PhotographEntity pe = new PhotographEntity();
         pe.setName(photo.getName());
         
         /*
-        Find entities for the categories this photo belongs to
+        Create new file for the photo
         */
-        Collection<CategoryEntity> catEnts = photo.getCategories().stream().map((categoryName)->{
+        PhotographEntity withId = this.photographRepository.save(pe); // save() returns the changed pe
+        try { 
+            photo.setId(withId.getId());
+            LocalFileSystem.getInstance().store(photo);
+        } catch (IOException ex) { 
+            ex.printStackTrace();
+        }
+        
+        /*
+        create categories this photo belongs to
+        */
+        photo.getCategoryNames().stream().forEach((categoryName)->{
             // todo categoryName formatting
             CategoryEntity catEnt = this.categoryRepository.findById(categoryName).orElse(null);
             if(catEnt == null){
@@ -91,38 +73,29 @@ public class RealDatabaseInterface implements DatabaseInterface {
                 catEnt.setName(categoryName);
                 categoryRepository.save(catEnt);
             }
-            return catEnt;
-        }).collect(Collectors.toList());
-        pe.setCategories(catEnts);
+        });
         
         /*
-        Create new file for the photo
+        Create bridge table entries 
         */
-        File root = this.getPhotoFolder();
-        
-        try {            
-            pe = this.photographRepository.save(pe); // save() returns the changed pe
-            photo.setId(pe.getId());
-            File newFile = Paths.get(root.getAbsolutePath(), pe.getId() + ".jpg").toFile();
-            ImageIO.write(photo.getPhoto(), "jpg", newFile);
-        } catch (IOException ex) { 
-            ex.printStackTrace();
+        UserEntity owner = null;
+        if(photo.getOwnerId() != null){
+            owner = getUser(photo.getOwnerId());
+        }
+        if(owner != null && owner.getId() != null){
+            owner.getPhotoIds().add(withId.getId());
+            owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
         }
         
-        return pe.getId();
+        return withId.getId();
     }
     
-    // image data is under FILE_SYS_PHOTO_REPO/id
-    private Photograph tryConvert(PhotographEntity asEntity){
-        Photograph ret = null;
+    private PhotographEntity tryConvert(PhotographEntity asEntity, boolean withWatermark){
+        PhotographEntity ret = null;
         try {
-            BufferedImage img = ImageIO.read(Paths.get(FILE_SYS_PHOTO_REPO, asEntity.getId() + ".jpg").toFile());
-            ret = new Photograph(
-                asEntity.getName(),
-                img,
-                asEntity.getCategories().stream().map((cat)->cat.getName()).toArray((s)->new String[s])
-            );
-            ret.setId(asEntity.getId());
+            BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
+            asEntity.setPhoto(img);
+            ret = asEntity;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -130,80 +103,85 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override 
-    public Photograph getPhotograph(String id, boolean withWatermark) {
-        Photograph photo = tryConvert(photographRepository.findById(id).get());
-        
-        System.err.println("Todo: add watermarking"); // maybe in tryConvert
-        
-        return photo;
+    public PhotographEntity getPhotograph(String id, boolean withWatermark) {
+        return tryConvert(photographRepository.findById(id).get(), withWatermark);
     }
-
+    
+    /**
+     * Gets all PhotographToCategoryTableEntrys with a category that is (or is
+     * the descendant of) the given category.
+     * 
+     * @param topmost the topmost category to search under
+     * 
+     * @return all the PhotographEntitys as described above
+     */
+    private Set<PhotographEntity> getPhotoBySupercategory(String topmost){
+        HashSet<PhotographEntity> ret = new HashSet<>();
+        this.photographRepository.findAllByCategoryNames(topmost).forEach(ret::add);
+        // recursively call on each direct child category
+        this.categoryRepository.findAllByParentName(topmost).forEach((catEnt)->{
+            ret.addAll(this.getPhotoBySupercategory(catEnt.getName()));
+        });
+        return ret;
+    }
+    
     @Override
-    public Photograph[] getPhotographsByCategory(String[] categories) {
-        // we'll have to decide how exactly this works.
-        // for now, I'll treat it as "get all photographs belonging to at least one of these categories"
-        // no categories = get all
-        HashSet<Photograph> ret = new HashSet<>();
-        Photograph curr = null;
+    public Set<PhotographEntity> getPhotographsByCategory(String category) {
+        HashSet<PhotographEntity> ret = new HashSet<>();
+        PhotographEntity curr = null;
         
-        Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator(); // how to SELECT WHERE category IN categories?
-        while(iter.hasNext()){
-            curr = this.tryConvert(iter.next());
+        for(PhotographEntity pe : getPhotoBySupercategory(category)){
+            curr = this.tryConvert(pe, true);
             if(curr != null){
                 ret.add(curr);
             }
-        }
+        };
         
-        // would like to check category before converting
-        if(categories.length != 0){
-            HashSet<Photograph> filtered = new HashSet<>();
-            ret.stream().filter((Photograph photo)->{
-                boolean b = false;
-                for(int i = 0; i < categories.length && !b; i++){
-                    b = photo.isInCategory(categories[i]);
-                }
-                return b;
-            }).forEach(filtered::add);
-            ret = filtered;
-        }
-        
-        return ret.toArray(new Photograph[ret.size()]);
+        return ret;
     }
     
     //temp
     @Override
     public final List<String> getAllPhotoIds(){
         List<String> ret = new LinkedList<>();
-        Iterator<PhotographEntity> iter = this.photographRepository.findAll().iterator();
-        while(iter.hasNext()){
-            ret.add(iter.next().getId());
-        }
+        this.photographRepository.findAll().forEach((PhotographEntity pe)->{
+            ret.add(pe.getId());
+        });
         return ret;
     }
 
     @Override
-    public List<String> getAllCategories() {
-        Iterator<CategoryEntity> cats = this.categoryRepository.findAll().iterator();
-        LinkedList<String> catNames = new LinkedList<>();
-        while(cats.hasNext()){
-            catNames.add(cats.next().getName());
-        }
+    public Set<String> getAllCategories() {
+        Set<String> catNames = new HashSet<>();
+        this.categoryRepository.findAll().forEach((CategoryEntity catEnt)->{
+            catNames.add(catEnt.getName());
+        });
         return catNames;
     }
 
     @Override
-    public HashMap<String, Photograph> getAllPhotos() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public HashMap<String, PhotographEntity> getAllPhotos() {
+        HashMap<String, PhotographEntity> ret = new HashMap<>();
+        this.photographRepository.findAll().forEach((photoEntity)->{
+            ret.put(photoEntity.getId(), getPhotograph(photoEntity.getId(), true));
+        });        
+        return ret;
     }
 
     @Override
     public int deletePhotoByID(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int found = 0;
+        if(this.photographRepository.findById(id).orElse(null) != null){
+            found = 1;
+            // delete photo table record after bridge table entries
+            this.photographRepository.deleteById(id);
+        }
+        return found;
     }
 
     @Override
-    public int updatePhotoByID(String id, Photograph photograph) {
+    public int updatePhotoByID(String id, PhotographEntity photograph) {
+        int found = 0;
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }

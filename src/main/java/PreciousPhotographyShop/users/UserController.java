@@ -1,6 +1,5 @@
 package PreciousPhotographyShop.users;
 
-import PreciousPhotographyShop.users.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +21,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUser() {
+    public List<UserEntity> getUser() {
         return userService.getUser();
     }
 
     @PostMapping
-    public void registerNewUser(User user){
+    public void registerNewUser(UserEntity user){
         userService.getUser();
     }
 }
