@@ -51,7 +51,7 @@ public class TestController {
             model.addAttribute("email", theUser.getEmail());
         }
         
-		return "index";
+		return "index-2";
 	}
     
     @GetMapping("/testCategories")
