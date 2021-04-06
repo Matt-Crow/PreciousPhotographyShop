@@ -3,8 +3,10 @@
     <head> 
         <title>Post a new Photograph</title> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
     </head>
     <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
         <form method="POST" action="#" th:action="@{/testPostPhoto}" enctype="multipart/form-data" th:object="${formResponse}">
             <div>
                 <label for="photo">Choose a photograph to post</label>
@@ -43,5 +45,6 @@
                 <input type="submit" value="Submit" />
             </div>
         </form>
+        <div th:insert="fragments.html :: end"></div>
     </body>
 </html>

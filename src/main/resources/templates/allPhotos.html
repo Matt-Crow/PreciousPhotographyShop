@@ -3,13 +3,16 @@
 <head> 
     <title>Example Photograph Listing</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
 </head>
 <body>
+    <nav th:insert="fragments.html :: pages-nav"></nav>
     <h1>All Photographs</h1>
     <div th:each="photoId : ${photos}">
         <hr/>
         <img th:src="${'/photo?id=' + photoId}"/>
         <hr/>
     </div>
+    <div th:insert="fragments.html :: end"></div>
 </body>
 </html>
