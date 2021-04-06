@@ -4,7 +4,6 @@ package PreciousPhotographyShop.databaseInterface;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
 import java.util.List;
-
 import java.util.HashMap;
 import java.util.Set;
 

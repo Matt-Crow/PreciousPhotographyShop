@@ -104,7 +104,7 @@ public class TestController {
     public @ResponseBody String main(){
         /*
         Testing all database capabilities
-        */
+
         
         /*
         // Create user

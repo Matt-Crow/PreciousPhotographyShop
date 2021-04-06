@@ -36,7 +36,6 @@ jar {
     }
 }
 
-
 repositories {
     // Use jcenter for resolving dependencies.
     // You can declare any Maven/Ivy/file repository here.
@@ -45,23 +44,18 @@ repositories {
 
 dependencies {
     // This dependency is used by the application.
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'com.google.guava:guava:28.0-jre'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-    
     implementation('org.springframework.boot:spring-boot-starter-jdbc')
     runtimeOnly('com.h2database:h2')
-
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    
     runtimeOnly 'mysql:mysql-connector-java'
-    
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'junit:junit:4.12'
-    
 }
 
 application {
