@@ -2,14 +2,11 @@ package PreciousPhotographyShop.photographs;
 
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.photographs.Photograph;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 //@Service
 public class PhotoService {
@@ -21,17 +18,17 @@ public class PhotoService {
         this.photoDB = photoDB;
     }
 
-    public void addPhoto(Photograph photograph){
+    public void addPhoto(PhotographEntity photograph){
         photoDB.storePhotograph(photograph);
     }
 
     // However Matt designs database
     @GetMapping
-    public HashMap<String, Photograph> getAllPhotos(){
+    public HashMap<String, PhotographEntity> getAllPhotos(){
         return photoDB.getAllPhotos();
     }
 
-    public Photograph getPhotoByID(String id){
+    public PhotographEntity getPhotoByID(String id){
         return photoDB.getPhotograph(id, true);
     }
 
@@ -39,7 +36,7 @@ public class PhotoService {
         return photoDB.deletePhotoByID(id);
     }
 
-    public int updatePhotograph(String id, Photograph newPhoto){
+    public int updatePhotograph(String id, PhotographEntity newPhoto){
         return photoDB.updatePhotoByID(id, newPhoto);
     }
 

@@ -1,11 +1,12 @@
 package PreciousPhotographyShop.photographs;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.databaseInterface.RealDatabaseInterface;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,7 @@ public class PhotographController {
     
     @GetMapping("/newPhoto")
     public String newPhotoForm(Model model){
-        List<String> categoryNames = databaseInterface.getAllCategories();
+        Set<String> categoryNames = databaseInterface.getAllCategories();
         categoryNames.add("still life");
         categoryNames.add("animals");
         categoryNames.add("black and white");
@@ -38,18 +39,21 @@ public class PhotographController {
         @ModelAttribute PhotoFormResponse photoFormResp,
         Model model
     ){
-        System.out.println("received form");
+        System.out.println("received form: todo get logged in user");
         try {
             MultipartFile file = photoFormResp.getFile();
             String name = photoFormResp.getName();
             List<String> categories = photoFormResp.getCategories();
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
-            Photograph photo = new Photograph(
-                name,
-                buff,
-                categories.toArray(new String[categories.size()])
-            );
+            PhotographEntity photo = new PhotographEntity();
+            photo.setName(name);
+            photo.setPhoto(buff);
+            photo.setDescription("no description");
+            photo.setPrice(20.0); // todo set price
+            photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
+            photo.setIsRecurring(false); // todo set recurring
+            
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {
             ex.printStackTrace();

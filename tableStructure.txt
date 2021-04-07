@@ -1,0 +1,34 @@
+<<Outdated>>
+
+DESC CSC130Precious.user_entity;
++-------+--------------+------+-----+---------+-------+
+| Field | Type         | Null | Key | Default | Extra |
++-------+--------------+------+-----+---------+-------+
+| id    | varchar(255) | NO   | PRI | NULL    |       |
+| email | varchar(255) | YES  |     | NULL    |       |
+| name  | varchar(255) | YES  |     | NULL    |       |
++-------+--------------+------+-----+---------+-------+
+
+DESC CSC130Precious.photograph_entity;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| photo_id | varchar(255) | NO   | PRI | NULL    |       |
+| name     | varchar(255) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+
+DESC CSC130Precious.category_entity;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| category_name | varchar(255) | NO   | PRI | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+
+DESC CSC130Precious.photograph_to_category_table_entry;
++------------------------+--------------+------+-----+---------+-------+
+| Field                  | Type         | Null | Key | Default | Extra |
++------------------------+--------------+------+-----+---------+-------+
+| id                     | varchar(255) | NO   | PRI | NULL    |       |
+| category_id            | varchar(255) | YES  |     | NULL    |       |
+| photograph_id          | varchar(255) | YES  |     | NULL    |       |
++------------------------+--------------+------+-----+---------+-------+
