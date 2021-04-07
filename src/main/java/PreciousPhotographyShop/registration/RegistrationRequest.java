@@ -1,11 +1,9 @@
 package PreciousPhotographyShop.registration;
 
 import lombok.*;
-import lombok.AllArgsConstructor;
 
 @Getter
 @EqualsAndHashCode
-@AllArgsConstructor
 @ToString
 public class RegistrationRequest {
 
@@ -13,7 +11,11 @@ public class RegistrationRequest {
     private final String password;
     private final String email;
 
-
+    public RegistrationRequest(String name, String password, String email){
+        this.name = name;
+        this.password = password;
+        this.email = email;
+    }
 }
 
 

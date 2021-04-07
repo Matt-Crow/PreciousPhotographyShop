@@ -74,7 +74,7 @@ public class TestController {
     
     @GetMapping("/testPart1")
     public @ResponseBody String testPart1(){
-        UserEntity seller = new UserEntity("John Doe", "johndoe@aol.com");
+        UserEntity seller = new UserEntity("John Doe", "johndoe@aol.com","password");
         seller.setUsername("theNextPicasoOfPhotography");
         Set<String> owned = new HashSet<>();
         List<String> photoIds = this.databaseInterface.getAllPhotoIds();
