@@ -59,9 +59,27 @@ public class PhotographController {
     }
     
     @GetMapping("/allPhotos")
-    public String allPhotos(Model model){
-        //temp
-        model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
+    public String allPhotos(
+        @RequestParam(name="category", required = false) String category, 
+        Model model
+    ){
+        System.out.printf("All photos by category is %s\n", category);
+        
+        model.addAttribute(
+            "categoryNames", 
+            databaseInterface.getAllCategories().stream().collect(Collectors.toList())
+        );
+        
+        if(category == null){
+            model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
+        } else {
+            model.addAttribute(
+                "photos", 
+                this.databaseInterface.getPhotographsByCategory(category).stream().map((photo)->{
+                   return photo.getId(); 
+                }).collect(Collectors.toList())
+            );
+        }
         return "allPhotos";
     }
     
