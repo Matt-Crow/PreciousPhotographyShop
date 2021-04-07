@@ -1,18 +1,23 @@
 package PreciousPhotographyShop.users;
 
+import PreciousPhotographyShop.registration.token.ConfirmationTokenService;
+import PreciousPhotographyShop.registration.token.ConfirmationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @Author: Daniel V
- * Contains all the business logic within the HTTP calls in @UserController
+ * Contains all the business logic within the HTTP calls in
+ * @UserController + login verification and authentication
  */
 
 @Service
@@ -22,10 +27,12 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
-    UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+    UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService){
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.confirmationTokenService = confirmationTokenService;
     }
 
     public UserEntity getSingleUser(String id) {
@@ -115,9 +122,20 @@ public class UserService implements UserDetailsService {
         userEntity.setPassword(encodedPassword);
 
         userRepository.save(userEntity);
-        // TODO: SEND CONFIRMATION TOKEN
 
-        return "It works!";
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                userEntity
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: Send email
+        return token;
     }
 
 

@@ -74,7 +74,7 @@ public class TestController {
     
     @GetMapping("/testPart1")
     public @ResponseBody String testPart1(){
-        UserEntity seller = new UserEntity("John Doe", "johndoe@aol.com","password");
+        UserEntity seller = new UserEntity("John", "Doe", "johndoe@aol.com", "JohnnyDoe","password");
         seller.setUsername("theNextPicasoOfPhotography");
         Set<String> owned = new HashSet<>();
         List<String> photoIds = this.databaseInterface.getAllPhotoIds();
@@ -96,7 +96,7 @@ public class TestController {
             System.out.println(photo.getOwnerId());
             return photo.getOwnerId() != null;
         }).map((photo)->{
-            return databaseInterface.getUser(photo.getOwnerId()).getName();
+            return databaseInterface.getUser(photo.getOwnerId()).getEmail();
         }).collect(Collectors.joining(", "));
     }
     
