@@ -43,15 +43,11 @@ public class PhotographController {
         System.out.println("received form: todo get logged in user");
         try {
             MultipartFile file = photoFormResp.getFile();
-            String name = photoFormResp.getName();
             List<String> categories = photoFormResp.getCategories();
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
-            PhotographEntity photo = new PhotographEntity();
-            photo.setName(name);
+            PhotographEntity photo = (PhotographEntity)photoFormResp;
             photo.setPhoto(buff);
-            photo.setDescription("no description");
-            photo.setPrice(20.0); // todo set price
             photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
             photo.setIsRecurring(false); // todo set recurring
             
