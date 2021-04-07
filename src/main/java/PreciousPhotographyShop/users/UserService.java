@@ -1,9 +1,9 @@
 package PreciousPhotographyShop.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -18,8 +18,15 @@ import java.util.Optional;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final String USER_NOT_FOUND_MSG = "Could not find an account associated with this email";
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     public UserEntity getSingleUser(String id) {
 
@@ -75,8 +82,8 @@ public class UserService implements UserDetailsService {
                 "User with id " + id + " does not exist"
         ));
 
-        if(name != null && name.length() > 0 && !Objects.equals(user.getFirst_name(), name)){
-            user.setFirst_name(name);
+        if(name != null && name.length() > 0 && !Objects.equals(user.getFirstName(), name)){
+            user.setFirstName(name);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
@@ -89,7 +96,29 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findUserByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_MSG, email)
+                ));
     }
+
+    public String signUpUser(UserEntity userEntity){
+        boolean userExists = userRepository.findUserByEmail(userEntity.getEmail()).isPresent();
+
+        if(userExists){
+            throw new IllegalStateException("Email is already taken!");
+        }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
+
+        userEntity.setPassword(encodedPassword);
+
+        userRepository.save(userEntity);
+        // TODO: SEND CONFIRMATION TOKEN
+
+        return "It works!";
+    }
+
+
 }

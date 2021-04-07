@@ -46,23 +46,29 @@ public class UserEntity implements UserDetails {
     @Column(name="username", nullable=false, unique=true)
     private String username;
     
-    @Column(name="name", nullable=false)
-    private String name;
-    
+    @Column(name="first_name", nullable=false)
+    private String firstName;
+
+    @Column(name="last_name", nullable=false)
+    private String lastName;
+
     @Column(name="email", nullable=false)
     private String email;
     
-    /*@Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")*/
-    private String first_name;
-    /*@Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")*/
-    private String last_name;
+    /*@Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")
+    private String firstName;*/
+
+    /*@Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")
+    private String lastName;*/
+
     private String password;
     /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
     message = "Address is invalid")*/
     private String address;
+    @Enumerated(EnumType.STRING)
     private UserRole userRole;
-    private Boolean locked;
-    private Boolean enabled;
+    private Boolean locked = false;
+    private Boolean enabled = false;
     
     @ElementCollection
     @CollectionTable(
@@ -75,30 +81,33 @@ public class UserEntity implements UserDetails {
     public UserEntity(){
         // requires no-arg ctro
         // I hate reflection
-        this.first_name = "";
-        this.last_name = "";
+        this.firstName = "";
+        this.lastName = "";
         this.email = "";
         this.username = "";
         this.password = "";
         this.address = "";
     }
-    
+
+    /* I feel that this constructor is redundant since we'll need firstName, lastName, and Username for
+    signing up so i'll just comment it for now - Daniel V.
     public UserEntity(String name, String email, String password){
         this.name = name;
         this.email = email;
         this.password = password;
     }
-    
+     */
+
     /*
         Default Constructor
      */
-    public UserEntity(String first_name, String last_name, String email, String address, String username, String password){
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public UserEntity(String firstName, String last_name, String email, /*String address, */ String username, String password){
+        this.firstName = firstName;
+        this.lastName = last_name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.address = address;
+        /*this.address = address; */
     }
     
     public String getId(){
@@ -149,11 +158,9 @@ public class UserEntity implements UserDetails {
 
     public String getPassword() { return password; }
 
-    public String getFirst_name(){
-        return first_name;
-    }
+    public String getFirstName(){ return firstName; }
 
-    public String getLast_name() { return last_name; }
+    public String getLastName() { return lastName; }
     
     public String getAddress() { return address; }
 
@@ -177,9 +184,9 @@ public class UserEntity implements UserDetails {
         this.email = email;
     }
     
-    public void setLast_name(String last_name) { this.first_name = last_name; }
+    public void setLastName(String last_name) { this.firstName = last_name; }
 
-    public void setFirst_name(String first_name) { this.first_name = first_name; }
+    public void setFirstName(String first_name) { this.firstName = first_name; }
 
     public void setAddress(String address) { this.address = address; }
 
@@ -210,8 +217,8 @@ public class UserEntity implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "First name='" + first_name + '\'' +
-                ", Last name='" + last_name + '\'' +
+                "First name='" + firstName + '\'' +
+                ", Last name='" + lastName + '\'' +
                 ", Username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", address='" + address + '\'' +
