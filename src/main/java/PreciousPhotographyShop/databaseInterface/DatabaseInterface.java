@@ -87,3 +87,4 @@ public interface DatabaseInterface {
     public List<String> getAllPhotoIds();
     
 }
+

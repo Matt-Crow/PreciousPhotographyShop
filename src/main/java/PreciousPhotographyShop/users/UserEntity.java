@@ -1,16 +1,17 @@
 package PreciousPhotographyShop.users;
 
 import com.google.common.base.Objects;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Previously split into user and user entity classes
@@ -19,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-public class UserEntity {
+public class UserEntity implements UserDetails {
     /*
     Which do we need?
     - id
@@ -30,6 +31,11 @@ public class UserEntity {
     
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
     @Column(name="user_id")
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
@@ -54,6 +60,9 @@ public class UserEntity {
     /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
     message = "Address is invalid")*/
     private String address;
+    private UserRole userRole;
+    private Boolean locked;
+    private Boolean enabled;
     
     @ElementCollection
     @CollectionTable(
@@ -74,9 +83,10 @@ public class UserEntity {
         this.address = "";
     }
     
-    public UserEntity(String name, String email){
+    public UserEntity(String name, String email, String password){
         this.name = name;
         this.email = email;
+        this.password = password;
     }
     
     /*
@@ -98,7 +108,31 @@ public class UserEntity {
     public String getUsername(){
         return username;
     }
-    
+
+
+    /*
+    Spring Security
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
     public String getName(){
         return name;
     }
@@ -106,7 +140,13 @@ public class UserEntity {
     public String getEmail(){
         return email;
     }
-    
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        return Collections.singletonList(authority);
+    }
+
     public String getPassword() { return password; }
 
     public String getFirst_name(){

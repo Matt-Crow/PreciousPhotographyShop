@@ -1,3 +1,4 @@
+
 package PreciousPhotographyShop.databaseInterface;
 
 import PreciousPhotographyShop.photographs.PhotographEntity;
@@ -23,7 +24,7 @@ public class BadExampleDatabase implements DatabaseInterface {
         users = new HashMap<>();
         photos = new HashMap<>();
         
-        storeUser(new UserEntity("John Doe", "johndoe@nonexistant.com"));
+        // storeUser(new UserEntity("John Doe", "johndoe@nonexistant.com"));
     }
 
     @Override
