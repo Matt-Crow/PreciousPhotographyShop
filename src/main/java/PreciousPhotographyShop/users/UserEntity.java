@@ -1,17 +1,16 @@
 package PreciousPhotographyShop.users;
 
 import com.google.common.base.Objects;
-
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.*;
-
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Previously split into user and user entity classes
@@ -20,7 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 
 @Entity
-public class UserEntity implements UserDetails {
+public class UserEntity {
     /*
     Which do we need?
     - id
@@ -31,11 +30,6 @@ public class UserEntity implements UserDetails {
     
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
-    @SequenceGenerator(
-            name = "user_sequence",
-            sequenceName = "user_sequence",
-            allocationSize = 1
-    )
     @Column(name="user_id")
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
@@ -60,9 +54,6 @@ public class UserEntity implements UserDetails {
     /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
     message = "Address is invalid")*/
     private String address;
-    private UserRole userRole;
-    private Boolean locked;
-    private Boolean enabled;
     
     @ElementCollection
     @CollectionTable(
@@ -83,10 +74,9 @@ public class UserEntity implements UserDetails {
         this.address = "";
     }
     
-    public UserEntity(String name, String email, String password){
+    public UserEntity(String name, String email){
         this.name = name;
         this.email = email;
-        this.password = password;
     }
     
     /*
@@ -108,31 +98,7 @@ public class UserEntity implements UserDetails {
     public String getUsername(){
         return username;
     }
-
-
-    /*
-    Spring Security
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return !locked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
+    
     public String getName(){
         return name;
     }
@@ -140,13 +106,7 @@ public class UserEntity implements UserDetails {
     public String getEmail(){
         return email;
     }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
-        return Collections.singletonList(authority);
-    }
-
+    
     public String getPassword() { return password; }
 
     public String getFirst_name(){
