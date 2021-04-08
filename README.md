@@ -2,12 +2,15 @@ Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 
 /
+search from home
 /staticHome.html
 /newPhoto
 /allPhotos
 /viewPhoto
 click to view photo
 file:///C:/Users/Matt/Documents/GitHub/PreciousPhotographyShop/Webpage/allPhotos.html
+
+Todo: fix upload form, as it isn't saving any of the photoentity properties
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.
