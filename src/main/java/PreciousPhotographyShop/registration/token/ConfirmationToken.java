@@ -1,8 +1,6 @@
 package PreciousPhotographyShop.registration.token;
 
 import PreciousPhotographyShop.users.UserEntity;
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -10,9 +8,12 @@ import java.time.LocalDateTime;
 public class ConfirmationToken {
 
     @Id
-    @Column(name="user_id")
-    @GeneratedValue(generator="system-uuid")
-    @GenericGenerator(name="system-uuid", strategy = "uuid")
+    @SequenceGenerator(
+            name = "confirmation_token_sequence",
+            sequenceName = "confirmation_token_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="system-uuid")
     private String id;
 
     @Column(nullable = false)
@@ -68,6 +69,7 @@ public class ConfirmationToken {
         return token;
     }
 
+    public UserEntity getUserEntity() { return userEntity; }
 
     /*
         Setters
@@ -86,6 +88,10 @@ public class ConfirmationToken {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
     }
 
     public void setToken(String token) {

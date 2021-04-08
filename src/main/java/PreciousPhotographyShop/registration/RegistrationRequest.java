@@ -1,10 +1,7 @@
 package PreciousPhotographyShop.registration;
 
-import lombok.*;
+import java.util.Objects;
 
-@Getter
-@EqualsAndHashCode
-@ToString
 public class RegistrationRequest {
 
     private final String firstName;
@@ -21,24 +18,32 @@ public class RegistrationRequest {
         this.email = email;
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
+    public String getFirstName() { return firstName; }
 
-    public String getLastName() {
-        return lastName;
-    }
+    public String getLastName() { return lastName; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() { return username; }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassword() { return password; }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, username, password, email);
+    }
+
+    @Override
+    public String toString() {
+        return "RegistrationRequest{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
 

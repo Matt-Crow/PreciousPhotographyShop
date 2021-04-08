@@ -31,13 +31,13 @@ public class UserEntity implements UserDetails {
     
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     // denotes this is the primary key
+
     @Id
     @SequenceGenerator(
             name = "user_sequence",
             sequenceName = "user_sequence",
             allocationSize = 1
     )
-    @Column(name="user_id")
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
@@ -47,7 +47,7 @@ public class UserEntity implements UserDetails {
     @Column(name="username", nullable=false, unique=true)
     private String username;
     
-    @Column(name="first_name", nullable=false)
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name="last_name", nullable=false)
@@ -75,10 +75,7 @@ public class UserEntity implements UserDetails {
     private Boolean enabled = false;
     
     @ElementCollection
-    @CollectionTable(
-        name = "seller_to_photo",
-        joinColumns = @JoinColumn(name = "user_id")
-    )
+    @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name="photo_id")
     Set<String> photoIds = new HashSet<>();
     
