@@ -1,9 +1,12 @@
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 
+/
 /staticHome.html
 /newPhoto
 /allPhotos
+/viewPhoto
+click to view photo
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.
