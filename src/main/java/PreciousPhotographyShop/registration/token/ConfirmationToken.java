@@ -42,9 +42,7 @@ public class ConfirmationToken {
         this.userEntity = userEntity;
     }
 
-    public ConfirmationToken() {
-
-    }
+    public ConfirmationToken() { }
 
     /*
         Getters
