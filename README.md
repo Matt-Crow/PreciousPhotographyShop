@@ -7,6 +7,7 @@ Pro-tip: put testing code in testsAndExamples/TestController::main
 /allPhotos
 /viewPhoto
 click to view photo
+file:///C:/Users/Matt/Documents/GitHub/PreciousPhotographyShop/Webpage/allPhotos.html
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.
