@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -42,15 +43,11 @@ public class PhotographController {
         System.out.println("received form: todo get logged in user");
         try {
             MultipartFile file = photoFormResp.getFile();
-            String name = photoFormResp.getName();
             List<String> categories = photoFormResp.getCategories();
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
-            PhotographEntity photo = new PhotographEntity();
-            photo.setName(name);
+            PhotographEntity photo = (PhotographEntity)photoFormResp;
             photo.setPhoto(buff);
-            photo.setDescription("no description");
-            photo.setPrice(20.0); // todo set price
             photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
             photo.setIsRecurring(false); // todo set recurring
             
@@ -62,9 +59,27 @@ public class PhotographController {
     }
     
     @GetMapping("/allPhotos")
-    public String allPhotos(Model model){
-        //temp
-        model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
+    public String allPhotos(
+        @RequestParam(name="category", required = false) String category, 
+        Model model
+    ){
+        System.out.printf("All photos by category is %s\n", category);
+        
+        model.addAttribute(
+            "categoryNames", 
+            databaseInterface.getAllCategories().stream().collect(Collectors.toList())
+        );
+        
+        if(category == null){
+            model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
+        } else {
+            model.addAttribute(
+                "photos", 
+                this.databaseInterface.getPhotographsByCategory(category).stream().map((photo)->{
+                   return photo.getId(); 
+                }).collect(Collectors.toList())
+            );
+        }
         return "allPhotos";
     }
     
@@ -80,5 +95,13 @@ public class PhotographController {
             ex.printStackTrace();
         }
         return ret;
+    }
+    
+    @GetMapping("/viewPhoto")
+    public String viewPhoto(@RequestParam String id, Model model){
+        PhotographEntity photo = this.databaseInterface.getPhotograph(id, true);
+        // todo error handling
+        model.addAttribute("photo", photo);
+        return "viewPhoto";
     }
 }

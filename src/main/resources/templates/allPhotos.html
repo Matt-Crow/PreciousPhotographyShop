@@ -3,13 +3,32 @@
 <head> 
     <title>Example Photograph Listing</title> 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
 </head>
 <body>
+    <nav th:insert="fragments.html :: pages-nav"></nav>
     <h1>All Photographs</h1>
+    <div align="right">
+        <!-- Dropdown category select -->
+        <!-- https://www.quora.com/How-do-I-create-a-hyperlink-in-a-drop-down-list-in-HTML-->
+        <div style="position: relative; display: inline-block">
+            <button onclick="document.getElementById('drop').style.display = 'block'">Browse by Category</button>
+            <div id="drop" style="color: white; display:none; position:absolute; z-index:1">
+                <a th:each="categoryName, idxInfo : ${categoryNames}" th:value="${categoryName}" th:text="${categoryName}" th:href="@{'/allPhotos?category=' + ${categoryName}}"></a>
+            </div>
+        </div>
+        <!--<label for="category">Browse by Category</label>
+        <select id="category" name="category">
+            <option th:each="categoryName, idxInfo : ${categoryNames}" th:name="${categoryName}" th:value="${categoryName}" th:text="${categoryName}"><a th:href="@{'/allPhotos?category=' + ${categoryName}}"></a></option>
+        </select>-->
+    </div>
     <div th:each="photoId : ${photos}">
         <hr/>
-        <img th:src="${'/photo?id=' + photoId}"/>
+        <a th:href="@{'/viewPhoto?id=' + ${photoId}}">
+            <img th:src="@{'/photo?id=' + ${photoId}}"/>
+        </a>
         <hr/>
     </div>
+    <div th:insert="fragments.html :: end"></div>
 </body>
 </html>
