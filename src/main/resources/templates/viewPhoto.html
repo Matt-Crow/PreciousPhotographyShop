@@ -20,7 +20,7 @@
                 <p th:text="${catName}"><p/>
             </li>
         </ul>
-        
+        <a th:href="@{'reviews/newReview?id=' + *{id}}">Review this Photograph</a>
     </div>
     
     <div th:insert="fragments.html :: end"></div>

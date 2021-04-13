@@ -7,6 +7,7 @@ search from home
 /newPhoto
 /allPhotos
 /viewPhoto
+/reviews/newReview
 click to view photo
 file:///C:/Users/Matt/Documents/GitHub/PreciousPhotographyShop/Webpage/allPhotos.html
 
