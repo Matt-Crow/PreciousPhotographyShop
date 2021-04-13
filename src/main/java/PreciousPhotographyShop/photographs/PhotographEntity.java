@@ -80,6 +80,12 @@ public class PhotographEntity {
     )
     String ownerId;
     
+    @Column(name="total_rating")
+    long totalRating = 0;
+    
+    @Column(name="num_ratings")
+    long numRatings = 0;
+    
     @Transient // "Don't store this in the database"
     BufferedImage photo;
     
@@ -115,6 +121,14 @@ public class PhotographEntity {
         this.ownerId = ownerId;
     }
     
+    public void setTotalRating(long totalRating){
+        this.totalRating = totalRating;
+    }
+    
+    public void setNumRatings(long numRatings){
+        this.numRatings = numRatings;
+    }
+    
     public void setPhoto(BufferedImage photo){
         this.photo = photo;
     }
@@ -147,6 +161,14 @@ public class PhotographEntity {
         return ownerId;
     }
     
+    public long getTotalRating(){
+        return totalRating;
+    }
+    
+    public long getNumRatings(){
+        return numRatings;
+    }
+    
     public BufferedImage getPhoto(){
         return photo;
     }
@@ -154,5 +176,9 @@ public class PhotographEntity {
     public final boolean isInCategory(String catName){
         // need to figure out where we want to put this
         return this.categoryNames.stream().anyMatch((cat)->cat.equalsIgnoreCase(catName));
+    }
+    
+    public final double getAverageRating(){
+        return ((double)totalRating) / numRatings;
     }
 }

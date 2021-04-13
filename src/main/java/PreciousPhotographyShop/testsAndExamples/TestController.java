@@ -96,7 +96,7 @@ public class TestController {
             System.out.println(photo.getOwnerId());
             return photo.getOwnerId() != null;
         }).map((photo)->{
-            return databaseInterface.getUser(photo.getOwnerId()).getName();
+            return databaseInterface.getUser(photo.getOwnerId()).getUsername();
         }).collect(Collectors.joining(", "));
     }
     
