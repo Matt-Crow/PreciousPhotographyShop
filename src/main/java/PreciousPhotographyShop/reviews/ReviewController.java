@@ -27,21 +27,32 @@ public class ReviewController {
     @GetMapping("/newReview")
     public String iWantToRoastSomeone(@RequestParam(name="id") String whatToRoast, Model model){
         ReviewEntity theReview = new ReviewEntity();
-        theReview.setReviewerId("lol idk");// todo set reviewerId
-        theReview.setReviewedId(whatToRoast); // not saving in the next method
+        /*
+        Important: setting attributes in theReview will not carry over to what
+        the next method sees. For example, setting theReview's ID here will not
+        set thee ID of the ReviewEntity received by the next method, as that ID
+        will not be contained in the form response sent to it.
+        */
         model.addAttribute("review", theReview);
+        model.addAttribute("reviewer", "lolidk"); // todo change to logged in user id
+        model.addAttribute("reviewing", whatToRoast);
         return "newReview";
     }
     
     @PostMapping("/newReview")
-    public String someoneWasRoasted(@ModelAttribute ReviewEntity theRoast){
+    public String someoneWasRoasted(
+        @ModelAttribute ReviewEntity theRoast,
+        @RequestParam(name="id") String whatWasRoasted,
+        @RequestParam(name="reviewer") String whoRoasted
+    ){
         try {
+            theRoast.setReviewerId(whoRoasted);
+            theRoast.setReviewedId(whatWasRoasted);
             System.out.println(theRoast.toString());
             reviews.save(theRoast);
-            System.out.println(theRoast.toString());
         } catch(Exception ex){
             ex.printStackTrace();
         }
-        return "allPhotos"; // how to redirect to other controller?
+        return String.format("redirect:/viewPhoto?id=%s", whatWasRoasted);
     }
 }
