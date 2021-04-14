@@ -21,6 +21,12 @@
             </li>
         </ul>
         <a th:href="@{'reviews/newReview?id=' + *{id}}">Review this Photograph</a>
+        <h2>Reviews</h2>
+        <ul>
+            <li th:each="review : ${reviews}">
+                <div th:replace="fragments.html :: reviewWidget(reviewer=${review.reviewerId}, text=${review.text}, rating=${review.rating})"></div>
+            </li>
+        </ul>
     </div>
     
     <div th:insert="fragments.html :: end"></div>

@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.photographs;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.reviews.ReviewRepository;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class PhotographController {
     @Autowired
     private DatabaseInterface databaseInterface;
+    
+    @Autowired
+    private ReviewRepository reviewRepository;
     
     @GetMapping("/newPhoto")
     public String newPhotoForm(Model model){
@@ -50,7 +54,7 @@ public class PhotographController {
             photo.setPhoto(buff);
             photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
             photo.setIsRecurring(false); // todo set recurring
-            
+            System.out.println(photo);
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -102,6 +106,10 @@ public class PhotographController {
         PhotographEntity photo = this.databaseInterface.getPhotograph(id, true);
         // todo error handling
         model.addAttribute("photo", photo);
+        model.addAttribute(
+            "reviews", 
+            reviewRepository.findAllByReviewedId(id)
+        );
         return "viewPhoto";
     }
 }

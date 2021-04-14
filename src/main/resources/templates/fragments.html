@@ -31,6 +31,19 @@
         </div>
     </nav>
     <!-- /navigation-->
+    
+    <!-- Widgets -->
+    
+    <div th:fragment="reviewWidget(reviewer, text, rating)">
+        <h3 th:text="${reviewer}"></h3>
+        <p th:text="${text}"></p>
+        <p th:text="${rating + ' / 5'}"></p>
+    </div>
+    
+    
+    
+    <!-- End widgets -->
+    
     <div th:fragment="end">
         <button class="menu-button"><span>Menu</span></button>
         <script src="js/classie.js"></script>
