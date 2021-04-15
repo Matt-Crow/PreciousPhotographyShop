@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Leave a Review</title>
+        <title th:text="${'Leave a Review for ' + reviewing}"></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <form action="#" th:action="@{'/reviews/newReview?id=' + ${reviewing} + '&reviewer=' + ${reviewer}}" th:object="${review}" method="post">
+        <form action="#" th:action="@{'/reviews/newPhotoReview?id=' + ${reviewingId} + '&reviewer=' + ${reviewer}}" th:object="${review}" method="post">
             <div>
                 <label for="text">Write your Review</label>
                 <input type="text" name="text" th:field="*{text}"/>

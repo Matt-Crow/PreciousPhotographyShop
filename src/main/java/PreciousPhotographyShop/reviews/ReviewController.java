@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.reviews;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.users.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +25,17 @@ public class ReviewController {
     @Autowired
     private ReviewRepository reviews;
     
-    @GetMapping("/newReview")
-    public String iWantToRoastSomeone(@RequestParam(name="id") String whatToRoast, Model model){
+    /*
+    Reviews for photographs
+    */
+    
+    @GetMapping("/newPhotoReview")
+    public String iWantToRoastSomething(@RequestParam(name="id") String whatToRoast, Model model){
+        UserEntity guest = new UserEntity();
+        guest.setUsername("Fakey Mc Dontexist");
+        guest.setEmail("fakey@aol.com");
+        guest.setId(database.storeUser(guest));
+        
         ReviewEntity theReview = new ReviewEntity();
         /*
         Important: setting attributes in theReview will not carry over to what
@@ -34,13 +44,14 @@ public class ReviewController {
         will not be contained in the form response sent to it.
         */
         model.addAttribute("review", theReview);
-        model.addAttribute("reviewer", "lolidk"); // todo change to logged in user id
-        model.addAttribute("reviewing", whatToRoast);
+        model.addAttribute("reviewer", guest.getId());// todo change to logged in user id
+        model.addAttribute("reviewingId", whatToRoast);
+        model.addAttribute("reviewing", database.getPhotograph(whatToRoast, true).getName());
         return "newReview";
     }
     
-    @PostMapping("/newReview")
-    public String someoneWasRoasted(
+    @PostMapping("/newPhotoReview")
+    public String somethingWasRoasted(
         @ModelAttribute ReviewEntity theRoast,
         @RequestParam(name="id") String whatWasRoasted,
         @RequestParam(name="reviewer") String whoRoasted

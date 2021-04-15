@@ -1,10 +1,13 @@
 package PreciousPhotographyShop.photographs;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
+import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -106,9 +109,19 @@ public class PhotographController {
         PhotographEntity photo = this.databaseInterface.getPhotograph(id, true);
         // todo error handling
         model.addAttribute("photo", photo);
+        
+        List<ReviewWidgetInfo> reviews = new LinkedList<>();
+        reviewRepository.findAllByReviewedId(id).forEach((ReviewEntity asEntity)->{
+            reviews.add(new ReviewWidgetInfo(
+                this.databaseInterface.getUser(asEntity.getReviewerId()).getUsername(),
+                asEntity.getText(),
+                asEntity.getRating()
+            ));
+        });
+        
         model.addAttribute(
             "reviews", 
-            reviewRepository.findAllByReviewedId(id)
+            reviews
         );
         return "viewPhoto";
     }
