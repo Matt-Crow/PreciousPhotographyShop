@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.photographs;
 
 import java.awt.image.BufferedImage;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CollectionTable;
@@ -40,6 +41,9 @@ public class PhotographEntity {
     
     @Column(name="isRecurring", nullable=false)
     private boolean isRecurring;
+    
+    @Column(name="posted_date", nullable=false)
+    private Date postedDate;
     
     /*
     I'm using this in lieu of @ManyToMany to minimize the amount
@@ -107,6 +111,10 @@ public class PhotographEntity {
         this.isRecurring = isRecurring;
     }
     
+    public void setPostedDate(Date postedDate){
+        this.postedDate = postedDate;
+    }
+    
     public void setCategoryNames(Set<String> categoryNames){
         this.categoryNames = categoryNames;
     }
@@ -137,6 +145,10 @@ public class PhotographEntity {
     
     public boolean getIsRecurring(){
         return isRecurring;
+    }
+    
+    public Date getPostedDate(){
+        return postedDate;
     }
     
     public Set<String> getCategoryNames(){

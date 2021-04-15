@@ -7,6 +7,7 @@ import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +50,7 @@ public class PhotographController {
     ){
         System.out.println("received form: todo get logged in user");
         try {
+            System.out.println(photoFormResp);
             MultipartFile file = photoFormResp.getFile();
             List<String> categories = photoFormResp.getCategories();
             
@@ -57,6 +59,7 @@ public class PhotographController {
             photo.setPhoto(buff);
             photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
             photo.setIsRecurring(false); // todo set recurring
+            photo.setPostedDate(new Date());
             System.out.println(photo);
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {
