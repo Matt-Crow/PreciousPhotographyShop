@@ -14,16 +14,16 @@
             </div>
             <div>
                 <label for="name">Name this photo</label>
-                <input th:field="*{name}" name="name" type="text"/>
+                <input th:field="*{containedEntity.name}" name="name" type="text"/>
             </div>
             <div>
                 <label for="description">Add a description</label>
-                <input th:field="*{description}" name="description" type="text"/>
+                <input th:field="*{containedEntity.description}" name="description" type="text"/>
             </div>
             <div>
                 <label for="price">Choose base photograph price (in dollars)</label>
                 <!--https://stackoverflow.com/questions/14650932/set-value-to-currency-in-input-type-number-->
-                <input th:field="*{price}" name="price" type="number" step="0.01"/>
+                <input th:field="*{containedEntity.price}" name="price" type="number" step="0.01"/>
             </div>
             <div>
                 <label for="rights">Choose purchaser rights</label>

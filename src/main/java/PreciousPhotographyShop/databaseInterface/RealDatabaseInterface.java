@@ -48,13 +48,10 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Override
     public String storePhotograph(PhotographEntity photo){
-        PhotographEntity pe = new PhotographEntity();
-        pe.setName(photo.getName());
-        
         /*
         Create new file for the photo
         */
-        PhotographEntity withId = this.photographRepository.save(pe); // save() returns the changed pe
+        PhotographEntity withId = this.photographRepository.save(photo); // save() returns the changed pe
         try { 
             photo.setId(withId.getId());
             LocalFileSystem.getInstance().store(photo);

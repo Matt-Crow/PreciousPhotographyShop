@@ -167,4 +167,22 @@ public class PhotographEntity {
         // need to figure out where we want to put this
         return this.categoryNames.stream().anyMatch((cat)->cat.equalsIgnoreCase(catName));
     }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Photograph:\n");
+        sb.append(String.format("\tid: %s\n", this.id));
+        sb.append(String.format("\tname: %s\n", this.name));
+        sb.append(String.format("\tdescription: %s\n", this.description));
+        sb.append(String.format("\tprice: $%.2f\n", this.price));
+        sb.append(String.format("\tisRecurring: %b\n", this.isRecurring));
+        sb.append(String.format("\tpostedDate: %s\n", (postedDate == null) ? "NULL" : this.postedDate.toString()));
+        sb.append(String.format("\towner: %s\n", this.ownerId));
+        sb.append("\tcategories:\n");
+        this.categoryNames.forEach((catName)->{
+            sb.append(String.format("\t\t%s\n", catName));
+        });
+        return sb.toString();
+    }
 }

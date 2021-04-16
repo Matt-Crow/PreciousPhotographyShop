@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,17 +49,15 @@ public class PhotographController {
     ){
         System.out.println("received form: todo get logged in user");
         try {
-            System.out.println(photoFormResp);
             MultipartFile file = photoFormResp.getFile();
             List<String> categories = photoFormResp.getCategories();
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
-            PhotographEntity photo = (PhotographEntity)photoFormResp;
+            PhotographEntity photo = photoFormResp.getContainedEntity();
             photo.setPhoto(buff);
             photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
             photo.setIsRecurring(false); // todo set recurring
             photo.setPostedDate(new Date());
-            System.out.println(photo);
             databaseInterface.storePhotograph(photo);
         } catch (IOException ex) {
             ex.printStackTrace();
