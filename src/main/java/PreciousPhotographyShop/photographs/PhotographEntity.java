@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -60,6 +62,7 @@ public class PhotographEntity {
     Setup will look similar in CategoryEntity
     */
     @ElementCollection
+    @Cascade(CascadeType.DELETE)
     @CollectionTable(
         name = "photo_to_category",
         joinColumns = @JoinColumn(name = "photo_id")
@@ -80,6 +83,7 @@ public class PhotographEntity {
             this.id  | this.ownerId
         The foreign key is automatically set by @SecondaryTable above
     */
+    @Cascade(CascadeType.DELETE)
     @Column(
         name = "user_id", //
         table = "seller_to_photo" // only stored in bridge table
