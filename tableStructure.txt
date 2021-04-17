@@ -8,15 +8,19 @@ mysql> desc users;
 | username | varchar(255) | NO   |     | NULL    |       |
 +----------+--------------+------+-----+---------+-------+
 
-<<Outdated>>
+mysql> desc photos;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| photo_id     | varchar(255) | NO   | PRI | NULL    |       |
+| name         | varchar(255) | YES  |     | NULL    |       |
+| description  | varchar(255) | YES  |     | NULL    |       |
+| is_recurring | bit(1)       | NO   |     | NULL    |       |
+| price        | double       | NO   |     | NULL    |       |
+| posted_date  | date         | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
 
-DESC CSC130Precious.photograph_entity;
-+----------+--------------+------+-----+---------+-------+
-| Field    | Type         | Null | Key | Default | Extra |
-+----------+--------------+------+-----+---------+-------+
-| photo_id | varchar(255) | NO   | PRI | NULL    |       |
-| name     | varchar(255) | YES  |     | NULL    |       |
-+----------+--------------+------+-----+---------+-------+
+<<Outdated>>
 
 DESC CSC130Precious.category_entity;
 +---------------+--------------+------+-----+---------+-------+

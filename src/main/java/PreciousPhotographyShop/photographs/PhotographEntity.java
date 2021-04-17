@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.SecondaryTable;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -22,6 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
+@Table(name="photos")
 @SecondaryTable(name = "seller_to_photo") // need this for bridge table
 public class PhotographEntity {
     @Id
@@ -30,19 +32,19 @@ public class PhotographEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
-    @Column(name="name", nullable=false)
+    @Column(name="name", nullable=false, unique=false)
     private String name;
     
-    @Column(name="description", nullable=true)
+    @Column(name="description", nullable=true, unique=false)
     private String description = "no description";
     
-    @Column(name="price", nullable=false)
+    @Column(name="price", nullable=false, unique=false)
     private double price;
     
-    @Column(name="isRecurring", nullable=false)
+    @Column(name="isRecurring", nullable=false, unique=false)
     private boolean isRecurring;
     
-    @Column(name="posted_date", nullable=false)
+    @Column(name="posted_date", nullable=false, unique=false)
     private Date postedDate;
     
     /*

@@ -5,6 +5,7 @@ import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
 import PreciousPhotographyShop.temp.BadLoginService;
+import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -97,6 +98,14 @@ public class PhotographController {
         return "allPhotos";
     }
     
+    /**
+     * Use this method to retrieve the image data for a photograph like so:
+     * <img th:src="@{'/photo?id=' + ${photoId}}"/>
+     * 
+     * @param id the ID of the photo to get
+     * 
+     * @return the binary image data, with the watermark attached 
+     */
     @GetMapping("/photo")
     public @ResponseBody byte[] photo(@RequestParam String id){
         byte[] ret = null;
@@ -112,10 +121,27 @@ public class PhotographController {
     }
     
     @GetMapping("/viewPhoto")
-    public String viewPhoto(@RequestParam String id, Model model){
-        PhotographEntity photo = this.databaseInterface.getPhotograph(id, true);
-        // todo error handling
+    public String viewPhoto(
+        @RequestParam String id, 
+        Model model
+    ){
+       
+        PhotographEntity photo = null;
+        try {
+            photo = this.databaseInterface.getPhotograph(id, true);
+        } catch(Exception ex){
+            System.err.printf("failed to load photo with id \"%s\".\n", id);
+            return "redirect:/allPhotos";
+        }
+        
         model.addAttribute("photo", photo);
+        try{
+            UserEntity seller = this.databaseInterface.getUser(photo.getOwnerId());
+            model.addAttribute("sellerName", seller.getUsername());
+        } catch(Exception ex){
+            System.err.printf("Photo with id \"%s\" and name \"%s\" has no seller.\n", id, photo.getName());
+            model.addAttribute("sellerName", "no seller specified");
+        }
         
         List<ReviewWidgetInfo> reviews = new LinkedList<>();
         reviewRepository.findAllByReviewedId(id).forEach((ReviewEntity asEntity)->{

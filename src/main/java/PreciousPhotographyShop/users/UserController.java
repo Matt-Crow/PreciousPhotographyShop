@@ -34,7 +34,7 @@ public class UserController {
      * @param id searches for a user by id
      * @return returns the user's information
      */
-    @GetMapping("/findUser")
+    @GetMapping("/findUser/{userID}")
     public UserEntity findUser(@PathVariable("userID") String id){
         return userService.getSingleUser(id);
     }
