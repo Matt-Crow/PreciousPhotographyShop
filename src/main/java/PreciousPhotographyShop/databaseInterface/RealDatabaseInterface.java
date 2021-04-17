@@ -8,19 +8,21 @@ import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
- * @author Matt
+ * This class is used to interface with the database repositories used by the
+ * program. While we could directly access these repositories, this adds a layer
+ * of abstraction by allowing us to swap between Services implementing the
+ * DatabaseInterface.
+ * 
+ * @author Matt Crow
  */
 
 @Service // "Yo! Spring! This class can be used when I Autowire a DatabaseInterface!"
@@ -37,7 +39,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
 
     /**
-     * 
      * @param id the ID of the user to get
      * @return the user with the given ID. If none is found, throws an exception
      */
@@ -87,7 +88,18 @@ public class RealDatabaseInterface implements DatabaseInterface {
         return withId.getId();
     }
     
-    private PhotographEntity tryConvert(PhotographEntity asEntity, boolean withWatermark){
+    /**
+     * Attempts to retrieve the BufferedImage associated with the given photograph
+     * from the LocalFileSystem, and attaches it to the given PhotographEntity.
+     * If this fails to load the image, returns null.
+     * 
+     * @param asEntity the PhotographEntity to attach the image to
+     * @param withWatermark whether or not the image should have a watermark 
+     * attached.
+     * 
+     * @return the PhotographEntity with its image set, or null.
+     */
+    private PhotographEntity attachImage(PhotographEntity asEntity, boolean withWatermark){
         PhotographEntity ret = null;
         try {
             BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
@@ -101,7 +113,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     
     @Override 
     public PhotographEntity getPhotograph(String id, boolean withWatermark) {
-        return tryConvert(photographRepository.findById(id).get(), withWatermark);
+        return attachImage(photographRepository.findById(id).get(), withWatermark);
     }
     
     /**
@@ -128,7 +140,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
         PhotographEntity curr = null;
         
         for(PhotographEntity pe : getPhotoBySupercategory(category)){
-            curr = this.tryConvert(pe, true);
+            curr = this.attachImage(pe, true);
             if(curr != null){
                 ret.add(curr);
             }

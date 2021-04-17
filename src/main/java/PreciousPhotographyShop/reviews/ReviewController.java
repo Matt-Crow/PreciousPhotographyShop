@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.reviews;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.temp.BadLoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,16 +26,16 @@ public class ReviewController {
     @Autowired
     private ReviewRepository reviews;
     
+    @Autowired
+    private BadLoginService loginService;
+    
     /*
     Reviews for photographs
     */
     
     @GetMapping("/newPhotoReview")
     public String iWantToRoastSomething(@RequestParam(name="id") String whatToRoast, Model model){
-        UserEntity guest = new UserEntity();
-        guest.setUsername("Fakey Mc Dontexist");
-        guest.setEmail("fakey@aol.com");
-        guest.setId(database.storeUser(guest));
+        UserEntity reviewer = loginService.getLoggedInUser();
         
         ReviewEntity theReview = new ReviewEntity();
         /*
@@ -44,7 +45,7 @@ public class ReviewController {
         will not be contained in the form response sent to it.
         */
         model.addAttribute("review", theReview);
-        model.addAttribute("reviewer", guest.getId());// todo change to logged in user id
+        model.addAttribute("reviewer", reviewer.getId());
         model.addAttribute("reviewingId", whatToRoast);
         model.addAttribute("reviewing", database.getPhotograph(whatToRoast, true).getName());
         return "newReview";

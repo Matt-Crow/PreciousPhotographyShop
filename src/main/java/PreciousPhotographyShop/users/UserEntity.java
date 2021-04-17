@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -22,6 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
+@Table(name="users")
 public class UserEntity {    
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
@@ -40,9 +42,6 @@ public class UserEntity {
     private String email;
     
     private String password;
-    /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
-    message = "Address is invalid")*/
-    private String address;
     
     @ElementCollection
     @CollectionTable(
@@ -58,10 +57,11 @@ public class UserEntity {
         this.email = "";
         this.username = "";
         this.password = "";
-        this.address = "";
+        photoIds = new HashSet<>();
     }
     
     public UserEntity(String username, String email){
+        this();
         this.username = username;
         this.email = email;
     }
@@ -69,11 +69,9 @@ public class UserEntity {
     /*
         Default Constructor
      */
-    public UserEntity(String email, String address, String username, String password){
-        this.username = username;
-        this.email = email;
+    public UserEntity(String email, String username, String password){
+        this(username, email);
         this.password = password;
-        this.address = address;
     }
     
     public String getId(){
@@ -88,9 +86,9 @@ public class UserEntity {
         return email;
     }
     
-    public String getPassword() { return password; }
-
-    public String getAddress() { return address; }
+    public String getPassword() { 
+        return password; 
+    }
 
     public Set<String> getPhotoIds(){
         return photoIds;
@@ -108,15 +106,13 @@ public class UserEntity {
         this.email = email;
     }
     
-    public void setAddress(String address) { this.address = address; }
-
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword(String password) { 
+        this.password = password; 
+    }
 
     public void setPhotoIds(Set<String> photoIds){
         this.photoIds = photoIds;
     }
-    
-    
     
     @Override
     public boolean equals(Object obj){
@@ -136,12 +132,16 @@ public class UserEntity {
     
     @Override
     public String toString() {
-        return "User{" +
-                ", Username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        return String.format(
+            "User{" +
+                "Username='%s'," +
+                "Password='%s'" + 
+                "email='%s'" +
+                "id='%s'",
+            username,
+            password,
+            email,
+            id
+        );
     }
 }

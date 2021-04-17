@@ -4,6 +4,7 @@ import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
+import PreciousPhotographyShop.temp.BadLoginService;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,29 +32,35 @@ public class PhotographController {
     @Autowired
     private ReviewRepository reviewRepository;
     
+    @Autowired
+    private BadLoginService loginService;
+    
     @GetMapping("/newPhoto")
     public String newPhotoForm(Model model){
+        String userId = loginService.getLoggedInUser().getId();
         Set<String> categoryNames = databaseInterface.getAllCategories();
         categoryNames.add("still life");
         categoryNames.add("animals");
         categoryNames.add("black and white");
         model.addAttribute("categoryNames", categoryNames);
         model.addAttribute("formResponse", new PhotoFormResponse());
+        model.addAttribute("sellerId", userId);
         return "postPhotographFormPage";
     }
     
-    @PostMapping("/testPostPhoto")
+    @PostMapping("/newPhoto")
     public String postNewPhoto(
         @ModelAttribute PhotoFormResponse photoFormResp,
+        @RequestParam(name="sellerId") String sellerId,
         Model model
     ){
-        System.out.println("received form: todo get logged in user");
         try {
             MultipartFile file = photoFormResp.getFile();
             List<String> categories = photoFormResp.getCategories();
             
             BufferedImage buff = ImageIO.read(file.getInputStream());
             PhotographEntity photo = photoFormResp.getContainedEntity();
+            photo.setOwnerId(sellerId);
             photo.setPhoto(buff);
             photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
             photo.setIsRecurring(false); // todo set recurring

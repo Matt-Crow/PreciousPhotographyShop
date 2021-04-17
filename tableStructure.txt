@@ -1,13 +1,14 @@
-<<Outdated>>
+mysql> desc users;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| user_id  | varchar(255) | NO   | PRI | NULL    |       |
+| email    | varchar(255) | NO   | UNI | NULL    |       |
+| password | varchar(255) | YES  |     | NULL    |       |
+| username | varchar(255) | NO   |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
 
-DESC CSC130Precious.user_entity;
-+-------+--------------+------+-----+---------+-------+
-| Field | Type         | Null | Key | Default | Extra |
-+-------+--------------+------+-----+---------+-------+
-| id    | varchar(255) | NO   | PRI | NULL    |       |
-| email | varchar(255) | YES  |     | NULL    |       |
-| name  | varchar(255) | YES  |     | NULL    |       |
-+-------+--------------+------+-----+---------+-------+
+<<Outdated>>
 
 DESC CSC130Precious.photograph_entity;
 +----------+--------------+------+-----+---------+-------+

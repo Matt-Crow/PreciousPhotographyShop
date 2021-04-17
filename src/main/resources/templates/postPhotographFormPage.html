@@ -7,7 +7,7 @@
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <form action="#" th:action="@{/testPostPhoto}" enctype="multipart/form-data" th:object="${formResponse}" method="post">
+        <form action="#" th:action="@{'/newPhoto?sellerId=' + ${sellerId}}" enctype="multipart/form-data" th:object="${formResponse}" method="post">
             <div>
                 <label for="file">Choose a photograph to post</label>
                 <input th:field="*{file}" type="file" id="file" name="file" accept="image/jpg"/>
