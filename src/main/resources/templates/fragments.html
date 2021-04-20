@@ -40,7 +40,13 @@
         <p th:text="${rating + ' / 5'}"></p>
     </div>
     
-    
+    <div class="col-sm-4" th:fragment="browsePhotoWidget(photoId)">
+        <a th:href="@{'/viewPhoto?id=' + ${photoId}}">
+            <img th:src="@{'/photo?id=' + ${photoId}}" height="200" width="300"/>
+        </a>
+        <div class="bottom-right">Todo price</div>
+        <p>Todo seller</p>
+    </div>
     
     <!-- End widgets -->
     

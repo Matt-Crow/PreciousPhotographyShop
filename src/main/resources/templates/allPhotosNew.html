@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Example Photograph Listing</title> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    
+        <!-- from Stevin's allPhotos -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="demo.css" />
+        <link rel="stylesheet" type="text/css" href="component.css" />
+        <style type="text/css">
+            <!-- table css -->
+            td {color:white; font-family:arialblack; font-size: 12px; font-weight: bold;}
+            table.center 
+            {
+            margin-left: auto;
+            margin-right: auto;
+            }
+            .container
+            {
+            position: relative;
+            text-align: center;
+            color: white;
+            }
+            .bottom-right
+            {
+            position: absolute;
+            bottom: 8px;
+            right: 50px;
+            }
+
+            body 
+            {
+            font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .navbar 
+            {
+            overflow: hidden;
+            background-color: #333;
+            }
+
+            .navbar a 
+            {
+            float: left;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            }
+
+            .dropdown 
+            {
+            float: left;
+            overflow: hidden;
+            }
+
+            .dropdown .dropbtn 
+            {
+            font-size: 16px;  
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+              margin: 0;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+              background-color: red;
+            }
+
+            .dropdown-content {
+              display: none;
+              position: absolute;
+              background-color: #f9f9f9;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+              z-index: 1;
+            }
+
+                    .dropdown-content a {
+                  float: none;
+                  color: black;
+                  padding: 12px 16px;
+                  text-decoration: none;
+                  display: block;
+                  text-align: left;
+            }
+
+            .dropdown-content a:hover {
+              background-color: #ddd;
+            }
+
+            .dropdown:hover .dropdown-content {
+              display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        
+        <!-- Stevin -->
+        <!--Header with link to homepage -->
+        <p style= text-align:center><span style="font-size: 25px; color: black;"> <a href="index-2.html"> <em> Precious Photography </em> </a> </span></p>
+
+        <!--Simple navigation bar -->
+
+        <div class="navbar">
+          <a href="#home">Browse All</a>
+          <div class="dropdown">
+            <button class="dropbtn">FilterBy 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="#">Trending</a>
+              <a href="#">Popular</a>
+              <a href="#">Top Rated</a>
+              <a href="#">Price</a>
+            </div>
+          </div> 
+          <div class="dropdown">
+            <button class="dropbtn">Orientation
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="#">Portrait</a>
+              <a href="#">Landscape</a>
+              <a href="#">Square</a>
+            </div>
+          </div> 
+          <div class="dropdown">
+            <button class="dropbtn">Size 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="#">Large</a>
+              <a href="#">Medium</a>
+              <a href="#">Small</a>
+            </div>
+          </div> 
+          <a style="float:right" href="#home"> Search </a>
+        </div>
+        
+        <div class="container">
+            <div class="row">
+                <div th:each="photoId : ${photos}">
+                    <div th:replace="fragments.html :: browsePhotoWidget(photoId=${photoId})"></div>
+                </div>
+            </div>
+        </div>
+        <!--Table of browsable images. -->
+        <table border = "1" width=100% cellpadding= 15 class=center style="background-color:grey; text-align:center">
+            <tr>
+                <td>
+                <div class="container">
+                    <img src="images/Landscape.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$300.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/Canal.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$150.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/cloud.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$50.00</div>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Tony Yiamkis - Pic of the sunset.</td>
+                <td>George Yandric - Pic of a river.</td>
+                <td>Joe Hernandez - Pic of the sky.</td>
+            </tr>
+            <tr>
+                <td>
+                <div class="container">
+                    <img src="images/Cool.jpg" height="200" width="300"/>
+                    <div class="bottom-right">$24.99</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/Forest.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$500.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/Palm_Trees.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$400.00</div>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Sam Nayyar - Cool strange picture.</td>
+                <td>Rulaine Carter - Pic of the forest.</td>
+                <td>Jenni Mantis - Pic of the beach.</td>
+            </tr>
+            <tr>
+                <td>
+                <div class="container">
+                    <img src="images/Sunset.jpg" height="200" width="300"/>
+                    <div class="bottom-right">$1000.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/Turtles.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$5.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/Waterfall.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$11.99</div>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td>Jose Garcia - Pic of the ocean.</td>
+                <td>Steven Even - Pic of a purty turtle.</td>
+                <td>Jill Evans - Pic of a waterfall.</td>
+            </tr>
+            <tr>
+                <td>
+                <div class="container">
+                    <img src="images/green_sky.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$35.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/Desert.jpeg" height="200" width="300" />
+                    <div class="bottom-right">$500.00</div>
+                </div>
+                </td>
+                <td>
+                <div class="container">
+                    <img src="images/beach.jpeg" height="200" width="300"/>
+                    <div class="bottom-right">$2000.00</div>
+                </div>
+                </td>
+            </tr>
+            <tr>
+                <td>John Jonas - Northern lights.</td>
+                <td>Achilles Rama - The desert lands.</td>
+                <td>TJ Rapozo - Time for a walk.</td>
+            </tr>
+        </table>
+        
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

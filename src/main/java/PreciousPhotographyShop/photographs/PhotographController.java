@@ -95,7 +95,7 @@ public class PhotographController {
                 }).collect(Collectors.toList())
             );
         }
-        return "allPhotos";
+        return "allPhotos";//"allPhotosNew";
     }
     
     /**
