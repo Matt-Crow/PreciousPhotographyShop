@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name="reviews")
+@Table(name="review")
 public class ReviewEntity {
     @Id
     @Column(name="review_id")
@@ -27,10 +27,10 @@ public class ReviewEntity {
     @Column(name="reviewed_id", nullable=false)
     private String reviewedId; // what or who was reviewed
     
-    @Column(name="text")
+    @Column(name="text", nullable=false)
     private String text = "no review text given";
     
-    @Column(name="rating")
+    @Column(name="rating", nullable=false)
     private int rating; // 0 - 5
     
     public ReviewEntity(){

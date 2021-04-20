@@ -47,8 +47,8 @@ class LocalFileSystem {
         ImageIO.write(photo.getPhoto(), "jpg", newFile);
     }
     
-    final void delete(PhotographEntity photo) throws IOException {
-        File itsFile = new File(idToFilePath(photo.getId()));
+    final void delete(String id) throws IOException {
+        File itsFile = new File(idToFilePath(id));
         itsFile.delete();
     }
     

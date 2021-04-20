@@ -183,8 +183,8 @@ public class RealDatabaseInterface implements DatabaseInterface {
         if(this.photographRepository.findById(id).orElse(null) != null){
             found = 1;
             try {
-                LocalFileSystem.getInstance().delete(photographRepository.findById(id).orElse(null));
-            } catch (IOException ex) {
+                LocalFileSystem.getInstance().delete(id);
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
             // delete photo table record after bridge table entries

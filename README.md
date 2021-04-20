@@ -1,3 +1,9 @@
+After merging, you'll need to rename a few tables if you want to keep using the same data:
+photograph_entity => photo
+user_entity => user
+category_entity => category
+reviews => review
+
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 

@@ -25,7 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name="photos")
+@Table(name="photo")
 @SecondaryTable(name = "seller_to_photo") // need this for bridge table
 public class PhotographEntity {
     @Id
@@ -37,7 +37,7 @@ public class PhotographEntity {
     @Column(name="name", nullable=false, unique=false)
     private String name;
     
-    @Column(name="description", nullable=true, unique=false)
+    @Column(name="description", nullable=false, unique=false)
     private String description = "no description";
     
     @Column(name="price", nullable=false, unique=false)

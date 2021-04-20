@@ -1,4 +1,4 @@
-mysql> desc users;
+mysql> desc user;
 +----------+--------------+------+-----+---------+-------+
 | Field    | Type         | Null | Key | Default | Extra |
 +----------+--------------+------+-----+---------+-------+
@@ -8,7 +8,7 @@ mysql> desc users;
 | username | varchar(255) | NO   |     | NULL    |       |
 +----------+--------------+------+-----+---------+-------+
 
-mysql> desc photos;
+mysql> desc photo;
 +--------------+--------------+------+-----+---------+-------+
 | Field        | Type         | Null | Key | Default | Extra |
 +--------------+--------------+------+-----+---------+-------+
@@ -20,20 +20,38 @@ mysql> desc photos;
 | posted_date  | date         | YES  |     | NULL    |       |
 +--------------+--------------+------+-----+---------+-------+
 
-<<Outdated>>
-
-DESC CSC130Precious.category_entity;
+mysql> desc category;
 +---------------+--------------+------+-----+---------+-------+
 | Field         | Type         | Null | Key | Default | Extra |
 +---------------+--------------+------+-----+---------+-------+
 | category_name | varchar(255) | NO   | PRI | NULL    |       |
+| parent_name   | varchar(255) | YES  |     | NULL    |       |
 +---------------+--------------+------+-----+---------+-------+
 
-DESC CSC130Precious.photograph_to_category_table_entry;
-+------------------------+--------------+------+-----+---------+-------+
-| Field                  | Type         | Null | Key | Default | Extra |
-+------------------------+--------------+------+-----+---------+-------+
-| id                     | varchar(255) | NO   | PRI | NULL    |       |
-| category_id            | varchar(255) | YES  |     | NULL    |       |
-| photograph_id          | varchar(255) | YES  |     | NULL    |       |
-+------------------------+--------------+------+-----+---------+-------+
+mysql> desc review;
++-------------+--------------+------+-----+---------+-------+
+| Field       | Type         | Null | Key | Default | Extra |
++-------------+--------------+------+-----+---------+-------+
+| review_id   | varchar(255) | NO   | PRI | NULL    |       |
+| rating      | int          | YES  |     | NULL    |       |
+| reviewed_id | varchar(255) | NO   |     | NULL    |       |
+| user_id     | varchar(255) | NO   |     | NULL    |       |
+| text        | varchar(255) | YES  |     | NULL    |       |
++-------------+--------------+------+-----+---------+-------+
+
+mysql> desc seller_to_photo;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| user_id  | varchar(255) | NO   | MUL | NULL    |       |
+| photo_id | varchar(255) | NO   | PRI | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+
+mysql> desc photo_to_category;
++---------------+--------------+------+-----+---------+-------+
+| Field         | Type         | Null | Key | Default | Extra |
++---------------+--------------+------+-----+---------+-------+
+| category_name | varchar(255) | YES  | MUL | NULL    |       |
+| photo_id      | varchar(255) | YES  | MUL | NULL    |       |
++---------------+--------------+------+-----+---------+-------+
+

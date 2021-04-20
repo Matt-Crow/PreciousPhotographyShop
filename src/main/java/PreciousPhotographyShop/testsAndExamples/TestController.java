@@ -102,23 +102,13 @@ public class TestController {
     
     @GetMapping("/main")
     public @ResponseBody String main(){
-        this.databaseInterface.getAllPhotoIds().stream().map((id)->{
-            PhotographEntity ret = null;
+        this.databaseInterface.getAllPhotoIds().stream().forEach((id)->{
             try {
-                ret = this.databaseInterface.getPhotograph(id, true);
+                this.databaseInterface.getPhotograph(id, true);
             } catch(Exception ex){
-                ex.printStackTrace();
-            }
-            return ret;
-        }).filter((pe)->{
-            return pe != null;
-        }).filter((pe)->{
-            return pe.getName() == null || pe.getCategoryNames().isEmpty();
-        }).forEach((pe)->{
-            try {
-                this.databaseInterface.deletePhotoByID(pe.getId());
-            }catch(Exception ex){
-                ex.printStackTrace();
+                //ex.printStackTrace();
+                this.databaseInterface.deletePhotoByID(id);
+                System.out.printf("delete %s\n", id);
             }
         });
         

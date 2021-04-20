@@ -23,7 +23,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-@Table(name="users")
+@Table(name="user")
 public class UserEntity {    
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
