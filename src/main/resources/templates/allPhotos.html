@@ -145,8 +145,8 @@
         </div>
         
         <div class="d-flex flex-wrap p-2 flex-row justify-content-around align-items-center align-content-around">
-            <div th:each="photoId : ${photos}" style="display: inline-block">
-                <div th:replace="fragments.html :: browsePhotoWidget(photoId=${photoId})" class="align-self-center"></div>
+            <div th:each="photo : ${photos}" style="display: inline-block">
+                <div th:replace="fragments.html :: browsePhotoWidget(widgetInfo=${photo})" class="align-self-center"></div>
             </div>
         </div>
         

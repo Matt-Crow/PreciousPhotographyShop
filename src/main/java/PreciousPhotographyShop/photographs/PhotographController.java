@@ -36,6 +36,9 @@ public class PhotographController {
     @Autowired
     private BadLoginService loginService;
     
+    @Autowired
+    private PhotoService photoService;
+    
     @GetMapping("/newPhoto")
     public String newPhotoForm(Model model){
         String userId = loginService.getLoggedInUser().getId();
@@ -84,14 +87,17 @@ public class PhotographController {
         );
         
         if(category == null){
-            model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
+            //model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
+            model.addAttribute("photos", photoService.getBrowseWidgetsForAllPhotos());
         } else {
+            model.addAttribute("photos", photoService.getBrowseWidgetsByCategory(category));
+            /*
             model.addAttribute(
                 "photos", 
                 this.databaseInterface.getPhotographsByCategory(category).stream().map((photo)->{
                    return photo.getId(); 
                 }).collect(Collectors.toList())
-            );
+            );*/
         }
         return "allPhotos";
     }

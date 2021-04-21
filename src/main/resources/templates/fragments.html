@@ -34,18 +34,21 @@
     
     <!-- Widgets -->
     
+    <!-- Review Widget -->
     <div th:fragment="reviewWidget(reviewerName, text, rating)">
         <h3 th:text="${reviewerName}"></h3>
         <p th:text="${text}"></p>
         <p th:text="${rating + ' / 5'}"></p>
     </div>
     
-    <div style="display:inline-block; width:25%; height:auto" th:fragment="browsePhotoWidget(photoId)">
-        <a th:href="@{'/viewPhoto?id=' + ${photoId}}">
-            <img th:src="@{'/photo?id=' + ${photoId}}" height="200" width="300"/>
+    
+    <!-- Browse Photo Widget -->
+    <div style="display:inline-block; width:25%; height:auto" th:fragment="browsePhotoWidget(widgetInfo)">
+        <a th:href="@{'/viewPhoto?id=' + ${widgetInfo.photoId}}">
+            <img th:src="@{'/photo?id=' + ${widgetInfo.photoId}}" style="width:300px; height:auto"/>
         </a>
-        <div class="bottom-right">Todo price</div>
-        <p>Todo seller</p>
+        <p th:text="${widgetInfo.title}"></p>
+        <p th:text="${widgetInfo.priceStr}"></p>
     </div>
     
     <!-- End widgets -->
