@@ -78,8 +78,6 @@ public class PhotographController {
         @RequestParam(name="category", required = false) String category, 
         Model model
     ){
-        System.out.printf("All photos by category is %s\n", category);
-        
         model.addAttribute(
             "categoryNames", 
             databaseInterface.getAllCategories().stream().collect(Collectors.toList())
@@ -95,7 +93,7 @@ public class PhotographController {
                 }).collect(Collectors.toList())
             );
         }
-        return "allPhotosNew";
+        return "allPhotos";
     }
     
     /**
