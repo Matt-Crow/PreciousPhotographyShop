@@ -5,6 +5,9 @@ Pro-tip: put testing code in testsAndExamples/TestController::main
 /newPhoto
 /allPhotos
 
+Pro-tip: after restarting the server, don't use the back button in your browser:
+that will retrieve the cached webpage.
+
 Having issues with Entity classes after changing them? Spring has issues with 
 changing primary key columns, so might need to rename or drop things
 
