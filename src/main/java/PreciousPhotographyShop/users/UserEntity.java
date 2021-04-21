@@ -1,16 +1,17 @@
 package PreciousPhotographyShop.users;
 
 import com.google.common.base.Objects;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Previously split into user and user entity classes
@@ -19,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
-public class UserEntity {
+public class UserEntity implements UserDetails {
     /*
     Which do we need?
     - id
@@ -29,8 +30,14 @@ public class UserEntity {
     */
     
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
-    @Id // denotes this is the primary key
-    @Column(name="user_id")
+    // denotes this is the primary key
+
+    @Id
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
@@ -40,80 +47,110 @@ public class UserEntity {
     @Column(name="username", nullable=false, unique=true)
     private String username;
     
-    @Column(name="name", nullable=false)
-    private String name;
-    
+    @Column(name = "firstName", nullable = false)
+    private String firstName;
+
+    @Column(name="lastName", nullable=false)
+    private String lastName;
+
     @Column(name="email", nullable=false)
     private String email;
     
-    /*@Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")*/
-    private String first_name;
-    /*@Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")*/
-    private String last_name;
+    /*@Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")
+    private String firstName;*/
+
+    /*@Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")
+    private String lastName;*/
+
     private String password;
     /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
     message = "Address is invalid")*/
     private String address;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole;
+
+    private Boolean locked = false;
+
+    private Boolean enabled = false;
     
     @ElementCollection
-    @CollectionTable(
-        name = "seller_to_photo",
-        joinColumns = @JoinColumn(name = "user_id")
-    )
+    @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name="photo_id")
     Set<String> photoIds = new HashSet<>();
     
     public UserEntity(){
         // requires no-arg ctro
         // I hate reflection
-        this.first_name = "";
-        this.last_name = "";
+        this.firstName = "";
+        this.lastName = "";
         this.email = "";
         this.username = "";
         this.password = "";
         this.address = "";
     }
-    
-    public UserEntity(String name, String email){
+
+    /* I feel that this constructor is redundant since we'll need firstName, lastName, and Username for
+    signing up so i'll just comment it for now - Daniel V.
+    public UserEntity(String name, String email, String password){
         this.name = name;
         this.email = email;
+        this.password = password;
     }
-    
+     */
+
     /*
         Default Constructor
      */
-    public UserEntity(String first_name, String last_name, String email, String address, String username, String password){
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public UserEntity(String firstName, String last_name, String email, /*String address, */ String username, String password){
+        this.firstName = firstName;
+        this.lastName = last_name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.address = address;
+        /*this.address = address; */
     }
-    
-    public String getId(){
-        return id;
+
+    /*
+    Spring Security
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
-    
-    public String getUsername(){
-        return username;
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
     }
-    
-    public String getName(){
-        return name;
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
-    
-    public String getEmail(){
-        return email;
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
-    
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        return Collections.singletonList(authority);
+    }
+
+    public String getId(){ return id; }
+
+    public String getUsername(){ return username; }
+
+    public String getEmail(){ return email; }
+
     public String getPassword() { return password; }
 
-    public String getFirst_name(){
-        return first_name;
-    }
+    public String getFirstName(){ return firstName; }
 
-    public String getLast_name() { return last_name; }
+    public String getLastName() { return lastName; }
     
     public String getAddress() { return address; }
 
@@ -121,36 +158,22 @@ public class UserEntity {
         return photoIds;
     }
     
-    public void setId(String id){
-        this.id = id;
-    }
-    
-    public void setUsername(String username){
-        this.username = username;
-    }
-    
-    public void setName(String name){
-        this.name = name;
-    }
-    
-    public void setEmail(String email){
-        this.email = email;
-    }
-    
-    public void setLast_name(String last_name) { this.first_name = last_name; }
+    public void setId(String id){ this.id = id; }
 
-    public void setFirst_name(String first_name) { this.first_name = first_name; }
+    public void setUsername(String username){ this.username = username; }
 
-    public void setAddress(String address) { this.address = address; }
+    public void setFirstName(String first_name) { this.firstName = first_name; }
+
+    public void setLastName(String last_name) { this.firstName = last_name; }
+
+    public void setEmail(String email){ this.email = email; }
 
     public void setPassword(String password) { this.password = password; }
 
-    public void setPhotoIds(Set<String> photoIds){
-        this.photoIds = photoIds;
-    }
-    
-    
-    
+    public void setAddress(String address) { this.address = address; }
+
+    public void setPhotoIds(Set<String> photoIds){ this.photoIds = photoIds; }
+
     @Override
     public boolean equals(Object obj){
         if( this == obj ) return true;
@@ -170,8 +193,8 @@ public class UserEntity {
     @Override
     public String toString() {
         return "User{" +
-                "First name='" + first_name + '\'' +
-                ", Last name='" + last_name + '\'' +
+                "First name='" + firstName + '\'' +
+                ", Last name='" + lastName + '\'' +
                 ", Username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", address='" + address + '\'' +

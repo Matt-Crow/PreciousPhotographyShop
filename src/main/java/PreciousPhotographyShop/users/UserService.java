@@ -1,22 +1,39 @@
 package PreciousPhotographyShop.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import PreciousPhotographyShop.registration.token.ConfirmationTokenService;
+import PreciousPhotographyShop.registration.token.ConfirmationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @Author: Daniel V
- * Contains all the business logic within the HTTP calls in @UserController
+ * Contains all the business logic within the HTTP calls in
+ * @UserController + login verification and authentication
  */
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final String USER_NOT_FOUND_MSG = "Could not find an account associated with this email";
+
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
+
+    UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService){
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.confirmationTokenService = confirmationTokenService;
+    }
 
     public UserEntity getSingleUser(String id) {
 
@@ -72,8 +89,8 @@ public class UserService {
                 "User with id " + id + " does not exist"
         ));
 
-        if(name != null && name.length() > 0 && !Objects.equals(user.getFirst_name(), name)){
-            user.setFirst_name(name);
+        if(name != null && name.length() > 0 && !Objects.equals(user.getFirstName(), name)){
+            user.setFirstName(name);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
@@ -83,5 +100,45 @@ public class UserService {
             }
             user.setEmail(email);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findUserByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_MSG, email)
+                ));
+    }
+
+    public String signUpUser(UserEntity userEntity){
+        boolean userExists = userRepository.findUserByEmail(userEntity.getEmail()).isPresent();
+
+        if(userExists){
+            throw new IllegalStateException("Email is already taken!");
+        }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
+
+        userEntity.setPassword(encodedPassword);
+
+        userRepository.save(userEntity);
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                userEntity
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: Send email
+        return token;
+    }
+
+    public int enableUser(String email) {
+        return userRepository.enableUser(email);
     }
 }
