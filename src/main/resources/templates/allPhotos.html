@@ -122,16 +122,6 @@
             </div>
           </div> 
           <div class="dropdown">
-            <button class="dropbtn">Orientation
-              <i class="fa fa-caret-down"></i>
-            </button>
-            <div class="dropdown-content">
-              <a href="#">Portrait</a>
-              <a href="#">Landscape</a>
-              <a href="#">Square</a>
-            </div>
-          </div> 
-          <div class="dropdown">
             <button class="dropbtn">Size 
               <i class="fa fa-caret-down"></i>
             </button>
@@ -140,8 +130,8 @@
               <a href="#">Medium</a>
               <a href="#">Small</a>
             </div>
-          </div> 
-          <a style="float:right" href="#home"> Search </a>
+          </div>
+          <a style="float:right" th:href="@{/index#page-search}"> Search </a>
         </div>
         
         <div class="d-flex flex-wrap p-2 flex-row justify-content-around align-items-center align-content-around">
@@ -149,113 +139,6 @@
                 <div th:replace="fragments.html :: browsePhotoWidget(widgetInfo=${photo})" class="align-self-center"></div>
             </div>
         </div>
-        
-        
-        <!--Table of browsable images. -->
-        <!--
-        <table border = "1" width=100% cellpadding= 15 class=center style="background-color:grey; text-align:center">
-            <tr>
-                <td>
-                <div class="container">
-                    <img src="images/Landscape.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$300.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/Canal.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$150.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/cloud.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$50.00</div>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Tony Yiamkis - Pic of the sunset.</td>
-                <td>George Yandric - Pic of a river.</td>
-                <td>Joe Hernandez - Pic of the sky.</td>
-            </tr>
-            <tr>
-                <td>
-                <div class="container">
-                    <img src="images/Cool.jpg" height="200" width="300"/>
-                    <div class="bottom-right">$24.99</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/Forest.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$500.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/Palm_Trees.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$400.00</div>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Sam Nayyar - Cool strange picture.</td>
-                <td>Rulaine Carter - Pic of the forest.</td>
-                <td>Jenni Mantis - Pic of the beach.</td>
-            </tr>
-            <tr>
-                <td>
-                <div class="container">
-                    <img src="images/Sunset.jpg" height="200" width="300"/>
-                    <div class="bottom-right">$1000.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/Turtles.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$5.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/Waterfall.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$11.99</div>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>Jose Garcia - Pic of the ocean.</td>
-                <td>Steven Even - Pic of a purty turtle.</td>
-                <td>Jill Evans - Pic of a waterfall.</td>
-            </tr>
-            <tr>
-                <td>
-                <div class="container">
-                    <img src="images/green_sky.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$35.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/Desert.jpeg" height="200" width="300" />
-                    <div class="bottom-right">$500.00</div>
-                </div>
-                </td>
-                <td>
-                <div class="container">
-                    <img src="images/beach.jpeg" height="200" width="300"/>
-                    <div class="bottom-right">$2000.00</div>
-                </div>
-                </td>
-            </tr>
-            <tr>
-                <td>John Jonas - Northern lights.</td>
-                <td>Achilles Rama - The desert lands.</td>
-                <td>TJ Rapozo - Time for a walk.</td>
-            </tr>
-        </table>
-        -->
         
         <div th:insert="fragments.html :: end"></div>
     </body>

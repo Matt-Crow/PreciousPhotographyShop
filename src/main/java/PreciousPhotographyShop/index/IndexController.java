@@ -2,6 +2,7 @@ package PreciousPhotographyShop.index;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class IndexController {
         return "index-2";
     }
     
-    @PostMapping("/search")
+    @PostMapping(value = "/search", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String search(
         @RequestBody MultiValueMap<String, String> formData
     ){
