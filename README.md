@@ -1,9 +1,20 @@
+After merging, you'll need to rename a few tables if you want to keep using the same data:
+photograph_entity => photo
+user_entity => user
+category_entity => category
+reviews => review
+
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 
+/
+search from home
+/contact
 /staticHome.html
 /newPhoto
 /allPhotos
+click to view photo
+reviewing photo
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.

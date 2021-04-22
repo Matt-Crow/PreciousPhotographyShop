@@ -96,51 +96,21 @@ public class TestController {
             System.out.println(photo.getOwnerId());
             return photo.getOwnerId() != null;
         }).map((photo)->{
-            return databaseInterface.getUser(photo.getOwnerId()).getName();
+            return databaseInterface.getUser(photo.getOwnerId()).getUsername();
         }).collect(Collectors.joining(", "));
     }
     
     @GetMapping("/main")
     public @ResponseBody String main(){
-        /*
-        Testing all database capabilities
-
-        
-        /*
-        // Create user
-        User u = new User("Fakey McDon'texist", "fakey@aol.com");
-        try {
-            databaseInterface.storeUser(u);
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
-        
-        // Get user
-        try {
-            u = databaseInterface.getUser(u.getId());
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
-        
-        // Create photograph
-        Photograph p = null;
-        try {
-            BufferedImage buff = ImageIO.read(new File("C:\\Users\\Matt\\Pictures\\batmanParametric.jpg"));
-            p = new Photograph("Test photo", buff, new String[]{"test"});
-            databaseInterface.storePhotograph(p);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        
-        // Retrieve photograph
-        try {
-            p = databaseInterface.getPhotograph(p.getId(), true);
-        } catch(Exception ex){
-            ex.printStackTrace();
-        }
-        
-        return Arrays.toString(databaseInterface.getPhotographsByCategory(new String[]{"test"}));
-        */
+        this.databaseInterface.getAllPhotoIds().stream().forEach((id)->{
+            try {
+                this.databaseInterface.getPhotograph(id, true);
+            } catch(Exception ex){
+                //ex.printStackTrace();
+                this.databaseInterface.deletePhotoByID(id);
+                System.out.printf("delete %s\n", id);
+            }
+        });
         
         return "lol nothing here";
     }

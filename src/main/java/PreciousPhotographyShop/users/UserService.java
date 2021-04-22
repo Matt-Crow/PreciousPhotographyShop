@@ -72,8 +72,8 @@ public class UserService {
                 "User with id " + id + " does not exist"
         ));
 
-        if(name != null && name.length() > 0 && !Objects.equals(user.getFirst_name(), name)){
-            user.setFirst_name(name);
+        if(name != null && name.length() > 0 && !Objects.equals(user.getUsername(), name)){
+            user.setUsername(name);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){

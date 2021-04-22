@@ -10,24 +10,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  * Previously split into user and user entity classes
  * 
- * @author Matt Crow, Daniel V?R?
+ * VERY IMPORTANT: a user's primary key is their ID, as their username and email
+ * can change.
+ * 
+ * @author Matt Crow, Daniel V
  */
 
 @Entity
-public class UserEntity {
-    /*
-    Which do we need?
-    - id
-    - username
-    - name
-    Having all 3 feels redundant
-    */
-    
+@Table(name="user")
+public class UserEntity {    
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
     @Id // denotes this is the primary key
     @Column(name="user_id")
@@ -37,23 +34,14 @@ public class UserEntity {
     
     /*@Pattern(regexp = "^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$",
             message = "Username should only contain alphanumeric characters, periods and underscores")*/
-    @Column(name="username", nullable=false, unique=true)
+    @Column(name="username", nullable=false, unique=false)
     private String username;
+    // Philip says he wants to allow duplicate usernames to encourage exploration
     
-    @Column(name="name", nullable=false)
-    private String name;
-    
-    @Column(name="email", nullable=false)
+    @Column(name="email", nullable=false, unique=true)
     private String email;
     
-    /*@Pattern(regexp = "/^[a-z ,.'-]+$/i", message = "First name is not valid")*/
-    private String first_name;
-    /*@Pattern(regexp = "\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+", message = "Last name(s) is not valid")*/
-    private String last_name;
     private String password;
-    /*@Pattern(regexp = "\\d{1,5}\\s\\w.\\s(\\b\\w*\\b\\s){1,2}\\w*\\.",
-    message = "Address is invalid")*/
-    private String address;
     
     @ElementCollection
     @CollectionTable(
@@ -66,29 +54,24 @@ public class UserEntity {
     public UserEntity(){
         // requires no-arg ctro
         // I hate reflection
-        this.first_name = "";
-        this.last_name = "";
         this.email = "";
         this.username = "";
         this.password = "";
-        this.address = "";
+        photoIds = new HashSet<>();
     }
     
-    public UserEntity(String name, String email){
-        this.name = name;
+    public UserEntity(String username, String email){
+        this();
+        this.username = username;
         this.email = email;
     }
     
     /*
         Default Constructor
      */
-    public UserEntity(String first_name, String last_name, String email, String address, String username, String password){
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.username = username;
-        this.email = email;
+    public UserEntity(String email, String username, String password){
+        this(username, email);
         this.password = password;
-        this.address = address;
     }
     
     public String getId(){
@@ -99,23 +82,13 @@ public class UserEntity {
         return username;
     }
     
-    public String getName(){
-        return name;
-    }
-    
     public String getEmail(){
         return email;
     }
     
-    public String getPassword() { return password; }
-
-    public String getFirst_name(){
-        return first_name;
+    public String getPassword() { 
+        return password; 
     }
-
-    public String getLast_name() { return last_name; }
-    
-    public String getAddress() { return address; }
 
     public Set<String> getPhotoIds(){
         return photoIds;
@@ -129,27 +102,17 @@ public class UserEntity {
         this.username = username;
     }
     
-    public void setName(String name){
-        this.name = name;
-    }
-    
     public void setEmail(String email){
         this.email = email;
     }
     
-    public void setLast_name(String last_name) { this.first_name = last_name; }
-
-    public void setFirst_name(String first_name) { this.first_name = first_name; }
-
-    public void setAddress(String address) { this.address = address; }
-
-    public void setPassword(String password) { this.password = password; }
+    public void setPassword(String password) { 
+        this.password = password; 
+    }
 
     public void setPhotoIds(Set<String> photoIds){
         this.photoIds = photoIds;
     }
-    
-    
     
     @Override
     public boolean equals(Object obj){
@@ -169,14 +132,16 @@ public class UserEntity {
     
     @Override
     public String toString() {
-        return "User{" +
-                "First name='" + first_name + '\'' +
-                ", Last name='" + last_name + '\'' +
-                ", Username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", address='" + address + '\'' +
-                ", email='" + email + '\'' +
-                ", id='" + id + '\'' +
-                '}';
+        return String.format(
+            "User{" +
+                "Username='%s'," +
+                "Password='%s'" + 
+                "email='%s'" +
+                "id='%s'",
+            username,
+            password,
+            email,
+            id
+        );
     }
 }

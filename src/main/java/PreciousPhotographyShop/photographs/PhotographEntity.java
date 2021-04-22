@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.photographs;
 
 import java.awt.image.BufferedImage;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CollectionTable;
@@ -11,7 +12,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.SecondaryTable;
+import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -21,6 +25,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 
 @Entity
+@Table(name="photo")
 @SecondaryTable(name = "seller_to_photo") // need this for bridge table
 public class PhotographEntity {
     @Id
@@ -29,17 +34,20 @@ public class PhotographEntity {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
-    @Column(name="name", nullable=false)
+    @Column(name="name", nullable=false, unique=false)
     private String name;
     
-    @Column(name="description", nullable=true)
+    @Column(name="description", nullable=false, unique=false)
     private String description = "no description";
     
-    @Column(name="price", nullable=false)
+    @Column(name="price", nullable=false, unique=false)
     private double price;
     
-    @Column(name="isRecurring", nullable=false)
+    @Column(name="isRecurring", nullable=false, unique=false)
     private boolean isRecurring;
+    
+    @Column(name="posted_date", nullable=false, unique=false)
+    private Date postedDate;
     
     /*
     I'm using this in lieu of @ManyToMany to minimize the amount
@@ -54,6 +62,7 @@ public class PhotographEntity {
     Setup will look similar in CategoryEntity
     */
     @ElementCollection
+    @Cascade(CascadeType.DELETE)
     @CollectionTable(
         name = "photo_to_category",
         joinColumns = @JoinColumn(name = "photo_id")
@@ -74,6 +83,7 @@ public class PhotographEntity {
             this.id  | this.ownerId
         The foreign key is automatically set by @SecondaryTable above
     */
+    @Cascade(CascadeType.DELETE)
     @Column(
         name = "user_id", //
         table = "seller_to_photo" // only stored in bridge table
@@ -105,6 +115,10 @@ public class PhotographEntity {
     
     public void setIsRecurring(boolean isRecurring){
         this.isRecurring = isRecurring;
+    }
+    
+    public void setPostedDate(Date postedDate){
+        this.postedDate = postedDate;
     }
     
     public void setCategoryNames(Set<String> categoryNames){
@@ -139,6 +153,10 @@ public class PhotographEntity {
         return isRecurring;
     }
     
+    public Date getPostedDate(){
+        return postedDate;
+    }
+    
     public Set<String> getCategoryNames(){
         return categoryNames;
     }
@@ -154,5 +172,23 @@ public class PhotographEntity {
     public final boolean isInCategory(String catName){
         // need to figure out where we want to put this
         return this.categoryNames.stream().anyMatch((cat)->cat.equalsIgnoreCase(catName));
+    }
+    
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Photograph:\n");
+        sb.append(String.format("\tid: %s\n", this.id));
+        sb.append(String.format("\tname: %s\n", this.name));
+        sb.append(String.format("\tdescription: %s\n", this.description));
+        sb.append(String.format("\tprice: $%.2f\n", this.price));
+        sb.append(String.format("\tisRecurring: %b\n", this.isRecurring));
+        sb.append(String.format("\tpostedDate: %s\n", (postedDate == null) ? "NULL" : this.postedDate.toString()));
+        sb.append(String.format("\towner: %s\n", this.ownerId));
+        sb.append("\tcategories:\n");
+        this.categoryNames.forEach((catName)->{
+            sb.append(String.format("\t\t%s\n", catName));
+        });
+        return sb.toString();
     }
 }
