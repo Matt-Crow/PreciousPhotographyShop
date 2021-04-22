@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Search Results</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
     </head>
     <body>
-        <div>search stuff here</div>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+            <div th:each="result : ${found}">
+                <a th:href="@{${result}}" th:text="${result}"></a>
+            </div>
+        </div>
+        
+        <div th:insert="fragments.html :: end"></div>
     </body>
 </html>
