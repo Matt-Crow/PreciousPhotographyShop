@@ -9,15 +9,12 @@ Pro-tip: put testing code in testsAndExamples/TestController::main
 
 /
 search from home
+/contact
 /staticHome.html
 /newPhoto
 /allPhotos
-/viewPhoto
-/reviews/newReview
 click to view photo
-file:///C:/Users/Matt/Documents/GitHub/PreciousPhotographyShop/Webpage/allPhotos.html
-
-Todo: fix upload form, as it isn't saving any of the photoentity properties
+reviewing photo
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.
