@@ -7,10 +7,10 @@
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        
+        <h2>Search Results</h2>
         <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
             <div th:each="result : ${found}">
-                <a th:href="@{${result}}" th:text="${result}"></a>
+                <a th:href="@{${result.url}}" th:text="${result.text}"></a>
             </div>
         </div>
         

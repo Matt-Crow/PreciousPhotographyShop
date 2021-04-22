@@ -1,7 +1,9 @@
 package PreciousPhotographyShop.index;
 
+import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.categories.CategoryRepository;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import java.util.LinkedList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,21 +44,36 @@ public class IndexController {
             list.forEach(System.out::println);
         });
         
-        LinkedList<String> foundUrls = new LinkedList<>();
+        LinkedList<SearchResultInfo> foundUrls = new LinkedList<>();
         formData.get("search").forEach((String data)->{
             catRepo.findAllByNameContainingIgnoreCase(data).forEach((cat)->{
-                foundUrls.add(String.format("/allPhotos?category=%s", cat.getName()));
+                foundUrls.add(resultFor(cat));
             });
             photoRepo.findAllByNameContainingIgnoreCase(data).forEach((photo)->{
-                foundUrls.add(String.format("/viewPhoto?id=%s", photo.getId()));
+                foundUrls.add(resultFor(photo));
             });
             photoRepo.findAllByDescriptionContainingIgnoreCase(data).forEach((photo)->{
-                foundUrls.add(String.format("/viewPhoto?id=%s", photo.getId()));
+                foundUrls.add(resultFor(photo));
             });
             // todo add user search
+            // review search?
         });
         model.addAttribute("found", foundUrls);
         
         return "search";
+    }
+    
+    private SearchResultInfo resultFor(CategoryEntity cat){
+        return new SearchResultInfo(
+            String.format("Browse by category: %s", cat.getName()),
+            String.format("/allPhotos?catgeory=%s", cat.getName())
+        );
+    }
+    
+    private SearchResultInfo resultFor(PhotographEntity photo){
+        return new SearchResultInfo(
+            String.format("Photograph: %s \n%s", photo.getName(), photo.getDescription()),
+            String.format("/viewPhoto?id=%s", photo.getId())
+        );
     }
 }
