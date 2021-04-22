@@ -10,19 +10,19 @@
     <meta name="author" content="Codrops" />
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="demo.css" />
-    <link rel="stylesheet" type="text/css" href="component.css" />
-    <script src="js/modernizr-custom.js"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/demo.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/component.css}" />
+    <script th:src="@{/js/modernizr-custom.js}"></script>
     <!--<link th:href="@{/css/styles.css}" rel="stylesheet">-->
 </head>
 <body>
     <nav class="pages-nav" th:fragment="pages-nav">
-        <div class="pages-nav__item"><a class="link link--page" th:href="@{#page-home}">Home</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-home}">Home</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/allPhotos}">Photos</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/newPhoto}">Upload</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/api/users}">User</a></div>
-        <div class="pages-nav__item"><a class="link link--page" th:href="@{#page-training}">About Us</a></div>
-        <div class="pages-nav__item"><a class="link link--page" th:href="@{#page-contact}">Contact</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-training}">About Us</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-contact}">Contact</a></div>
         <div class="pages-nav__item pages-nav__item--social">
             <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
@@ -31,10 +31,32 @@
         </div>
     </nav>
     <!-- /navigation-->
+    
+    <!-- Widgets -->
+    
+    <!-- Review Widget -->
+    <div th:fragment="reviewWidget(reviewerName, text, rating)">
+        <h3 th:text="${reviewerName}"></h3>
+        <p th:text="${text}"></p>
+        <p th:text="${rating + ' / 5'}"></p>
+    </div>
+    
+    
+    <!-- Browse Photo Widget -->
+    <div style="display:inline-block; width:25%; height:auto" th:fragment="browsePhotoWidget(widgetInfo)">
+        <a th:href="@{'/viewPhoto?id=' + ${widgetInfo.photoId}}">
+            <img th:src="@{'/photo?id=' + ${widgetInfo.photoId}}" style="width:300px; height:auto"/>
+        </a>
+        <p th:text="${widgetInfo.title}"></p>
+        <p th:text="${widgetInfo.priceStr}"></p>
+    </div>
+    
+    <!-- End widgets -->
+    
     <div th:fragment="end">
         <button class="menu-button"><span>Menu</span></button>
-        <script src="js/classie.js"></script>
-        <script src="js/main.js"></script>
+        <script th:src="@{/js/classie.js}"></script>
+        <script th:src="@{/js/main.js}"></script>
     </div>
     
     <!-- Below here is from the tutorial -->

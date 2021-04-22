@@ -183,6 +183,10 @@ html.js,
     box-shadow: 0 -1px 10px rgba(0, 0, 0, 0.1);
 }
 
+.page-back {
+    background-image: url("images/galaxy-1.jpg");
+}
+
 .js .pages-stack--open .page {
     cursor: pointer;
     -webkit-transition: -webkit-transform 0.45s, opacity 0.45s;
@@ -208,10 +212,12 @@ html.js,
 
 .poster {
     position: absolute;
-    bottom: 4vh;
-    left: 60%;
+    bottom: auto;
+    top: auto;
+    left: auto;
+    right: 50vh;
     max-width: 100%;
-    max-height: 80%;
+    max-height: 100%;
 }
 
 .poster-main {
@@ -318,6 +324,25 @@ html.js,
     transform: rotate3d(0, 0, 1, -45deg);
 }
 
+@media screen and (max-width: 90em) {
+    .poster-main {
+        position: absolute;
+        z-index: -5;
+        top: 10vh;
+        left: auto;
+        display: block;
+        max-width: 80%;
+        max-height: 80vh;
+        margin: 0 0 0 40%;
+    }
+    .poster-about {
+        z-index: -5;
+    }
+    .poster-cont {
+        z-index: -5;
+    }
+}
+
 @media screen and (max-width: 60em) {
     .info {
         max-width: 100%;
@@ -326,6 +351,15 @@ html.js,
         position: relative;
         top: auto;
         left: auto;
+        display: block;
+        max-width: 100%;
+        max-height: 50vh;
+        margin: 0 0 0 50%;
+    }
+    .poster-main {
+        position: relative;
+        top: auto;
+        left: -18.5vh;
         display: block;
         max-width: 100%;
         max-height: 50vh;
@@ -373,5 +407,8 @@ html.js,
     }
     .poster {
         margin: 1em;
+    }
+    .poster-main {
+        margin: 8em;
     }
 }

@@ -47,6 +47,11 @@ class LocalFileSystem {
         ImageIO.write(photo.getPhoto(), "jpg", newFile);
     }
     
+    final void delete(String id) throws IOException {
+        File itsFile = new File(idToFilePath(id));
+        itsFile.delete();
+    }
+    
     BufferedImage load(String id, boolean withWatermark) throws IOException{
         BufferedImage orig = ImageIO.read(new File(idToFilePath(id)));
         if(withWatermark){

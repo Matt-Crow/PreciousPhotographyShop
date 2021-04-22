@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="${'Leave a Review for ' + reviewing}"></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        <form action="#" th:action="@{'/reviews/newPhotoReview?id=' + ${reviewingId} + '&reviewer=' + ${reviewer}}" th:object="${review}" method="post">
+            <div>
+                <label for="text">Write your Review</label>
+                <input type="text" name="text" th:field="*{text}"/>
+            </div>
+            <div>
+                <label for="rating">Your Rating</label>
+                <input type="number" name="rating" min="1" max="5" step="1" th:field="*{rating}">
+            </div>
+            <div>
+                <input type="submit" value="Submit">
+            </div>
+        </form>
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

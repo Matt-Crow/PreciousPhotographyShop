@@ -8,6 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 /**
  * This is the database entry class for categories.
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
  * @author Matt Crow
  */
 @Entity
+@Table(name="category")
 public class CategoryEntity {
     @Id
     @Column(name="category_name", nullable=false, unique=true)
