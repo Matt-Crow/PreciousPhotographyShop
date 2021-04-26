@@ -12,13 +12,9 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -61,19 +57,51 @@ public class IndexController {
         String[] terms = URLDecoder.decode(searchTerms, StandardCharsets.UTF_8.toString()).split(" ");
         LinkedList<SearchResultInfo> foundUrls = new LinkedList<>();
         
-        for(String term : terms){
+        Set<CategoryEntity> matchedCats = new HashSet<>();
+        Set<PhotographEntity> matchedPhotos = new HashSet<>();
+        // match first term
+        catRepo.findAllByNameContainingIgnoreCase(terms[0]).forEach((cat)->{
+            matchedCats.add(cat);
+        });
+        photoRepo.findAllByNameContainingIgnoreCase(terms[0]).forEach((photo)->{
+            matchedPhotos.add(photo);
+        });
+        photoRepo.findAllByDescriptionContainingIgnoreCase(terms[0]).forEach((photo)->{
+            matchedPhotos.add(photo);
+        });
+        
+        // intersect matches for other terms
+        String term;
+        Set<Object> newSet = new HashSet<>();
+        for(int i = 1; i < terms.length; i++){
+            term = terms[i];
+            
             catRepo.findAllByNameContainingIgnoreCase(term).forEach((cat)->{
-                foundUrls.add(resultFor(cat));
+                newSet.add(cat);
             });
+            matchedCats.retainAll(newSet); // intersect old set with new one
+            newSet.clear();
+            
             photoRepo.findAllByNameContainingIgnoreCase(term).forEach((photo)->{
-                foundUrls.add(resultFor(photo));
+                newSet.add(resultFor(photo));
             });
             photoRepo.findAllByDescriptionContainingIgnoreCase(term).forEach((photo)->{
-                foundUrls.add(resultFor(photo));
+                newSet.add(resultFor(photo));
             });
+            matchedPhotos.retainAll(newSet);
+            newSet.clear();
             // todo add user search
             // review search?
         }
+        
+        matchedCats.forEach((cat)->{
+            foundUrls.add(resultFor(cat));
+        });
+        
+        matchedPhotos.forEach((photo)->{
+            foundUrls.add(resultFor(photo));
+        });
+        
         model.addAttribute("found", foundUrls);
         return "search";
     }
