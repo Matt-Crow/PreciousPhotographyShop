@@ -2,6 +2,7 @@ package PreciousPhotographyShop.index;
 
 import PreciousPhotographyShop.categories.CategoryEntity;
 import PreciousPhotographyShop.photographs.PhotographEntity;
+import PreciousPhotographyShop.users.UserEntity;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -51,8 +52,7 @@ public class IndexController {
         
         Set<CategoryEntity> matchedCats = this.searchService.getMatchingCategories(terms);
         Set<PhotographEntity> matchedPhotos = this.searchService.getMatchingPhotos(terms);
-        // todo add user search
-        // review search?
+        Set<UserEntity> matchedUsers = this.searchService.getMatchingUsers(terms);
         
         matchedCats.forEach((cat)->{
             foundUrls.add(resultFor(cat));
@@ -60,6 +60,10 @@ public class IndexController {
         
         matchedPhotos.forEach((photo)->{
             foundUrls.add(resultFor(photo));
+        });
+        
+        matchedUsers.forEach((user)->{
+            foundUrls.add(resultFor(user));
         });
         
         model.addAttribute("found", foundUrls);
@@ -77,6 +81,13 @@ public class IndexController {
         return new SearchResultInfo(
             String.format("Photograph: %s \n%s", photo.getName(), photo.getDescription()),
             String.format("/viewPhoto?id=%s", photo.getId())
+        );
+    }
+    
+    private SearchResultInfo resultFor(UserEntity user){
+        return new SearchResultInfo(
+            String.format("Seller: %s \n", user.getUsername()),
+            String.format("/seller?id=%s", user.getId())
         );
     }
 }
