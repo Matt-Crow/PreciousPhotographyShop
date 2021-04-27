@@ -68,11 +68,11 @@ public class UserEntity implements UserDetails {
     private String address;
 
     @Enumerated(EnumType.STRING)
-    private UserRole userRole;
+    private UserRole userRole = UserRole.USER;
 
     private Boolean locked = false;
 
-    private Boolean enabled = false;
+    private Boolean enabled = true;
     
     @ElementCollection
     @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
@@ -90,25 +90,15 @@ public class UserEntity implements UserDetails {
         this.address = "";
     }
 
-    /* I feel that this constructor is redundant since we'll need firstName, lastName, and Username for
-    signing up so i'll just comment it for now - Daniel V.
-    public UserEntity(String name, String email, String password){
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-     */
-
     /*
         Default Constructor
      */
-    public UserEntity(String firstName, String last_name, String email, /*String address, */ String username, String password){
+    public UserEntity(String firstName, String last_name, String username, String password, String email){
         this.firstName = firstName;
         this.lastName = last_name;
         this.username = username;
-        this.email = email;
         this.password = password;
-        /*this.address = address; */
+        this.email = email;
     }
 
     /*
@@ -130,9 +120,7 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
+    public boolean isEnabled() { return true; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

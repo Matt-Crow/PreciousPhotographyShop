@@ -13,19 +13,18 @@ import java.time.LocalDateTime;
 @Service
 public class RegistrationService {
 
-    RegistrationService(UserService userService,
-                        EmailValidator emailValidator,
-                        ConfirmationTokenService confirmationTokenService, EmailSender emailSender) {
-        this.userService = userService;
-        this.emailValidator = emailValidator;
-        this.confirmationTokenService = confirmationTokenService;
-        this.emailSender = emailSender;
-    }
 
     private final UserService userService;
     private final EmailValidator emailValidator;
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
+
+    RegistrationService(UserService userService, EmailValidator emailValidator, ConfirmationTokenService confirmationTokenService, EmailSender emailSender) {
+        this.userService = userService;
+        this.emailValidator = emailValidator;
+        this.confirmationTokenService = confirmationTokenService;
+        this.emailSender = emailSender;
+    }
 
     public String register(RegistrationRequest request) {
         boolean isValidEmail = emailValidator.test(request.getEmail());
@@ -36,11 +35,9 @@ public class RegistrationService {
                 request.getFirstName(),
                 request.getLastName(),
                 request.getUsername(),
-                request.getEmail(),
-                request.getPassword()
+                request.getPassword(),
+                request.getEmail()
         ));
-        String link = "http://localhost:8080/confirm?token=" + s;
-        emailSender.send(request.getEmail(), buildEmail(request.getFirstName(), link));
         return s;
 
     }

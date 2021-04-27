@@ -3,7 +3,8 @@ package PreciousPhotographyShop.registration;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path="api/v1/registration")
+@CrossOrigin
+@RequestMapping(path="api/registration")
 public class RegistrationController {
 
     private RegistrationService registrationService;

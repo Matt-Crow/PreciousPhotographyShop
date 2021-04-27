@@ -35,10 +35,10 @@ public class UserService implements UserDetailsService {
         this.confirmationTokenService = confirmationTokenService;
     }
 
-    public UserEntity getSingleUser(String id) {
+    public UserEntity getSingleUser(String email) {
 
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException((
-                "User with id " + id + " cannot be found"
+        UserEntity user = userRepository.findUserByEmail(email).orElseThrow(() -> new IllegalStateException((
+                "User with id " + email + " cannot be found"
                 )));
         return user;
     }
@@ -48,7 +48,7 @@ public class UserService implements UserDetailsService {
      * @return Returns a list of all user by name and email
      */
     public List<UserEntity> getAllUsers(){
-        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
+        List<UserEntity> users = userRepository.findAll();
         return users;
     }
 
@@ -80,17 +80,34 @@ public class UserService implements UserDetailsService {
     /**
      * This is an @PUT HTTP call that updates either the name, email, or both entries on a user.
      * @param id The id for searching in the Database
-     * @param name The name that potentially will be updated
+     * @param first_name The name that potentially will be updated
+     * @param last_name The last name that potentially will be updated
+     * @param password The password that potentially will be updated
      * @param email The email that potentially will be updated
+     * @param username The username that potentially will be updated
      */
     @Transactional
-    public void updateUser(String id, String name, String email){
+    public void updateUser(String id, String first_name,
+                           String last_name, String password,
+                           String email, String username){
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException(
                 "User with id " + id + " does not exist"
         ));
 
-        if(name != null && name.length() > 0 && !Objects.equals(user.getFirstName(), name)){
-            user.setFirstName(name);
+        if(first_name != null && first_name.length() > 0 && !Objects.equals(user.getFirstName(), first_name)){
+            user.setFirstName(first_name);
+        }
+
+        if(last_name != null && last_name.length() > 0 && !Objects.equals(user.getLastName(), last_name)){
+            user.setLastName(last_name);
+        }
+
+        if(password != null && password.length() > 0 && !Objects.equals(user.getPassword(), password)){
+            user.setPassword(password);
+        }
+
+        if(username != null && username.length() > 0 && !Objects.equals(user.getUsername(), username)){
+            user.setUsername(username);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
