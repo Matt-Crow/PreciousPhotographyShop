@@ -1,14 +1,10 @@
 package PreciousPhotographyShop.index;
 
 import PreciousPhotographyShop.categories.CategoryEntity;
-import PreciousPhotographyShop.categories.CategoryRepository;
-import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.photographs.PhotographEntity;
-import PreciousPhotographyShop.photographs.PhotographRepository;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class IndexController {
     
-    @Autowired private DatabaseInterface db;
-    
-    @Autowired private CategoryRepository catRepo;
-    @Autowired private PhotographRepository photoRepo;
+    @Autowired private SearchService searchService;
     
     @GetMapping({"/", "/index"})
     public String index(){
@@ -39,8 +32,7 @@ public class IndexController {
      * 
      * @param searchTerms the search terms the user entered in the search bar.
      *  These are delimanated by spaces, so having searchTerms of "a b" counts
-     *  as searching "a" or "b" and finding the union of the results. May want to
-     *  change to intersection.
+     *  as searching "a" or "b" and finding the intersection of the results.
      * 
      * @param model
      * 
@@ -57,42 +49,10 @@ public class IndexController {
         String[] terms = URLDecoder.decode(searchTerms, StandardCharsets.UTF_8.toString()).split(" ");
         LinkedList<SearchResultInfo> foundUrls = new LinkedList<>();
         
-        Set<CategoryEntity> matchedCats = new HashSet<>();
-        Set<PhotographEntity> matchedPhotos = new HashSet<>();
-        // match first term
-        catRepo.findAllByNameContainingIgnoreCase(terms[0]).forEach((cat)->{
-            matchedCats.add(cat);
-        });
-        photoRepo.findAllByNameContainingIgnoreCase(terms[0]).forEach((photo)->{
-            matchedPhotos.add(photo);
-        });
-        photoRepo.findAllByDescriptionContainingIgnoreCase(terms[0]).forEach((photo)->{
-            matchedPhotos.add(photo);
-        });
-        
-        // intersect matches for other terms
-        String term;
-        Set<Object> newSet = new HashSet<>();
-        for(int i = 1; i < terms.length; i++){
-            term = terms[i];
-            
-            catRepo.findAllByNameContainingIgnoreCase(term).forEach((cat)->{
-                newSet.add(cat);
-            });
-            matchedCats.retainAll(newSet); // intersect old set with new one
-            newSet.clear();
-            
-            photoRepo.findAllByNameContainingIgnoreCase(term).forEach((photo)->{
-                newSet.add(resultFor(photo));
-            });
-            photoRepo.findAllByDescriptionContainingIgnoreCase(term).forEach((photo)->{
-                newSet.add(resultFor(photo));
-            });
-            matchedPhotos.retainAll(newSet);
-            newSet.clear();
-            // todo add user search
-            // review search?
-        }
+        Set<CategoryEntity> matchedCats = this.searchService.getMatchingCategories(terms);
+        Set<PhotographEntity> matchedPhotos = this.searchService.getMatchingPhotos(terms);
+        // todo add user search
+        // review search?
         
         matchedCats.forEach((cat)->{
             foundUrls.add(resultFor(cat));
