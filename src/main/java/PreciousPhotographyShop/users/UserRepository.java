@@ -13,4 +13,6 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, String> {
     Optional<UserEntity> findUserByEmail(String email);
+    
+    Iterable<UserEntity> findAllByUsernameContainingIgnoreCase(String username);
 }

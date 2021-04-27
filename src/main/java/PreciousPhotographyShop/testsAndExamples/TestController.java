@@ -29,7 +29,7 @@ public class TestController {
     
     @Autowired private CategoryRepository catRepo;
     
-    @GetMapping("/")
+    //@GetMapping("/")
 	public String index(@RequestParam(name="name", required=false, defaultValue="Someone") String name, Model model) {
         model.addAttribute("name", name);
         
