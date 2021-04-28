@@ -1,17 +1,17 @@
 package PreciousPhotographyShop.users;
 
 import com.google.common.base.Objects;
+
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Previously split into user and user entity classes
@@ -24,10 +24,17 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="user")
-public class UserEntity {    
+public class UserEntity implements UserDetails {
     // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
-    @Id // denotes this is the primary key
+    // denotes this is the primary key
+
+    @Id
     @Column(name="user_id")
+    @SequenceGenerator(
+            name = "user_sequence",
+            sequenceName = "user_sequence",
+            allocationSize = 1
+    )
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
@@ -41,13 +48,18 @@ public class UserEntity {
     @Column(name="email", nullable=false, unique=true)
     private String email;
     
+
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private UserRole userRole = UserRole.USER;
+
+    private Boolean locked = false;
+
+    private Boolean enabled = true;
     
     @ElementCollection
-    @CollectionTable(
-        name = "seller_to_photo",
-        joinColumns = @JoinColumn(name = "user_id")
-    )
+    @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name="photo_id")
     Set<String> photoIds = new HashSet<>();
     
@@ -73,13 +85,18 @@ public class UserEntity {
         this(username, email);
         this.password = password;
     }
-    
-    public String getId(){
-        return id;
+
+    /*
+    Spring Security
+     */
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
-    
-    public String getUsername(){
-        return username;
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
     }
     
     public String getEmail(){
@@ -89,6 +106,24 @@ public class UserEntity {
     public String getPassword() { 
         return password; 
     }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() { return true; }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
+        return Collections.singletonList(authority);
+    }
+
+    public String getId(){ return id; }
+
+    public String getUsername(){ return username; }
 
     public Set<String> getPhotoIds(){
         return photoIds;
@@ -113,7 +148,7 @@ public class UserEntity {
     public void setPhotoIds(Set<String> photoIds){
         this.photoIds = photoIds;
     }
-    
+
     @Override
     public boolean equals(Object obj){
         if( this == obj ) return true;
