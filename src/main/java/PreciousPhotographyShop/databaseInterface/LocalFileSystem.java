@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
  * 
  * @author Matt
  */
-class LocalFileSystem {
+public class LocalFileSystem {
     private final String photoPath;
     
     private static LocalFileSystem instance;
@@ -52,7 +52,7 @@ class LocalFileSystem {
         itsFile.delete();
     }
     
-    BufferedImage load(String id, boolean withWatermark) throws IOException{
+    public final BufferedImage load(String id, boolean withWatermark) throws IOException{
         BufferedImage orig = ImageIO.read(new File(idToFilePath(id)));
         if(withWatermark){
             Graphics vandalizeMe = orig.createGraphics();

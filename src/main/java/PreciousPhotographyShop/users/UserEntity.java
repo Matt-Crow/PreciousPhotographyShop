@@ -48,6 +48,8 @@ public class UserEntity implements UserDetails {
     @Column(name="email", nullable=false, unique=true)
     private String email;
     
+    @Column(name="profile_picture_id", nullable=true, unique=false)
+    private String profilePictureId;
 
     private String password;
 
@@ -69,6 +71,7 @@ public class UserEntity implements UserDetails {
         this.email = "";
         this.username = "";
         this.password = "";
+        this.profilePictureId = null;
         photoIds = new HashSet<>();
     }
     
@@ -103,6 +106,7 @@ public class UserEntity implements UserDetails {
         return email;
     }
     
+    @Override
     public String getPassword() { 
         return password; 
     }
@@ -123,7 +127,14 @@ public class UserEntity implements UserDetails {
 
     public String getId(){ return id; }
 
-    public String getUsername(){ return username; }
+    @Override
+    public String getUsername(){ 
+        return username; 
+    }
+    
+    public String getProfilePictureId(){
+        return profilePictureId;
+    }
 
     public Set<String> getPhotoIds(){
         return photoIds;
@@ -139,6 +150,10 @@ public class UserEntity implements UserDetails {
     
     public void setEmail(String email){
         this.email = email;
+    }
+    
+    public void setProfilePictureId(String profilePictureId){
+        this.profilePictureId = profilePictureId;
     }
     
     public void setPassword(String password) { 
@@ -172,7 +187,8 @@ public class UserEntity implements UserDetails {
                 "Username='%s'," +
                 "Password='%s'" + 
                 "email='%s'" +
-                "id='%s'",
+                "id='%s'"+
+            "}",
             username,
             password,
             email,
