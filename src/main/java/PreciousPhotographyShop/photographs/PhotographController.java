@@ -4,7 +4,7 @@ import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
-import PreciousPhotographyShop.temp.BadLoginService;
+import PreciousPhotographyShop.temp.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -34,7 +34,7 @@ public class PhotographController {
     private ReviewRepository reviewRepository;
     
     @Autowired
-    private BadLoginService loginService;
+    private LoginService loginService;
     
     @Autowired
     private PhotoService photoService;
