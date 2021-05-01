@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
@@ -15,25 +16,37 @@ import javax.imageio.ImageIO;
  */
 public class LocalFileSystem {
     private final String photoPath;
+    private final String logPath;
     
     private static LocalFileSystem instance;
     
-    private LocalFileSystem(){
-        photoPath = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
+    private LocalFileSystem() throws IOException{
+        String preciousFolder = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
+        photoPath = preciousFolder;
+        logPath = Paths.get(preciousFolder, "logs").toString();
         getPhotoFolder(); // create folder if it does not yet exist
+        getLogFolder();
     }
     
-    public static final LocalFileSystem getInstance(){
+    public static final LocalFileSystem getInstance() throws IOException{
         if(instance == null){
             instance = new LocalFileSystem();
         }
         return instance;
     }
     
-    private File getPhotoFolder(){
+    public final File getPhotoFolder(){
         File f = new File(this.photoPath);
         if(!f.exists()){
             f.mkdirs();
+        }
+        return f;
+    }
+    
+    public final File getLogFolder() throws IOException{
+        File f = new File(this.logPath);
+        if(!f.exists()){
+            Files.createDirectories(f.toPath());
         }
         return f;
     }
