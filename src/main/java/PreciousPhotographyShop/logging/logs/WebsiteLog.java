@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,28 +19,28 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class WebsiteLog extends AbstractLog {
+
+    @Override
+    protected String getLogSubfolderName() {
+        return "website";
+    }
+
+    @Override
+    protected String getLogFileName() {
+        // don't include time (hrs, min, etc), as we want one log per day
+        String today = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalTime.now());
+        return String.format("websiteLog%s.txt", today);
+    }
+
+    @Override
+    protected String format(String eventString) {
+        return encrypt(eventString);
+    }
     
     // todo: actually encrypt it
     private String encrypt(String message){
         StringBuilder sb = new StringBuilder();
         sb.append(message);
         return sb.toString();
-    }
-    
-    public final String getLogFilePathForToday() throws IOException{
-        // don't include time (hrs, min, etc), as we want one log per day
-        String today = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalTime.now());
-        String fileName = String.format("websiteLog%s.txt", today);
-        return Paths.get(LocalFileSystem.getInstance().getLogFolder().getAbsolutePath(), fileName).toString();
-    }
-    
-    @Override
-    public void logEvent(AbstractLoggedEvent event) throws IOException {
-        File logFile = new File(getLogFilePathForToday());
-        try(
-            BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
-        ){
-            writer.write(encrypt(event.getMessageToLog()));
-        }
     }
 }
