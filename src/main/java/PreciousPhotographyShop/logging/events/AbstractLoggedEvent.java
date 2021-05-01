@@ -1,5 +1,8 @@
 package PreciousPhotographyShop.logging.events;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * This is the base class for the events this package will log.
  * 
@@ -16,7 +19,24 @@ public interface AbstractLoggedEvent {
     
     /**
      * 
-     * @return the un-encrypted text to insert into relevant log files.
+     * @return the un-encrypted text to use when inserting into relevant log 
+     * files. 
      */
-    public String getLoggableString();
+    public String getLogText();
+    
+    /**
+     * Don't override this method
+     * 
+     * @return the exact message to insert into the log file
+     */
+    public default String getMessageToLog(){
+        String tag = getLogPrefix();
+        return String.format(
+            "<%s>%s : %s</%s>", 
+            tag,
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalTime.now()),
+            getLogText(),
+            tag
+        );
+    }
 }

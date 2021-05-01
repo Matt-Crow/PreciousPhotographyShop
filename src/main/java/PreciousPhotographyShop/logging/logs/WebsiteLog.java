@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import org.springframework.stereotype.Component;
 
 /**
@@ -25,13 +28,20 @@ public class WebsiteLog extends AbstractLog {
         return sb.toString();
     }
     
+    public final String getLogFilePathForToday() throws IOException{
+        // don't include time (hrs, min, etc), as we want one log per day
+        String today = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalTime.now());
+        String fileName = String.format("websiteLog%s.txt", today);
+        return Paths.get(LocalFileSystem.getInstance().getLogFolder().getAbsolutePath(), fileName).toString();
+    }
+    
     @Override
     public void logEvent(AbstractLoggedEvent event) throws IOException {
-        File logFile = Paths.get(LocalFileSystem.getInstance().getLogFolder().getAbsolutePath(), "websiteLog.txt").toFile();
+        File logFile = new File(getLogFilePathForToday());
         try(
             BufferedWriter writer = new BufferedWriter(new FileWriter(logFile));
         ){
-            writer.write(encrypt(event.getLoggableString()));
+            writer.write(encrypt(event.getMessageToLog()));
         }
     }
 }
