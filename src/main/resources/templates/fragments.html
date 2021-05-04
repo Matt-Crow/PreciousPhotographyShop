@@ -19,6 +19,7 @@
     <nav class="pages-nav" th:fragment="pages-nav">
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-home}">Home</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/allPhotos}">Photos</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-search}">Search</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/newPhoto}">Upload</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/api/users}">User</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-training}">About Us</a></div>
@@ -29,6 +30,8 @@
             <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
         </div>
+        <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/login}">Log in</a></div>
+        <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
     </nav>
     <!-- /navigation-->
     
