@@ -7,6 +7,8 @@ reviews => review
 Todo: finish LogService, needs to send to the appropriate logs. Events, 
 LogController, etc.
 
+Need to finish PurchaseDetails
+
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 

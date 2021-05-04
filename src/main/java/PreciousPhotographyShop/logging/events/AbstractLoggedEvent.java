@@ -1,7 +1,9 @@
 package PreciousPhotographyShop.logging.events;
 
+import PreciousPhotographyShop.users.UserEntity;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * This is the base class for the events this package will log.
@@ -23,6 +25,12 @@ public interface AbstractLoggedEvent {
      * files. 
      */
     public String getLogText();
+    
+    /**
+     * 
+     * @return the users involved in this event
+     */
+    public UserEntity[] getInvolvedUsers();
     
     /**
      * Don't override this method

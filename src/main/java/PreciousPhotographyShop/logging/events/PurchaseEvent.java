@@ -34,4 +34,9 @@ public class PurchaseEvent implements AbstractLoggedEvent {
         );
     }
 
+    @Override
+    public UserEntity[] getInvolvedUsers() {
+        return new UserEntity[]{buyer, seller};
+    }
+
 }

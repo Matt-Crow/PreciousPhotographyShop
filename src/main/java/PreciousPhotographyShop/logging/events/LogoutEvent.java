@@ -32,4 +32,9 @@ public class LogoutEvent implements AbstractLoggedEvent {
             ip
         );
     }
+
+    @Override
+    public UserEntity[] getInvolvedUsers() {
+        return new UserEntity[]{user};
+    }
 }
