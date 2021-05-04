@@ -16,7 +16,8 @@ public abstract class AbstractLog {
     
     public final void logEvent(AbstractLoggedEvent event) throws IOException {
         try(
-            BufferedWriter writer = new BufferedWriter(new FileWriter(getFileForToday()));
+            //                                                                           append
+            BufferedWriter writer = new BufferedWriter(new FileWriter(getFileForToday(), true));
         ){
             writer.write(format(event.getMessageToLog()));
             writer.write('\n');
