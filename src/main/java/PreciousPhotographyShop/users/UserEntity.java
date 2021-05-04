@@ -42,7 +42,8 @@ public class UserEntity {
     private String email;
     
     private String password;
-    
+
+    // replace one - to - many
     @ElementCollection
     @CollectionTable(
         name = "seller_to_photo",
