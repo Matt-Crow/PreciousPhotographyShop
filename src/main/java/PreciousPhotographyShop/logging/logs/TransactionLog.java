@@ -1,19 +1,14 @@
 package PreciousPhotographyShop.logging.logs;
 
-import PreciousPhotographyShop.databaseInterface.LocalFileSystem;
-import PreciousPhotographyShop.logging.events.AbstractLoggedEvent;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Matt
  */
+@Component
 public class TransactionLog extends AbstractLog {
     
 
@@ -25,7 +20,7 @@ public class TransactionLog extends AbstractLog {
     @Override
     protected String getLogFileName() {
         // date, but not time. This means on transaction log per day
-        return String.format("transactions%s.txt", DateTimeFormatter.ISO_LOCAL_DATE.format(LocalTime.now()));
+        return String.format("transactions%s.txt", DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDateTime.now()));
     }
 
     @Override

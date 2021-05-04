@@ -1,7 +1,9 @@
 package PreciousPhotographyShop.security.config;
 
 
+import PreciousPhotographyShop.security.LoginLogoutHandler;
 import PreciousPhotographyShop.users.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,11 +16,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    private final LoginLogoutHandler loginLogoutHandler;
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public WebSecurityConfig( UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder){
+    public WebSecurityConfig(LoginLogoutHandler loginLogoutHandler, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.loginLogoutHandler = loginLogoutHandler;
         this.userService = userService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
@@ -33,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 antMatchers("/newPhoto").authenticated().
                 anyRequest().permitAll().
             and().
-                formLogin().permitAll().
+                formLogin().permitAll().successHandler(loginLogoutHandler).
             and().
                 logout().permitAll();
     }

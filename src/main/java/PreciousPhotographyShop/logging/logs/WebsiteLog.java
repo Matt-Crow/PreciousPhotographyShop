@@ -1,13 +1,6 @@
 package PreciousPhotographyShop.logging.logs;
 
-import PreciousPhotographyShop.databaseInterface.LocalFileSystem;
-import PreciousPhotographyShop.logging.events.AbstractLoggedEvent;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +21,7 @@ public class WebsiteLog extends AbstractLog {
     @Override
     protected String getLogFileName() {
         // don't include time (hrs, min, etc), as we want one log per day
-        String today = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalTime.now());
+        String today = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDateTime.now());
         return String.format("websiteLog%s.txt", today);
     }
 

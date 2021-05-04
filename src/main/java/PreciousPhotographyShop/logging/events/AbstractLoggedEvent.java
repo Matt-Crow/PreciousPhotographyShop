@@ -1,9 +1,8 @@
 package PreciousPhotographyShop.logging.events;
 
 import PreciousPhotographyShop.users.UserEntity;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * This is the base class for the events this package will log.
@@ -42,7 +41,7 @@ public interface AbstractLoggedEvent {
         return String.format(
             "<%s>%s : %s</%s>", 
             tag,
-            DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalTime.now()),
+            DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDateTime.now()),
             getLogText(),
             tag
         );

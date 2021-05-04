@@ -4,8 +4,8 @@ user_entity => user
 category_entity => category
 reviews => review
 
-Todo: finish LogService, needs to send to the appropriate logs. Events, 
-LogController, etc.
+Todo: LogController, AbstractLog needs to create log file if it doesn't yet 
+    exist, need handler for logout success see WebSecurityConfig
 
 Need to finish PurchaseDetails
 
