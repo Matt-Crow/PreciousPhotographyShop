@@ -2,6 +2,10 @@ package PreciousPhotographyShop.photographs;
 
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
+import PreciousPhotographyShop.logging.LogService;
+import PreciousPhotographyShop.logging.events.PurchaseEvent;
+import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.users.UserEntity;
 import java.text.NumberFormat;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,12 @@ public class PhotoService {
     
     @Autowired
     private DatabaseInterface photoDB;
+    
+    @Autowired
+    private LoginService loginService;
+    
+    @Autowired
+    private LogService logService;
     
     /*
     @Autowired
@@ -63,5 +73,21 @@ public class PhotoService {
     
     public final Collection<BrowsePhotoWidgetInfo> getBrowseWidgetsByCategory(String category){
         return photoDB.getPhotographsByCategory(category).stream().map(this::mapPhotoToBrowseWidget).collect(Collectors.toList());
+    }
+    
+    public final void addToCart(String id){
+        // todo change this later
+        PhotographEntity photo = this.getPhotoByID(id);
+        UserEntity owner = null;
+        if(photo.getOwnerId() != null){
+            owner = photoDB.getUser(photo.getOwnerId());
+        }
+        PurchaseDetails details = new PurchaseDetails(photo);
+        PurchaseEvent evt = new PurchaseEvent(
+            owner,
+            loginService.getLoggedInUser(),
+            details
+        );
+        logService.logEvent(evt);
     }
 }

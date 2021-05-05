@@ -4,10 +4,12 @@ user_entity => user
 category_entity => category
 reviews => review
 
-Todo: LogController, AbstractLog needs to create log file if it doesn't yet 
-    exist, need handler for logout success see WebSecurityConfig
+Need LogController to download the logs
+
+Add to cart only works if logged in
 
 Need to finish PurchaseDetails
+Move PurchaseEvent creation from PhotoService
 
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
