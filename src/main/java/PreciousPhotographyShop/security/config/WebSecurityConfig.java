@@ -38,7 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             and().
                 formLogin().permitAll().successHandler(loginLogoutHandler).
             and().
-                logout().permitAll();
+                logout().permitAll().addLogoutHandler(loginLogoutHandler);
     }
 
     @Override
