@@ -6,6 +6,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
@@ -15,9 +16,12 @@ import java.nio.file.Paths;
 public abstract class AbstractLog {
     
     public final void logEvent(AbstractLoggedEvent event) throws IOException {
+        File todaysFile = getFileForToday();
+        createParentsIfAbsent(todaysFile);
+        createFileIfAbsent(todaysFile);
         try(
-            //                                                                           append
-            BufferedWriter writer = new BufferedWriter(new FileWriter(getFileForToday(), true));
+            //                                                                  append
+            BufferedWriter writer = new BufferedWriter(new FileWriter(todaysFile, true));
         ){
             writer.write(format(event.getMessageToLog()));
             writer.write('\n');
@@ -35,6 +39,18 @@ public abstract class AbstractLog {
         return new File(path);
     }
     
+    private void createParentsIfAbsent(File f) throws IOException{
+        File parent = f.getParentFile();
+        if(parent != null){
+            Files.createDirectories(parent.toPath());
+        }
+    }
+    
+    private void createFileIfAbsent(File f) throws IOException{
+        if(!f.exists()){
+            Files.createFile(f.toPath());
+        }
+    }
     /**
      * 
      * @return the name of the subfolder of the log folder this log's files are

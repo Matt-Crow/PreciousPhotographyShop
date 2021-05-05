@@ -14,8 +14,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 /**
- * This was the only way I could think of to capture login / logout traffic.
- * There is probably a better solution
+ * Captures login and logout traffic in WebSecurityConfig
+ * 
  * @author Matt Crow
  */
 @Component
@@ -24,13 +24,15 @@ public class LoginLogoutHandler implements AuthenticationSuccessHandler {
     @Autowired LoginService loginService;
     
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest hsr, HttpServletResponse hsr1, Authentication a) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication a) throws IOException, ServletException {
         LoginEvent evt = new LoginEvent(
             loginService.getLoggedInUser(),
             LocalDateTime.now(),
-            hsr.getRemoteUser()
+            request.getRemoteAddr()
         );
         logService.logEvent(evt);
+        
+        response.sendRedirect(request.getContextPath());
     }
     
 }
