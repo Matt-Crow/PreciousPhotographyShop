@@ -66,5 +66,7 @@ public class Encrypter {
         String enc = encrypter.encrypt(orig, password, secretVector);
         String dec = encrypter.decrypt(enc, password, secretVector);
         System.out.printf("%s =>\n%s =>\n%s\n", orig, enc, dec);
+        
+        System.out.println(new String(encrypter.generateKey(password).getEncoded()));
     }
 }

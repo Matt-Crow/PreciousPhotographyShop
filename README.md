@@ -4,7 +4,8 @@ user_entity => user
 category_entity => category
 reviews => review
 
-Need LogController to download the logs. Encryption / decryption
+Need LogController to download the logs. Encryption / decryption. Need to save
+secret and iv to a properties file
 
 Add to cart only works if logged in
 

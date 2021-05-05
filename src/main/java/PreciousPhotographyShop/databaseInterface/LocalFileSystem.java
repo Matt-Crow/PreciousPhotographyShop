@@ -15,15 +15,15 @@ import javax.imageio.ImageIO;
  * @author Matt
  */
 public class LocalFileSystem {
+    public static final String MAIN_PATH = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();;
     private final String photoPath;
     private final String logPath;
     
     private static LocalFileSystem instance;
     
     private LocalFileSystem() throws IOException{
-        String preciousFolder = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
-        photoPath = preciousFolder;
-        logPath = Paths.get(preciousFolder, "logs").toString();
+        photoPath = MAIN_PATH;
+        logPath = Paths.get(MAIN_PATH, "logs").toString();
         getPhotoFolder(); // create folder if it does not yet exist
         getLogFolder();
     }
@@ -33,6 +33,14 @@ public class LocalFileSystem {
             instance = new LocalFileSystem();
         }
         return instance;
+    }
+    
+    public final File getMainFolder(){
+        File f = new File(MAIN_PATH);
+        if(!f.exists()){
+            f.mkdirs();
+        }
+        return f;
     }
     
     public final File getPhotoFolder(){
