@@ -4,7 +4,7 @@ user_entity => user
 category_entity => category
 reviews => review
 
-Need LogController to download the logs
+Need LogController to download the logs. Encryption / decryption
 
 Add to cart only works if logged in
 
