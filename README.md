@@ -1,3 +1,16 @@
+
+Files created by the program are stored in
+```
+%your home%/.preciousPhotographyShop
+```
+For example,
+```
+C:\Users\JohnDoe\.preciousPhotographyShop
+```
+You may need to enable hidden folders to view it
+
+
+
 After merging, you'll need to rename a few tables if you want to keep using the same data:
 photograph_entity => photo
 user_entity => user

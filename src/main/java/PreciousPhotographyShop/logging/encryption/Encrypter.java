@@ -1,16 +1,14 @@
 package PreciousPhotographyShop.logging.encryption;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.Provider;
 import java.security.SecureRandom;
+import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Base64;
-import javax.crypto.BadPaddingException;
+import java.util.Properties;
 import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
@@ -23,21 +21,37 @@ import javax.crypto.spec.SecretKeySpec;
  * @author Matt
  */
 public class Encrypter {
-    private final int NUM_KEY_BYTES = 16;
+    private static final int NUM_KEY_BYTES = 16;
     
-    public final String encrypt(String plainText, String password, byte[] vector) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException{
-        Cipher cipherAlgorithm = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        SecretKey key = generateKey(password);
-        IvParameterSpec iv = new IvParameterSpec(vector);
+    private final Cipher cipherAlgorithm;
+    private final SecretKey key;
+    private final IvParameterSpec iv;
+    
+    public Encrypter(Properties props) throws Exception {
+        cipherAlgorithm = findSupportedCipher();
+        key = generateKey(props.getProperty("key"));
+        iv = new IvParameterSpec(Base64.getDecoder().decode(props.getProperty("iv")));
+    }
+    
+    private Cipher findSupportedCipher() throws Exception {
+        Cipher found = null;
+        for(Provider p : Security.getProviders()){
+            p.getServices().forEach((service)->{
+                System.out.println(service.getAlgorithm());
+            });
+        }
+        found = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        
+        return found;
+    }
+    
+    public final String encrypt(String plainText) throws Exception {
         cipherAlgorithm.init(Cipher.ENCRYPT_MODE, key, iv);
         byte[] cipherText = cipherAlgorithm.doFinal(plainText.getBytes());
         return Base64.getEncoder().encodeToString(cipherText);
     }
     
-    public final String decrypt(String cipherText, String password, byte[] vector) throws InvalidKeyException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException{
-        Cipher cipherAlgorithm = Cipher.getInstance("AES/CBC/PKCS5Padding");
-        SecretKey key = generateKey(password);
-        IvParameterSpec iv = new IvParameterSpec(vector);
+    public final String decrypt(String cipherText) throws Exception {
         cipherAlgorithm.init(Cipher.DECRYPT_MODE, key, iv);
         byte[] plainText = cipherAlgorithm.doFinal(Base64.getDecoder().decode(cipherText.getBytes()));
         return new String(plainText);
@@ -51,22 +65,29 @@ public class Encrypter {
         return secret;
     }
     
-    private byte[] generateInitVector(){
+    private static byte[] generateInitVector(){
         byte[] vector = new byte[NUM_KEY_BYTES];
         new SecureRandom().nextBytes(vector);
         return vector;
     }
     
     public static void main(String[] args) throws Exception {
-        Encrypter encrypter = new Encrypter();
-        String password = "password";
-        byte[] secretVector = encrypter.generateInitVector();
+        EncryptionPropertyLoader loader = new EncryptionPropertyLoader();
+        Properties props = null;
+        if(loader.exists()){
+            props = loader.load();
+        } else {
+            props = new Properties();
+            props.setProperty("key", "password");
+            props.setProperty("iv", Base64.getEncoder().encodeToString(generateInitVector()));
+            loader.save(props);
+        }
+        
+        Encrypter encrypter = new Encrypter(props);
         
         String orig = "Hello world!";
-        String enc = encrypter.encrypt(orig, password, secretVector);
-        String dec = encrypter.decrypt(enc, password, secretVector);
+        String enc = encrypter.encrypt(orig);
+        String dec = encrypter.decrypt(enc);
         System.out.printf("%s =>\n%s =>\n%s\n", orig, enc, dec);
-        
-        System.out.println(new String(encrypter.generateKey(password).getEncoded()));
     }
 }
