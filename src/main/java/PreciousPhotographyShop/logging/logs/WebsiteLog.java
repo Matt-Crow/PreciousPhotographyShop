@@ -2,6 +2,11 @@ package PreciousPhotographyShop.logging.logs;
 
 import PreciousPhotographyShop.logging.encryption.Encrypter;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
+import com.google.common.io.Files;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
@@ -47,7 +52,6 @@ public class WebsiteLog extends AbstractLog {
         return encrypt(eventString);
     }
     
-    // todo: actually encrypt it
     private String encrypt(String message){
         if(encrypter != null){
             try {
@@ -57,5 +61,21 @@ public class WebsiteLog extends AbstractLog {
             }
         }
         return message;
+    }
+    
+    public static void main(String[] args) throws Exception{
+        WebsiteLog log = new WebsiteLog();
+        Encrypter enc = EncryptionProvider.createDefaulEncrypter();
+        File f = log.getFileForToday();
+        BufferedReader read = new BufferedReader(new FileReader(f));
+        read.lines().map((encLine)->{
+            String line = "";
+            try {
+                line = enc.decrypt(encLine);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return line;
+        }).forEach(System.out::println);
     }
 }
