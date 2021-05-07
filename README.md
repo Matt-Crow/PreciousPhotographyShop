@@ -1,4 +1,4 @@
-
+## Where Does the Website Store Files?
 Files created by the program are stored in
 ```
 %your home%/.preciousPhotographyShop

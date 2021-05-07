@@ -1,5 +1,7 @@
 package PreciousPhotographyShop.logging.logs;
 
+import PreciousPhotographyShop.logging.encryption.Encrypter;
+import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class WebsiteLog extends AbstractLog {
 
+    private final Encrypter encrypter;
+    
+    public WebsiteLog(){
+        super();
+        
+        Encrypter temp = null;
+        try {
+            temp = EncryptionProvider.createDefaulEncrypter();
+        } catch (Exception ex) {
+            System.err.println("Failed to load encrypter. Switching to no encryption");
+            ex.printStackTrace();
+        }
+        this.encrypter = temp;
+    }
+    
     @Override
     protected String getLogSubfolderName() {
         return "website";
@@ -32,8 +49,13 @@ public class WebsiteLog extends AbstractLog {
     
     // todo: actually encrypt it
     private String encrypt(String message){
-        StringBuilder sb = new StringBuilder();
-        sb.append(message);
-        return sb.toString();
+        if(encrypter != null){
+            try {
+                message = encrypter.encrypt(message);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return message;
     }
 }
