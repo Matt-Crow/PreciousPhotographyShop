@@ -1,5 +1,6 @@
 package PreciousPhotographyShop.logging;
 
+import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
 import PreciousPhotographyShop.temp.LoginService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,12 +30,13 @@ public class LogController {
     }
     
     @PostMapping("request-access")
-    public final RedirectView processAccessRequest(
+    public final String processAccessRequest(
         @RequestParam("email") String email,
-        RedirectAttributes redirectAttrs
-    ) {
+        Model model
+    ) throws Exception {
+        String[] fiveFactorsOfAuthentication = EncryptionProvider.getFiveFactorsOfAuthentication();
         // todo send email to multiple people with each piece of the key
-        redirectAttrs.addAttribute("code", "example code goes here");
-        return new RedirectView("/log/request-access");
+        model.addAttribute("ffa", fiveFactorsOfAuthentication);
+        return "viewFiveFactors";
     }
 }

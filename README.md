@@ -36,6 +36,7 @@ search from home
 /allPhotos
 click to view photo
 reviewing photo
+/log/request-access
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.

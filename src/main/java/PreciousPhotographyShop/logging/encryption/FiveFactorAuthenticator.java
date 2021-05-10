@@ -8,10 +8,10 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author Matt
  */
-public class FiveFactorAuthentication {
+public class FiveFactorAuthenticator {
     private final EncryptionProperties props;
     
-    public FiveFactorAuthentication(EncryptionProperties props){
+    public FiveFactorAuthenticator(EncryptionProperties props){
         this.props = props;
     }
     
@@ -60,7 +60,7 @@ public class FiveFactorAuthentication {
     public static void main(String[] args) throws Exception{
         EncryptionProperties newProps = new EncryptionPropertyProvider("AES", 16).newEncryptionProperties();
         Encrypter enc = new Encrypter(newProps);
-        FiveFactorAuthentication ffa = new FiveFactorAuthentication(newProps);
+        FiveFactorAuthenticator ffa = new FiveFactorAuthenticator(newProps);
         
         String[] split = ffa.getFiveFactorAuthentication();
         for(int i = 0; i < split.length; i++){

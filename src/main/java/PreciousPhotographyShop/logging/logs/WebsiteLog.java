@@ -27,7 +27,7 @@ public class WebsiteLog extends AbstractLog {
         
         Encrypter temp = null;
         try {
-            temp = EncryptionProvider.createDefaulEncrypter();
+            temp = EncryptionProvider.createDefaultEncrypter();
         } catch (Exception ex) {
             System.err.println("Failed to load encrypter. Switching to no encryption");
             ex.printStackTrace();
@@ -65,7 +65,7 @@ public class WebsiteLog extends AbstractLog {
     
     public static void main(String[] args) throws Exception{
         WebsiteLog log = new WebsiteLog();
-        Encrypter enc = EncryptionProvider.createDefaulEncrypter();
+        Encrypter enc = EncryptionProvider.createDefaultEncrypter();
         File f = log.getFileForToday();
         BufferedReader read = new BufferedReader(new FileReader(f));
         read.lines().map((encLine)->{
