@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Request Access to the Website Log</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        <div style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
+            <h2>Request Access to the Log</h2>
+            <form action="#" th:action="@{/log/request-access}" method="POST">
+                <label for="email" Your email/>
+                <input id="email" name="email" type="email" required="true"/>
+                <input type="submit" value="Request Access"/>
+            </form>
+            <p th:if="${code}" th:text="${code}"></p>
+        </div>
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>
