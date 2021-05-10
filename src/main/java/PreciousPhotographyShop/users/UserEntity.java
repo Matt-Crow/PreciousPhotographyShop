@@ -91,14 +91,6 @@ public class UserEntity implements UserDetails {
         return !locked;
     }
 
-    public String getEmail(){
-        return email;
-    }
-    
-    public String getPassword() {
-        return password;
-    }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
@@ -112,15 +104,26 @@ public class UserEntity implements UserDetails {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
+    /*
+        Getters
+     */
 
     public String getId(){ return id; }
 
+    public String getEmail(){ return email; }
+
     public String getUsername(){ return username; }
 
+    public String getPassword() { return password; }
+
     public Set<String> getPhotoIds(){ return photoIds; }
-    
+
+    /*
+        Setters
+     */
+
     public void setId(String id){ this.id = id; }
-    
+
     public void setUsername(String username){ this.username = username; }
     
     public void setEmail(String email){ this.email = email; }
