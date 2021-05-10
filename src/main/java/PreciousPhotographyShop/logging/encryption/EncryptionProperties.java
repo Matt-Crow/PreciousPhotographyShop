@@ -37,5 +37,4 @@ public class EncryptionProperties extends Properties {
         byte[] ivAsBytes = Base64.getDecoder().decode(getProperty("iv"));
         return new IvParameterSpec(ivAsBytes);
     }
-    
 }

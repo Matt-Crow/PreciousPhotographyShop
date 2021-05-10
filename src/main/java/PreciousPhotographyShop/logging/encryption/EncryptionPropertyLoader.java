@@ -65,7 +65,7 @@ public class EncryptionPropertyLoader {
     }
     
     public final EncryptionProperties createAndStore() throws NoSuchAlgorithmException, IOException{
-        EncryptionPropertyProvider propProv = new EncryptionPropertyProvider(bytesInKey);
+        EncryptionPropertyProvider propProv = new EncryptionPropertyProvider(keyType, bytesInKey);
         EncryptionProperties props = new EncryptionProperties(keyType);
         props.setKey(propProv.newSecretKey());
         props.setIv(propProv.newIvParameter());

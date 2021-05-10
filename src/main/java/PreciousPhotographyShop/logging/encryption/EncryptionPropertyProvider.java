@@ -12,9 +12,11 @@ import javax.crypto.spec.IvParameterSpec;
  * @author Matt Crow
  */
 public class EncryptionPropertyProvider {
+    private final String encryptionType;
     private final int bytesInKey;
     
-    public EncryptionPropertyProvider(int numKeyBytes){
+    public EncryptionPropertyProvider(String encryptionType, int numKeyBytes){
+        this.encryptionType = encryptionType;
         this.bytesInKey = numKeyBytes;
     }
     
@@ -28,5 +30,12 @@ public class EncryptionPropertyProvider {
         byte[] bitMask = new byte[bytesInKey];
         new SecureRandom().nextBytes(bitMask);
         return new IvParameterSpec(bitMask);
+    }
+    
+    public final EncryptionProperties newEncryptionProperties() throws NoSuchAlgorithmException{
+        EncryptionProperties props = new EncryptionProperties("AES");
+        props.setKey(newSecretKey());
+        props.setIv(newIvParameter());
+        return props;
     }
 }
