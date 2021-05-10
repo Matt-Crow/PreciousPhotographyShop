@@ -1,15 +1,14 @@
 package PreciousPhotographyShop.logging;
 
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
-import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.logging.logs.WebsiteLog;
+import java.io.IOException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 /**
  *
@@ -18,6 +17,13 @@ import org.springframework.web.servlet.view.RedirectView;
 @Controller
 @RequestMapping("log")
 public class LogController {
+    
+    private final WebsiteLog websiteLog;
+    
+    public LogController(WebsiteLog websiteLog){
+        this.websiteLog = websiteLog;
+    }
+    
     @GetMapping("request-access")
     public final String reqAccess(
         @RequestParam(name="code", required=false) String code,
@@ -38,5 +44,21 @@ public class LogController {
         // todo send email to multiple people with each piece of the key
         model.addAttribute("ffa", fiveFactorsOfAuthentication);
         return "viewFiveFactors";
+    }
+    
+    @GetMapping("enter-factors")
+    public final String enterFiveFactors(
+    
+    ){
+        return "enterFiveFactors";
+    }
+    
+    @PostMapping("submit-auth")
+    public final String processFiveFactors(
+        Model model
+    ) throws IOException {
+        // todo save five factors, keep forwarding to subsequent requests
+        model.addAttribute("logs", websiteLog.getAllWebsiteLogsNames());
+        return "listLogs";
     }
 }

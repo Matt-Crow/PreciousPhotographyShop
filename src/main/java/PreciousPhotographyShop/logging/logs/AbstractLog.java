@@ -30,10 +30,16 @@ public abstract class AbstractLog {
         }
     };
     
+    public final File getFolder() throws IOException{
+        return Paths.get(
+            LocalFileSystem.getInstance().getLogFolder().getAbsolutePath(),
+            getLogSubfolderName()
+        ).toFile();
+    }
+    
     public final File getFileForToday() throws IOException{
         String path = Paths.get(
-            LocalFileSystem.getInstance().getLogFolder().getAbsolutePath(),
-            getLogSubfolderName(),
+            getFolder().getAbsolutePath(),
             getLogFileName()
         ).toString();
         return new File(path);

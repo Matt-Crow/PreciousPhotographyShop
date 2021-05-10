@@ -7,8 +7,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import org.springframework.stereotype.Component;
 
 /**
@@ -61,6 +63,13 @@ public class WebsiteLog extends AbstractLog {
             }
         }
         return message;
+    }
+    
+    public final String[] getAllWebsiteLogsNames() throws IOException{
+        File root = this.getFolder();
+        return Arrays.stream(root.listFiles()).map((File file)->{
+            return file.getName();
+        }).toArray(String[]::new);
     }
     
     public static void main(String[] args) throws Exception{
