@@ -43,10 +43,15 @@ public class ShoppingCartServices {
         cartItemRepository.save(cartItem);
         return addedQuantity;
     }
-        public double updateQuantity(String photoId, int quantity, UserEntity user) {
-            cartItemRepository.updateQuantity(quantity, photoId, user.getId());
-            PhotographEntity photo = photographRepository.findById(photoId).get();
-            double subtotal = photo.getPrice() * quantity;
-            return subtotal;
-        }
+
+    public double updateQuantity(String photoId, int quantity, UserEntity user) {
+        cartItemRepository.updateQuantity(quantity, photoId, user.getId());
+        PhotographEntity photo = photographRepository.findById(photoId).get();
+        double subtotal = photo.getPrice() * quantity;
+        return subtotal;
+    }
+
+    public void removeProduct(String photoId, UserEntity user){
+        cartItemRepository.deleteByUserEntityAndPhotographEntity(user.getId(), photoId);
+    }
 }

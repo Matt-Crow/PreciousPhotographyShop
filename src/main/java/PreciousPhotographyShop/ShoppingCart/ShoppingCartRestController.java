@@ -19,17 +19,41 @@ public class ShoppingCartRestController {
     @PostMapping("/cart/add/{photoid}/{qty}")
     public String addProductToCart(@PathVariable("photoid") String photoId, @PathVariable("qty") int quantity){
 
-        UserEntity user = loginService.getLoggedInUser();
+        UserEntity userEntity = loginService.getLoggedInUser();
 
-        if (user == null) {
+        if (userEntity == null) {
             return "You must login in order to add products to your shopping cart.";
         }
-        int addedQuantity = cartServices.addProduct(photoId, quantity, user);
+        int addedQuantity = cartServices.addProduct(photoId, quantity, userEntity);
 
         System.out.println("Added item");
 
-        double subtotal = cartServices.updateQuantity(photoId, quantity, user);
+        return addedQuantity + " item(s) of this product were added to your shopping cart";
+    }
+
+    @PostMapping("/cart/update/{pid}/{qty}")
+    public String updateQuantity(@PathVariable("pid") String photoId, @PathVariable("qty") int quantity){
+
+        UserEntity userEntity = loginService.getLoggedInUser();
+
+        if (userEntity == null) {
+            return "You must login in order to update the quantity of the products of your shopping cart.";
+        }
+        double subtotal = cartServices.updateQuantity(photoId, quantity, userEntity);
 
         return String.valueOf(subtotal);
+    }
+
+    @PostMapping("/cart/remove/{pid}")
+    public String removePhotoFromCart(@PathVariable("pid") String photoId, @PathVariable("qty") int quantity){
+
+        UserEntity userEntity = loginService.getLoggedInUser();
+
+        if (userEntity == null) {
+            return "You must login in order to remove products from your shopping cart.";
+        }
+        cartServices.removeProduct(photoId, userEntity);
+
+        return "The product has been removed from your shopping cart. ";
     }
 }
