@@ -2,8 +2,6 @@ package PreciousPhotographyShop.ShoppingCart;
 
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.users.UserEntity;
-import org.springframework.security.core.userdetails.User;
-
 import javax.persistence.*;
 
 @Entity

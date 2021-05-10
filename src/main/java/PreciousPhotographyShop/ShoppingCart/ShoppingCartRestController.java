@@ -54,6 +54,6 @@ public class ShoppingCartRestController {
         }
         cartServices.removeProduct(photoId, userEntity);
 
-        return "The product has been removed from your shopping cart. ";
+        return "The product has been removed from your shopping cart.";
     }
 }
