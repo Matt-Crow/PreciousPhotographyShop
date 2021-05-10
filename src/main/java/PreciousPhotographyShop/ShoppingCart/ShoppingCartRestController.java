@@ -19,15 +19,17 @@ public class ShoppingCartRestController {
     @PostMapping("/cart/add/{photoid}/{qty}")
     public String addProductToCart(@PathVariable("photoid") String photoId, @PathVariable("qty") int quantity){
 
-        UserEntity userEntity = loginService.getLoggedInUser();
+        UserEntity user = loginService.getLoggedInUser();
 
-        if (userEntity == null) {
+        if (user == null) {
             return "You must login in order to add products to your shopping cart.";
         }
-        int addedQuantity = cartServices.addProduct(photoId, quantity, userEntity);
+        int addedQuantity = cartServices.addProduct(photoId, quantity, user);
 
         System.out.println("Added item");
 
-        return addedQuantity + " item(s) of this product were added to your shopping cart";
+        double subtotal = cartServices.updateQuantity(photoId, quantity, user);
+
+        return String.valueOf(subtotal);
     }
 }

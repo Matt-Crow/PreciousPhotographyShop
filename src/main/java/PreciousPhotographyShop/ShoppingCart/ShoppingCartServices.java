@@ -5,10 +5,12 @@ import PreciousPhotographyShop.photographs.PhotographRepository;
 import PreciousPhotographyShop.users.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 public class ShoppingCartServices {
 
     @Autowired
@@ -38,8 +40,13 @@ public class ShoppingCartServices {
             cartItem.setUserEntity(user);
             cartItem.setPhotographEntity(photo);
         }
-
         cartItemRepository.save(cartItem);
         return addedQuantity;
     }
+        public double updateQuantity(String photoId, int quantity, UserEntity user) {
+            cartItemRepository.updateQuantity(quantity, photoId, user.getId());
+            PhotographEntity photo = photographRepository.findById(photoId).get();
+            double subtotal = photo.getPrice() * quantity;
+            return subtotal;
+        }
 }

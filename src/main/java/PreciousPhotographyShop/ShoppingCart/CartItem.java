@@ -11,23 +11,23 @@ import javax.persistence.*;
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private int id;
 
     @ManyToOne
-    @Column(name = "photo_id")
+    @JoinColumn(name = "photo_id")
     private PhotographEntity photographEntity;
 
     @ManyToOne
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
     private int quantity;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -53,6 +53,11 @@ public class CartItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    @Transient
+    public double getSubtotal(){
+        return this.photographEntity.getPrice() * quantity;
     }
 }
 
