@@ -1,7 +1,8 @@
 package PreciousPhotographyShop.ShoppingCart;
 
-import PreciousPhotographyShop.temp.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
+import PreciousPhotographyShop.users.UserRepository;
+import PreciousPhotographyShop.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,12 +15,16 @@ public class ShoppingCartRestController {
     private ShoppingCartServices cartServices;
 
     @Autowired
-    private LoginService loginService;
+    private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/cart/add/{photoid}/{qty}")
     public String addProductToCart(@PathVariable("photoid") String photoId, @PathVariable("qty") int quantity){
 
-        UserEntity userEntity = loginService.getLoggedInUser();
+//        UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
+        UserEntity userEntity = userService.getLoggedInUser();
 
         if (userEntity == null) {
             return "You must login in order to add products to your shopping cart.";
@@ -34,7 +39,8 @@ public class ShoppingCartRestController {
     @PostMapping("/cart/update/{pid}/{qty}")
     public String updateQuantity(@PathVariable("pid") String photoId, @PathVariable("qty") int quantity){
 
-        UserEntity userEntity = loginService.getLoggedInUser();
+//        UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
+        UserEntity userEntity = userService.getLoggedInUser();
 
         if (userEntity == null) {
             return "You must login in order to update the quantity of the products of your shopping cart.";
@@ -45,9 +51,11 @@ public class ShoppingCartRestController {
     }
 
     @PostMapping("/cart/remove/{pid}")
-    public String removePhotoFromCart(@PathVariable("pid") String photoId, @PathVariable("qty") int quantity){
+    public String removePhotoFromCart(@PathVariable("pid") String photoId){
 
-        UserEntity userEntity = loginService.getLoggedInUser();
+//        UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
+
+        UserEntity userEntity = userService.getLoggedInUser();
 
         if (userEntity == null) {
             return "You must login in order to remove products from your shopping cart.";
