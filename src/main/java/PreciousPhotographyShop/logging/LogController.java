@@ -1,8 +1,10 @@
 package PreciousPhotographyShop.logging;
 
+import PreciousPhotographyShop.logging.encryption.EncryptionKeys;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
 import PreciousPhotographyShop.logging.logs.WebsiteLog;
 import java.io.IOException;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("log")
 public class LogController {
+    
+    @Resource
+    private EncryptionKeys currentUserEncKeys;
     
     private final WebsiteLog websiteLog;
     
@@ -45,9 +50,7 @@ public class LogController {
     }
     
     @GetMapping("enter-factors")
-    public final String enterFiveFactors(
-    
-    ){
+    public final String enterFiveFactors(){
         return "logging/enterFiveFactors";
     }
     
