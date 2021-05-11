@@ -61,4 +61,20 @@ public class LogController {
         model.addAttribute("logs", websiteLog.getAllWebsiteLogsNames());
         return "logging/listLogs";
     }
+    
+    @GetMapping("website")
+    public final String viewWebsiteLog(
+        @RequestParam("name") String name,
+        Model model
+    ){
+        model.addAttribute("title", String.format("Website Log - %s", name));
+        String contents = "failed to load log contents";
+        try {
+            contents = websiteLog.getText();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        model.addAttribute("text", contents);
+        return "logging/view";
+    }
 }

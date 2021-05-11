@@ -2,8 +2,11 @@ package PreciousPhotographyShop.logging.logs;
 
 import PreciousPhotographyShop.databaseInterface.LocalFileSystem;
 import PreciousPhotographyShop.logging.events.AbstractLoggedEvent;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,6 +32,32 @@ public abstract class AbstractLog {
             throw ex;
         }
     };
+    
+    public final String getText() throws IOException{
+        File todaysFile = getFileForToday();
+        String contents = "";
+        if(todaysFile.exists()){
+            contents = readContents(todaysFile);
+        }
+        return contents;
+    }
+    
+    private String readContents(File f){
+        StringBuilder sb = new StringBuilder();
+        try (
+            FileReader freed = new FileReader(f);
+            BufferedReader buff = new BufferedReader(freed);
+        ){
+            while(buff.ready()){
+                sb.append(buff.readLine()).append('\n');
+            }
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return sb.toString();
+    }
     
     public final File getFolder() throws IOException{
         return Paths.get(
@@ -57,6 +86,7 @@ public abstract class AbstractLog {
             Files.createFile(f.toPath());
         }
     }
+    
     /**
      * 
      * @return the name of the subfolder of the log folder this log's files are
