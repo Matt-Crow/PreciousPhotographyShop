@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Request Access to the Website Log</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        <div style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
+            <h2>Request Access to the Log</h2>
+            <form action="#" th:action="@{/log/request-access}" method="POST">
+                <table>
+                    <tr>
+                        <td><label for="email0"> Initiator email</label></td>
+                        <td><input id="email0" name="email0" type="email" required="true"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email1"> Witness Email 1</label></td>
+                        <td><input id="email1" name="email1" type="email" required="true"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email2"> Witness Email 2</label></td>
+                        <td><input id="email2" name="email2" type="email" required="true"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email3"> Witness Email 3</label></td>
+                        <td><input id="email3" name="email3" type="email" required="true"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="email4"> Witness Email 4</label></td>
+                        <td><input id="email4" name="email4" type="email" required="true"/></td>
+                    </tr>
+                    <tr colspan="2">
+                        <input type="submit" value="Request Access"/>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

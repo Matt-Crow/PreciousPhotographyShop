@@ -25,32 +25,30 @@ public class LogController {
     }
     
     @GetMapping("request-access")
-    public final String reqAccess(
-        @RequestParam(name="code", required=false) String code,
-        Model model
-    ){
-        if(code != null){
-            model.addAttribute("code", code);
-        }
-        return "requestLogAccess";
+    public final String requestAccess(){
+        return "logging/requestLogAccess";
     }
     
     @PostMapping("request-access")
     public final String processAccessRequest(
-        @RequestParam("email") String email,
+        @RequestParam("email0") String email,
+        @RequestParam("email1") String witnessEmail1,
+        @RequestParam("email2") String witnessEmail2,
+        @RequestParam("email3") String witnessEmail3,
+        @RequestParam("email4") String witnessEmail4,
         Model model
     ) throws Exception {
         String[] fiveFactorsOfAuthentication = EncryptionProvider.getFiveFactorsOfAuthentication();
         // todo send email to multiple people with each piece of the key
         model.addAttribute("ffa", fiveFactorsOfAuthentication);
-        return "viewFiveFactors";
+        return "logging/viewFiveFactors"; // change to a confirmation screen after email
     }
     
     @GetMapping("enter-factors")
     public final String enterFiveFactors(
     
     ){
-        return "enterFiveFactors";
+        return "logging/enterFiveFactors";
     }
     
     @PostMapping("submit-auth")
@@ -58,7 +56,9 @@ public class LogController {
         Model model
     ) throws IOException {
         // todo save five factors, keep forwarding to subsequent requests
+        
+        model.addAttribute("title", "Website Logs");
         model.addAttribute("logs", websiteLog.getAllWebsiteLogsNames());
-        return "listLogs";
+        return "logging/listLogs";
     }
 }
