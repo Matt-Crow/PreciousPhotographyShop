@@ -1,18 +1,11 @@
-package PreciousPhotographyShop.logging.logs;
+package PreciousPhotographyShop.logging.website;
 
+import PreciousPhotographyShop.logging.AbstractLog;
 import PreciousPhotographyShop.logging.encryption.Encrypter;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
-import com.google.common.io.Files;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
 
 /**
  * The WebsiteLog is the primary log used by the website. This file must be
@@ -20,13 +13,12 @@ import org.springframework.stereotype.Component;
  * 
  * @author Matt Crow
  */
-@Component
 public class WebsiteLog extends AbstractLog {
 
     private final Encrypter encrypter;
     
-    public WebsiteLog(){
-        super();
+    public WebsiteLog(String path){
+        super(path);
         
         Encrypter temp = null;
         try {
@@ -36,18 +28,6 @@ public class WebsiteLog extends AbstractLog {
             ex.printStackTrace();
         }
         this.encrypter = temp;
-    }
-    
-    @Override
-    protected String getLogSubfolderName() {
-        return "website";
-    }
-
-    @Override
-    protected String getLogFileName() {
-        // don't include time (hrs, min, etc), as we want one log per day
-        String today = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDateTime.now());
-        return String.format("websiteLog%s.txt", today);
     }
 
     @Override
@@ -80,15 +60,8 @@ public class WebsiteLog extends AbstractLog {
         return contents;
     }
     
-    public final String[] getAllWebsiteLogsNames() throws IOException{
-        File root = this.getFolder();
-        return Arrays.stream(root.listFiles()).map((File file)->{
-            return file.getName();
-        }).toArray(String[]::new);
-    }
-    
     public static void main(String[] args) throws Exception{
-        WebsiteLog log = new WebsiteLog();
+        WebsiteLog log = new WebsiteLogFolder().getOrCreateLogForToday();
            
         System.out.println(log.decryptContentsUsing(log.encrypter));
     }

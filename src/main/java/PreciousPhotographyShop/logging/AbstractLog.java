@@ -1,6 +1,5 @@
-package PreciousPhotographyShop.logging.logs;
+package PreciousPhotographyShop.logging;
 
-import PreciousPhotographyShop.databaseInterface.LocalFileSystem;
 import PreciousPhotographyShop.logging.events.AbstractLoggedEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,19 +8,20 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  *
  * @author Matt
  */
 public abstract class AbstractLog {
+    private final String path;
+    
+    public AbstractLog(String path){
+        this.path = path;
+    }
     
     public final void logEvent(AbstractLoggedEvent event) throws IOException {
-        File todaysFile = getFileForToday();
-        createParentsIfAbsent(todaysFile);
-        createFileIfAbsent(todaysFile);
+        File todaysFile = new File(path);
         try(
             //                                                                  append
             BufferedWriter writer = new BufferedWriter(new FileWriter(todaysFile, true));
@@ -34,7 +34,7 @@ public abstract class AbstractLog {
     };
     
     public final String getText() throws IOException{
-        File todaysFile = getFileForToday();
+        File todaysFile = new File(this.path);
         String contents = "";
         if(todaysFile.exists()){
             contents = readContents(todaysFile);
@@ -58,48 +58,6 @@ public abstract class AbstractLog {
         }
         return sb.toString();
     }
-    
-    public final File getFolder() throws IOException{
-        return Paths.get(
-            LocalFileSystem.getInstance().getLogFolder().getAbsolutePath(),
-            getLogSubfolderName()
-        ).toFile();
-    }
-    
-    public final File getFileForToday() throws IOException{
-        String path = Paths.get(
-            getFolder().getAbsolutePath(),
-            getLogFileName()
-        ).toString();
-        return new File(path);
-    }
-    
-    private void createParentsIfAbsent(File f) throws IOException{
-        File parent = f.getParentFile();
-        if(parent != null){
-            Files.createDirectories(parent.toPath());
-        }
-    }
-    
-    private void createFileIfAbsent(File f) throws IOException{
-        if(!f.exists()){
-            Files.createFile(f.toPath());
-        }
-    }
-    
-    /**
-     * 
-     * @return the name of the subfolder of the log folder this log's files are
-     * kept in
-     */
-    protected abstract String getLogSubfolderName();
-    
-    /**
-     * 
-     * @return the name of this log file for today. Some logs change files each
-     * day to avoid getting too large
-     */
-    protected abstract String getLogFileName();
     
     /**
      * Only really used by WebsiteLog to encrypt

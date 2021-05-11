@@ -1,5 +1,6 @@
-package PreciousPhotographyShop.logging.logs;
+package PreciousPhotographyShop.logging.users;
 
+import PreciousPhotographyShop.logging.AbstractLog;
 import PreciousPhotographyShop.users.UserEntity;
 
 /**
@@ -9,18 +10,9 @@ import PreciousPhotographyShop.users.UserEntity;
 public class UserLog extends AbstractLog {
     private final UserEntity forUser;
     
-    public UserLog(UserEntity forUser){
+    public UserLog(String path, UserEntity forUser){
+        super(path);
         this.forUser = forUser;
-    }
-
-    @Override
-    protected String getLogSubfolderName() {
-        return "users";
-    }
-
-    @Override
-    protected String getLogFileName() {
-        return String.format("%s.txt", forUser.getId());
     }
 
     @Override

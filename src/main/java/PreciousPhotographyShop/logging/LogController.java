@@ -4,10 +4,8 @@ import PreciousPhotographyShop.logging.encryption.Encrypter;
 import PreciousPhotographyShop.logging.encryption.EncryptionKeys;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
 import PreciousPhotographyShop.logging.encryption.FiveFactorAuthenticator;
-import PreciousPhotographyShop.logging.logs.WebsiteLog;
+import PreciousPhotographyShop.logging.website.WebsiteLogFolder;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,13 +22,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("log")
 public class LogController {
     
-    @Resource
+    @Resource // EncryptionKeys is annotate to be stored in the session
     private EncryptionKeys currentUserEncKeys;
     
-    private final WebsiteLog websiteLog;
+    private final WebsiteLogFolder websiteLogFolder;
     
-    public LogController(WebsiteLog websiteLog){
-        this.websiteLog = websiteLog;
+    public LogController(WebsiteLogFolder websiteLogFolder){
+        this.websiteLogFolder = websiteLogFolder;
     }
     
     @GetMapping({"/", "/index"})
@@ -79,10 +77,16 @@ public class LogController {
             factor3.trim(),
             factor4.trim()
         };
+        // saves in the session
         currentUserEncKeys = FiveFactorAuthenticator.getEncryptionKeysFromFiveFactors(ffa);
         
+        return "redirect:./list-website";
+    }
+    
+    @GetMapping("list-website")
+    public final String listWebsiteLogs(Model model) throws IOException{
         model.addAttribute("title", "Website Logs");
-        model.addAttribute("logs", websiteLog.getAllWebsiteLogsNames());
+        model.addAttribute("logs", websiteLogFolder.getAllWebsiteLogNames());
         return "logging/listLogs";
     }
     
@@ -98,7 +102,7 @@ public class LogController {
                 throw new IllegalStateException("Cannot access website log before providing encryption keys");
             }
             Encrypter enc = new Encrypter(currentUserEncKeys);
-            contents = websiteLog.decryptContentsUsing(enc);
+            contents = websiteLogFolder.getLogByName(name).decryptContentsUsing(enc);
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {

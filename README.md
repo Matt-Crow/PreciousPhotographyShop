@@ -1,6 +1,6 @@
 
 
-Matt working on /log/enter-factors no link to it yet
+Website log done, need ability to view the user's log
 
 
 
