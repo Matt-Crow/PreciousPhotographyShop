@@ -1,9 +1,13 @@
 package PreciousPhotographyShop.logging;
 
+import PreciousPhotographyShop.logging.encryption.Encrypter;
 import PreciousPhotographyShop.logging.encryption.EncryptionKeys;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
+import PreciousPhotographyShop.logging.encryption.FiveFactorAuthenticator;
 import PreciousPhotographyShop.logging.logs.WebsiteLog;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +31,11 @@ public class LogController {
     
     public LogController(WebsiteLog websiteLog){
         this.websiteLog = websiteLog;
+    }
+    
+    @GetMapping({"/", "/index"})
+    public final String index(){
+        return "logging/main";
     }
     
     @GetMapping("request-access")
@@ -56,9 +65,21 @@ public class LogController {
     
     @PostMapping("submit-auth")
     public final String processFiveFactors(
+        @RequestParam("initKey") String initKey,
+        @RequestParam("factor1") String factor1,
+        @RequestParam("factor2") String factor2,
+        @RequestParam("factor3") String factor3,
+        @RequestParam("factor4") String factor4,
         Model model
     ) throws IOException {
-        // todo save five factors, keep forwarding to subsequent requests
+        String[] ffa = new String[]{
+            initKey.trim(), // form data may have white space
+            factor1.trim(),
+            factor2.trim(),
+            factor3.trim(),
+            factor4.trim()
+        };
+        currentUserEncKeys = FiveFactorAuthenticator.getEncryptionKeysFromFiveFactors(ffa);
         
         model.addAttribute("title", "Website Logs");
         model.addAttribute("logs", websiteLog.getAllWebsiteLogsNames());
@@ -73,8 +94,23 @@ public class LogController {
         model.addAttribute("title", String.format("Website Log - %s", name));
         String contents = "failed to load log contents";
         try {
-            contents = websiteLog.getText();
+            if(currentUserEncKeys == null){
+                throw new IllegalStateException("Cannot access website log before providing encryption keys");
+            }
+            Encrypter enc = new Encrypter(currentUserEncKeys);
+            contents = Arrays.stream(websiteLog.getText().split("\n")).map((line)->{
+                String dec = null;
+                try {
+                    // need to decrypt line by line, as the \n is NOT encrypted in the log file
+                    dec = enc.decrypt(line);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return dec;
+            }).filter((dec)->dec != null).collect(Collectors.joining("<br/>"));
         } catch (IOException ex) {
+            ex.printStackTrace();
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         model.addAttribute("text", contents);

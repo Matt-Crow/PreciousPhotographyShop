@@ -17,7 +17,7 @@ public class Encrypter {
     private final SecretKey key;
     private final IvParameterSpec iv;
     
-    protected Encrypter(EncryptionKeys keys) throws Exception {
+    public Encrypter(EncryptionKeys keys) throws Exception {
         cipherAlgorithm = findSupportedCipher();
         key = keys.getKey();
         iv = keys.getIv();

@@ -35,7 +35,7 @@ public class FiveFactorAuthenticator {
         return fiveFactors;
     }
     
-    public final EncryptionKeys getEncryptionKeysFromFiveFactors(String[] ffa){
+    public static final EncryptionKeys getEncryptionKeysFromFiveFactors(String[] ffa){
         // used later
         byte[] decodedIv = Base64.getDecoder().decode(ffa[0]);
         IvParameterSpec iv = new IvParameterSpec(decodedIv);

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title th:text="${title}"></title>
+        <title>Logs</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <div style="width: 80%; margin: auto">
-            <!--                                                         un-escaped text-->
-            <p style="background-color: white; word-wrap: break-word" th:utext="${text}"></p>
+        <h1>Logs</h1>
+        <div style="display: flex; flex-direction: column">
+            <a th:href="@{/log/request-access}">Request Access to Website Log</a>
+            <a th:href="@{/log/enter-factors}">Enter Access Codes for Website Log</a>
         </div>
         <div th:insert="fragments.html :: end"></div>
     </body>
