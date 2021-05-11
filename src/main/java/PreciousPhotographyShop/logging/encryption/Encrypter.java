@@ -17,11 +17,10 @@ public class Encrypter {
     private final SecretKey key;
     private final IvParameterSpec iv;
     
-    protected Encrypter(EncryptionProperties props) throws Exception {
+    protected Encrypter(EncryptionKeys keys) throws Exception {
         cipherAlgorithm = findSupportedCipher();
-        byte[] b = Base64.getDecoder().decode(props.getProperty("key"));
-        key = props.getKey();
-        iv = props.getIv();
+        key = keys.getKey();
+        iv = keys.getIv();
     }
     
     private Cipher findSupportedCipher() throws Exception {

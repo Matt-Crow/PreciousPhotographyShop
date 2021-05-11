@@ -9,19 +9,19 @@ import javax.crypto.spec.SecretKeySpec;
  * @author Matt
  */
 public class FiveFactorAuthenticator {
-    private final EncryptionProperties props;
+    private final EncryptionKeys keys;
     
-    public FiveFactorAuthenticator(EncryptionProperties props){
-        this.props = props;
+    public FiveFactorAuthenticator(EncryptionKeys props){
+        this.keys = props;
     }
     
     public final String[] getFiveFactorAuthentication(){
         String[] fiveFactors = new String[5];
         
         // first factor is just the IV
-        fiveFactors[0] = Base64.getEncoder().encodeToString(props.getIv().getIV());
+        fiveFactors[0] = Base64.getEncoder().encodeToString(keys.getIv().getIV());
         
-        byte[] theOther4 = props.getKey().getEncoded();
+        byte[] theOther4 = keys.getKey().getEncoded();
         byte maskGetEvery4thByte = 17; // 16 + 1 = 0001 0001
         byte[] newFactor = new byte[theOther4.length];
         for(int factor = 1; factor < 5; factor++){
@@ -35,12 +35,10 @@ public class FiveFactorAuthenticator {
         return fiveFactors;
     }
     
-    public final EncryptionProperties getEncryptionPropertiesFromFiveFactors(String[] ffa){
-        EncryptionProperties props = new EncryptionProperties("AES");
-        
+    public final EncryptionKeys getEncryptionKeysFromFiveFactors(String[] ffa){
+        // used later
         byte[] decodedIv = Base64.getDecoder().decode(ffa[0]);
         IvParameterSpec iv = new IvParameterSpec(decodedIv);
-        props.setIv(iv);
         
         byte[][] splitKey = new byte[4][];
         for(int factor = 1; factor < 5; factor++){
@@ -52,15 +50,19 @@ public class FiveFactorAuthenticator {
                 allOredTogether[i] |= splitKey[byteFactor][i];
             }
         }
-        props.setKey(new SecretKeySpec(allOredTogether, "AES"));
         
-        return props;
+        return new EncryptionKeys(
+            "AES", 
+            16, 
+            new SecretKeySpec(allOredTogether, "AES"), 
+            iv
+        );
     }
     
     public static void main(String[] args) throws Exception{
-        EncryptionProperties newProps = new EncryptionPropertyProvider("AES", 16).newEncryptionProperties();
-        Encrypter enc = new Encrypter(newProps);
-        FiveFactorAuthenticator ffa = new FiveFactorAuthenticator(newProps);
+        EncryptionKeys newKeys = new EncryptionKeyProvider("AES", 16).newKeys();
+        Encrypter enc = new Encrypter(newKeys);
+        FiveFactorAuthenticator ffa = new FiveFactorAuthenticator(newKeys);
         
         String[] split = ffa.getFiveFactorAuthentication();
         for(int i = 0; i < split.length; i++){
@@ -69,8 +71,8 @@ public class FiveFactorAuthenticator {
         
         String encrypted = enc.encrypt("Hello world!");
         
-        newProps = ffa.getEncryptionPropertiesFromFiveFactors(split);
-        enc = new Encrypter(newProps);
+        newKeys = ffa.getEncryptionKeysFromFiveFactors(split);
+        enc = new Encrypter(newKeys);
         String decrypted = enc.decrypt(encrypted);
         
         System.out.println(decrypted);

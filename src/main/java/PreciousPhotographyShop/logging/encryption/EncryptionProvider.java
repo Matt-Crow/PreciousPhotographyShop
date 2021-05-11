@@ -6,26 +6,32 @@ package PreciousPhotographyShop.logging.encryption;
  */
 public class EncryptionProvider {
     public static final Encrypter createDefaultEncrypter() throws Exception{
-        EncryptionProperties props = getProperties();
+        EncryptionKeys props = getKeys();
         Encrypter enc = new Encrypter(props);
         return enc;
     }
     
-    private static EncryptionProperties getProperties() throws Exception{
+    private static EncryptionKeys getKeys() throws Exception{
         // Default to 16 byte AES encryption keys
         EncryptionPropertyLoader propLoader = new EncryptionPropertyLoader("AES", 16);
-        EncryptionProperties props = null;
+        EncryptionProperties props;
         if(!propLoader.exists()){
             props = propLoader.createAndStore();
         } else {
             props = propLoader.load();
         }
-        return props;
+        EncryptionKeys keys = new EncryptionKeys(
+            "AES",
+            16,
+            props.getKey(),
+            props.getIv()
+        );
+        return keys;
     }
 
     public static String[] getFiveFactorsOfAuthentication() throws Exception {
-        EncryptionProperties props = getProperties();
-        FiveFactorAuthenticator ffa = new FiveFactorAuthenticator(props);
+        EncryptionKeys keys = getKeys();
+        FiveFactorAuthenticator ffa = new FiveFactorAuthenticator(keys);
         return ffa.getFiveFactorAuthentication();
     }
 }

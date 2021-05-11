@@ -11,17 +11,17 @@ import javax.crypto.spec.IvParameterSpec;
  * 
  * @author Matt Crow
  */
-public class EncryptionPropertyProvider {
+public class EncryptionKeyProvider {
     private final String encryptionType;
     private final int bytesInKey;
     
-    public EncryptionPropertyProvider(String encryptionType, int numKeyBytes){
+    public EncryptionKeyProvider(String encryptionType, int numKeyBytes){
         this.encryptionType = encryptionType;
         this.bytesInKey = numKeyBytes;
     }
     
     public final SecretKey newSecretKey() throws NoSuchAlgorithmException{
-        KeyGenerator gen = KeyGenerator.getInstance("AES");
+        KeyGenerator gen = KeyGenerator.getInstance(encryptionType);
         gen.init(bytesInKey * 8); // measured in bits, not bytes
         return gen.generateKey();
     }
@@ -32,10 +32,13 @@ public class EncryptionPropertyProvider {
         return new IvParameterSpec(bitMask);
     }
     
-    public final EncryptionProperties newEncryptionProperties() throws NoSuchAlgorithmException{
-        EncryptionProperties props = new EncryptionProperties("AES");
-        props.setKey(newSecretKey());
-        props.setIv(newIvParameter());
-        return props;
+    public final EncryptionKeys newKeys() throws NoSuchAlgorithmException{
+        EncryptionKeys keys = new EncryptionKeys(
+            encryptionType,
+            bytesInKey,
+            newSecretKey(),
+            newIvParameter()
+        );
+        return keys;
     }
 }
