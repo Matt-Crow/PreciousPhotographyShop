@@ -98,16 +98,7 @@ public class LogController {
                 throw new IllegalStateException("Cannot access website log before providing encryption keys");
             }
             Encrypter enc = new Encrypter(currentUserEncKeys);
-            contents = Arrays.stream(websiteLog.getText().split("\n")).map((line)->{
-                String dec = null;
-                try {
-                    // need to decrypt line by line, as the \n is NOT encrypted in the log file
-                    dec = enc.decrypt(line);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                return dec;
-            }).filter((dec)->dec != null).collect(Collectors.joining("<br/>"));
+            contents = websiteLog.decryptContentsUsing(enc);
         } catch (IOException ex) {
             ex.printStackTrace();
         } catch (Exception ex) {

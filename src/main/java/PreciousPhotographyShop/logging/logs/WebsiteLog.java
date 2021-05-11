@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 /**
@@ -65,6 +66,20 @@ public class WebsiteLog extends AbstractLog {
         return message;
     }
     
+    public final String decryptContentsUsing(Encrypter decrypter) throws IOException{
+        String contents = Arrays.stream(getText().split("\n")).map((line)->{
+            String dec = null;
+            try {
+                // need to decrypt line by line, as the \n is NOT encrypted in the log file
+                dec = decrypter.decrypt(line);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            return dec;
+        }).filter((dec)->dec != null).collect(Collectors.joining("\n"));
+        return contents;
+    }
+    
     public final String[] getAllWebsiteLogsNames() throws IOException{
         File root = this.getFolder();
         return Arrays.stream(root.listFiles()).map((File file)->{
@@ -74,17 +89,7 @@ public class WebsiteLog extends AbstractLog {
     
     public static void main(String[] args) throws Exception{
         WebsiteLog log = new WebsiteLog();
-        Encrypter enc = EncryptionProvider.createDefaultEncrypter();
-        File f = log.getFileForToday();
-        BufferedReader read = new BufferedReader(new FileReader(f));
-        read.lines().map((encLine)->{
-            String line = "";
-            try {
-                line = enc.decrypt(encLine);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return line;
-        }).forEach(System.out::println);
+           
+        System.out.println(log.decryptContentsUsing(log.encrypter));
     }
 }

@@ -8,8 +8,7 @@
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
         <div style="width: 80%; margin: auto">
-            <!--                                                         un-escaped text-->
-            <p style="background-color: white; word-wrap: break-word" th:utext="${text}"></p>
+            <p style="background-color: white; word-wrap: break-word; white-space: pre" th:text="${text}"></p>
         </div>
         <div th:insert="fragments.html :: end"></div>
     </body>
