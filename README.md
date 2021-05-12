@@ -2,6 +2,7 @@
 
 Website log done, need ability to view the user's log
 
+/contact
 
 
 
@@ -34,16 +35,6 @@ Move PurchaseEvent creation from PhotoService
 
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
-
-/
-search from home
-/contact
-/staticHome.html
-/newPhoto
-/allPhotos
-click to view photo
-reviewing photo
-/log/request-access
 
 Pro-tip: after restarting the server, don't use the back button in your browser:
 that will retrieve the cached webpage.
