@@ -3,7 +3,6 @@ package PreciousPhotographyShop.security.config;
 
 import PreciousPhotographyShop.security.LoginLogoutHandler;
 import PreciousPhotographyShop.users.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,6 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //antMatchers("/", "/index", "/search", "/login", "/allPhotos", "/api/registration/**", "/resources/**").permitAll().
                 //anyRequest().authenticated().
                 antMatchers("/newPhoto").authenticated().
+                antMatchers("/log/personal").authenticated().
                 anyRequest().permitAll().
             and().
                 formLogin().permitAll().successHandler(loginLogoutHandler).

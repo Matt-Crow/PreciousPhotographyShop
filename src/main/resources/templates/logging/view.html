@@ -7,8 +7,9 @@
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <div style="width: 80%; margin: auto">
-            <p style="background-color: white; word-wrap: break-word; white-space: pre-wrap" th:text="${text}"></p>
+        <div style="background-color: white; width: 80%; margin: auto">
+            <h2 th:text="${title}"></h2>
+            <p style="color: black; word-wrap: break-word; white-space: pre-wrap" th:text="${text}"></p>
         </div>
         <div th:insert="fragments.html :: end"></div>
     </body>

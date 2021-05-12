@@ -5,6 +5,8 @@ import PreciousPhotographyShop.logging.encryption.EncryptionKeys;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
 import PreciousPhotographyShop.logging.encryption.FiveFactorAuthenticator;
 import PreciousPhotographyShop.logging.website.WebsiteLogFolder;
+import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.users.UserEntity;
 import java.io.IOException;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
@@ -21,13 +23,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("log")
 public class LogController {
+    private final LoginService loginService;
+    private final LogService logService;
+    private final WebsiteLogFolder websiteLogFolder;
     
     @Resource // EncryptionKeys is annotate to be stored in the session
     private EncryptionKeys currentUserEncKeys;
     
-    private final WebsiteLogFolder websiteLogFolder;
-    
-    public LogController(WebsiteLogFolder websiteLogFolder){
+    public LogController(LoginService loginService, LogService logService, WebsiteLogFolder websiteLogFolder){
+        this.loginService = loginService;
+        this.logService = logService;
         this.websiteLogFolder = websiteLogFolder;
     }
     
@@ -108,6 +113,23 @@ public class LogController {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        model.addAttribute("text", contents);
+        return "logging/view";
+    }
+    
+    @GetMapping("personal")
+    public final String viewCurrentUsersLog(Model model){
+        UserEntity currentUser = loginService.getLoggedInUser();
+        if(currentUser == null){
+            throw new IllegalStateException("Cannot view personal log with no logged-in user");
+        }
+        String contents = String.format("Failed to get log for user %s", currentUser.getId());
+        try {
+            contents = this.logService.getLogForUser(currentUser).getText();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        model.addAttribute("title", String.format("User Log - %s", currentUser.getId()));
         model.addAttribute("text", contents);
         return "logging/view";
     }

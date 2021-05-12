@@ -7,10 +7,11 @@
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <h1>Logs</h1>
-        <div style="display: flex; flex-direction: column">
+        <div style="display: flex; flex-direction: column; width:80%; margin: auto">
+            <h1>Logs</h1>
             <a th:href="@{/log/request-access}">Request Access to Website Log</a>
             <a th:href="@{/log/enter-factors}">Enter Access Codes for Website Log</a>
+            <a th:href="@{/log/personal}">View Your Log</a>
         </div>
         <div th:insert="fragments.html :: end"></div>
     </body>

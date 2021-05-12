@@ -1,4 +1,5 @@
 
+Todo: email five factors instead of displaying in web page
 
 Website log done, need ability to view the user's log
 
