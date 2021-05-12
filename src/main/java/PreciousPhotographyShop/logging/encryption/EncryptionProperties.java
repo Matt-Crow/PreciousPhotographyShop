@@ -7,7 +7,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- *
+ * Used to store encryption properties in the user's local file system
  * @author Matt
  */
 public class EncryptionProperties extends Properties {

@@ -10,8 +10,9 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 
 /**
- *
- * @author Matt
+ * Loads and stores the encryption properties for this project
+ * 
+ * @author Matt Crow
  */
 public class EncryptionPropertyLoader {
     private static final String path = Paths.get(LocalFileSystem.MAIN_PATH, "config", ".enc.properties").toString();
@@ -65,10 +66,11 @@ public class EncryptionPropertyLoader {
     }
     
     public final EncryptionProperties createAndStore() throws NoSuchAlgorithmException, IOException{
-        EncryptionKeyProvider propProv = new EncryptionKeyProvider(keyType, bytesInKey);
+        EncryptionKeyProvider keyProv = new EncryptionKeyProvider(keyType, bytesInKey);
+        EncryptionKeys keys = keyProv.newKeys();
         EncryptionProperties props = new EncryptionProperties(keyType);
-        props.setKey(propProv.newSecretKey());
-        props.setIv(propProv.newIvParameter());
+        props.setKey(keys.getKey());
+        props.setIv(keys.getIv());
         save(props);
         return props;
     }

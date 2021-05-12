@@ -20,18 +20,6 @@ public class EncryptionKeyProvider {
         this.bytesInKey = numKeyBytes;
     }
     
-    public final SecretKey newSecretKey() throws NoSuchAlgorithmException{
-        KeyGenerator gen = KeyGenerator.getInstance(encryptionType);
-        gen.init(bytesInKey * 8); // measured in bits, not bytes
-        return gen.generateKey();
-    }
-    
-    public final IvParameterSpec newIvParameter(){
-        byte[] bitMask = new byte[bytesInKey];
-        new SecureRandom().nextBytes(bitMask);
-        return new IvParameterSpec(bitMask);
-    }
-    
     public final EncryptionKeys newKeys() throws NoSuchAlgorithmException{
         EncryptionKeys keys = new EncryptionKeys(
             encryptionType,
@@ -41,4 +29,18 @@ public class EncryptionKeyProvider {
         );
         return keys;
     }
+    
+    private SecretKey newSecretKey() throws NoSuchAlgorithmException{
+        KeyGenerator gen = KeyGenerator.getInstance(encryptionType);
+        gen.init(bytesInKey * 8); // measured in bits, not bytes
+        return gen.generateKey();
+    }
+    
+    private IvParameterSpec newIvParameter(){
+        byte[] bitMask = new byte[bytesInKey];
+        new SecureRandom().nextBytes(bitMask);
+        return new IvParameterSpec(bitMask);
+    }
+    
+    
 }

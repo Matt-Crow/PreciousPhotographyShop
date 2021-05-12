@@ -1,23 +1,8 @@
 
 Todo: email five factors instead of displaying in web page
 
-Website log done, need ability to view the user's log
 
 /contact
-
-
-
-## Where Does the Website Store Files?
-Files created by the program are stored in
-```
-%your home%/.preciousPhotographyShop
-```
-For example,
-```
-C:\Users\JohnDoe\.preciousPhotographyShop
-```
-You may need to enable hidden folders to view it
-
 
 
 After merging, you'll need to rename a few tables if you want to keep using the same data:
@@ -26,8 +11,6 @@ user_entity => user
 category_entity => category
 reviews => review
 
-Need LogController to download the logs. Encryption / decryption. Need to save
-secret and iv to a properties file
 
 Add to cart only works if logged in
 
@@ -48,6 +31,29 @@ and an Entity needs the new data
 
 Might be able to use without the database by commenting out the "@Service" in 
 RealDatabaseInterface, and uncommenting "@Service" in BadExampleDatabase
+
+
+
+## Where Does the Website Store Files?
+Files created by the program are stored in
+```
+%your home%/.preciousPhotographyShop
+```
+For example,
+```
+C:\Users\JohnDoe\.preciousPhotographyShop
+```
+You may need to enable hidden folders to view it
+
+## Where are the Website Logs?
+The website logs are stored in the ```logs``` folder of the 
+```.preciousPhotographyShop``` folder. User and Transaction logs are NOT 
+encrypted, while the Website logs are. You can decrypt the logs via the website.
+Note that the decryption keys provided by 'request log access' are never 
+regenerated: whoever gets access to these keys can use them for however long
+they want, and still view the decrypted log using them.
+
+
 
 HOW TO RUN:
 1. Run from your IDE, or via the command line with "gradle bootRun"

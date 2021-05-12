@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
 
 /**
- *
+ * Used to store encryption properties within the program
  * @author Matt
  */
 @Component

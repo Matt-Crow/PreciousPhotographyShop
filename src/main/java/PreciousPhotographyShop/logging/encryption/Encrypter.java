@@ -48,7 +48,7 @@ public class Encrypter {
     }
     
     public static void main(String[] args) throws Exception {
-        Encrypter encrypter = EncryptionProvider.createDefaultEncrypter();
+        Encrypter encrypter = new EncryptionProvider().createDefaultEncrypter();
         
         String orig = "Hello world!";
         String enc = encrypter.encrypt(orig);

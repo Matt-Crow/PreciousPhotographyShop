@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("log")
 public class LogController {
+    private final EncryptionProvider encryptionProvider;
     private final LoginService loginService;
     private final LogService logService;
     private final WebsiteLogFolder websiteLogFolder;
@@ -30,7 +31,8 @@ public class LogController {
     @Resource // EncryptionKeys is annotate to be stored in the session
     private EncryptionKeys currentUserEncKeys;
     
-    public LogController(LoginService loginService, LogService logService, WebsiteLogFolder websiteLogFolder){
+    public LogController(EncryptionProvider encryptionProvider, LoginService loginService, LogService logService, WebsiteLogFolder websiteLogFolder){
+        this.encryptionProvider = encryptionProvider;
         this.loginService = loginService;
         this.logService = logService;
         this.websiteLogFolder = websiteLogFolder;
@@ -55,7 +57,7 @@ public class LogController {
         @RequestParam("email4") String witnessEmail4,
         Model model
     ) throws Exception {
-        String[] fiveFactorsOfAuthentication = EncryptionProvider.getFiveFactorsOfAuthentication();
+        String[] fiveFactorsOfAuthentication = encryptionProvider.getFiveFactorsOfAuthentication();
         // todo send email to multiple people with each piece of the key
         model.addAttribute("ffa", fiveFactorsOfAuthentication);
         return "logging/viewFiveFactors"; // change to a confirmation screen after email

@@ -22,7 +22,7 @@ public class WebsiteLog extends AbstractLog {
         
         Encrypter temp = null;
         try {
-            temp = EncryptionProvider.createDefaultEncrypter();
+            temp = new EncryptionProvider().createDefaultEncrypter();
         } catch (Exception ex) {
             System.err.println("Failed to load encrypter. Switching to no encryption");
             ex.printStackTrace();

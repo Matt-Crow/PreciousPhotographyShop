@@ -1,17 +1,21 @@
 package PreciousPhotographyShop.logging.encryption;
 
+import org.springframework.stereotype.Service;
+
 /**
  *
  * @author Matt
  */
+@Service
 public class EncryptionProvider {
-    public static final Encrypter createDefaultEncrypter() throws Exception{
+    
+    public final Encrypter createDefaultEncrypter() throws Exception{
         EncryptionKeys props = getKeys();
         Encrypter enc = new Encrypter(props);
         return enc;
     }
     
-    private static EncryptionKeys getKeys() throws Exception{
+    private EncryptionKeys getKeys() throws Exception{
         // Default to 16 byte AES encryption keys
         EncryptionPropertyLoader propLoader = new EncryptionPropertyLoader("AES", 16);
         EncryptionProperties props;
@@ -29,7 +33,7 @@ public class EncryptionProvider {
         return keys;
     }
 
-    public static String[] getFiveFactorsOfAuthentication() throws Exception {
+    public final String[] getFiveFactorsOfAuthentication() throws Exception {
         EncryptionKeys keys = getKeys();
         FiveFactorAuthenticator ffa = new FiveFactorAuthenticator(keys);
         return ffa.getFiveFactorAuthentication();
