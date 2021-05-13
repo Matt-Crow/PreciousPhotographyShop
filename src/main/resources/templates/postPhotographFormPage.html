@@ -7,48 +7,63 @@
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <form action="#" th:action="@{'/newPhoto?sellerId=' + ${sellerId}}" enctype="multipart/form-data" th:object="${formResponse}" method="post">
-            <div>
-                <label for="file">Choose a photograph to post</label>
-                <input th:field="*{file}" type="file" id="file" name="file" accept="image/jpg"/>
-            </div>
-            <div>
-                <label for="name">Name this photo</label>
-                <input th:field="*{containedEntity.name}" name="name" type="text"/>
-            </div>
-            <div>
-                <label for="description">Add a description</label>
-                <input th:field="*{containedEntity.description}" name="description" type="text"/>
-            </div>
-            <div>
-                <label for="price">Choose base photograph price (in dollars)</label>
-                <!--https://stackoverflow.com/questions/14650932/set-value-to-currency-in-input-type-number-->
-                <input th:field="*{containedEntity.price}" name="price" type="number" step="0.01"/>
-            </div>
-            <div>
-                <label for="rights">Choose purchaser rights</label>
-                <select name="rights" id="rights" multiple>
-                    <option value="edit">purchaser may alter this photograph</option>
-                    <option value="distribute">purchaser may redistribute this photograph</option>
-                    <option value="display">purchaser may show this photograph in media, such as movies</option>
-                </select>
-            </div>
-            <div>
-                <label for="categories">Categorize this photo (shift click to select multiple)</label>
-                <select name="categories" id="categories" multiple>
-                    <!--https://stackoverflow.com/questions/36500731/how-to-bind-an-object-list-with-thymeleaf-->
-                    <option th:each="categoryName, idxInfo : ${categoryNames}" th:name="|categoryNames[${idxInfo.index}]|" th:value="${categoryName}" th:text="${categoryName}"></option>
-                </select>
-                <p>TODO: add ability to make new categories</p>
-            </div>
-            <div>
-                <label for="isRecurring">Is this a recurring sale?</label>
-                <input type="checkbox" id="isRecurring" name="isRecurring"/>
-            </div>
-            <div>
-                <input type="submit" value="Submit" />
-            </div>
-        </form>
+        <div style="width: 80%; margin: auto">
+            <form th:action="@{'/newPhoto?sellerId=' + ${sellerId}}" enctype="multipart/form-data" th:object="${formResponse}" method="post">
+                <table>
+                    <tr>
+                        <td><label for="file">Choose a photograph to post</label></td>
+                        <td><input th:field="*{file}" type="file" id="file" name="file" accept="image/jpg"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="name">Name this photo</label></td>
+                        <td><input th:field="*{containedEntity.name}" name="name" type="text"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="description">Add a description</label></td>
+                        <td><textarea th:field="*{containedEntity.description}" name="description"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="price">Choose base photograph price (in dollars)</label></td>
+                        <!--https://stackoverflow.com/questions/14650932/set-value-to-currency-in-input-type-number-->
+                        <td><input th:field="*{containedEntity.price}" name="price" type="number" step="0.01"/></td>
+                    </tr>
+                    <tr>
+                        <td><label for="rights">Choose purchaser rights</label></td>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td><input name="rights0" type="checkbox"/></td>
+                                    <td><label for="rights0">purchaser may alter this photograph</label></td>
+                                </tr>
+                                <tr>
+                                    <td><input name="rights1" type="checkbox"/></td>
+                                    <td><label for="rights1">purchaser may redistribute this photograph</label></td>
+                                </tr>
+                                <tr>
+                                    <td><input name="rights2" type="checkbox"/></td>
+                                    <td><label for="rights2">purchaser may show this photograph in media, such as movies</label></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="categories">Categorize this photo</label></td>
+                        <td><select name="categories" id="categories" multiple>
+                            <!--https://stackoverflow.com/questions/36500731/how-to-bind-an-object-list-with-thymeleaf-->
+                            <option th:each="categoryName, idxInfo : ${categoryNames}" th:name="|categoryNames[${idxInfo.index}]|" th:value="${categoryName}" th:text="${categoryName}"></option>
+                        </select></td>
+                        <td><p>TODO: add ability to make new categories</p></td>
+                    </tr>
+                    <tr>
+                        <td><label for="isRecurring">Is this a recurring sale?</label></td>
+                        <td><input type="checkbox" id="isRecurring" name="isRecurring"/></td>
+                    </tr>
+                    <tr colspan="2">
+                        <td><input type="submit" value="Submit" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
         <div th:insert="fragments.html :: end"></div>
     </body>
 </html>
