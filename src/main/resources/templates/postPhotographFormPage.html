@@ -4,6 +4,10 @@
         <title>Post a new Photograph</title> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+        <script type="module">
+            import {registerKeyListener} from "/js/categoryList.js";
+            registerKeyListener();
+        </script>
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
@@ -48,11 +52,16 @@
                     </tr>
                     <tr>
                         <td><label for="categories">Categorize this photo</label></td>
-                        <td><select name="categories" id="categories" multiple>
-                            <!--https://stackoverflow.com/questions/36500731/how-to-bind-an-object-list-with-thymeleaf-->
+                        <td>
+                            <table id="categories">
+                                <tr><td><input id="newCategory" type="text"/></td></tr>
+                            </table>
+                        </td>
+                        <!--<td><select name="categories" id="categories" multiple>
+                            https://stackoverflow.com/questions/36500731/how-to-bind-an-object-list-with-thymeleaf
                             <option th:each="categoryName, idxInfo : ${categoryNames}" th:name="|categoryNames[${idxInfo.index}]|" th:value="${categoryName}" th:text="${categoryName}"></option>
                         </select></td>
-                        <td><p>TODO: add ability to make new categories</p></td>
+                        <td><p>TODO: add ability to make new categories</p></td>-->
                     </tr>
                     <tr>
                         <td><label for="isRecurring">Is this a recurring sale?</label></td>
