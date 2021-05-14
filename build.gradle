@@ -21,7 +21,11 @@ if (!hasProperty('mainClass')) {
 }
 
 bootJar {
-    exclude("**/application.properties")
+    exclude("**/application.properties") // don't include OUR application.properties...
+    manifest {
+        attributes("Class-Path": ".") // ... but allow Java to find them in the working directory
+        // That allows clients to just plop their application.properties next to the jar file
+    }
 }
 
 // disabled by Spring:
