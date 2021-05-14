@@ -25,7 +25,7 @@ public interface DatabaseInterface {
      * 
      * @return the user's ID in the database 
      */
-    public String storeUser(UserEntity user);
+    public String storeUser(UserEntity user) throws Exception;
     
     /**
      * 
@@ -34,7 +34,7 @@ public interface DatabaseInterface {
      * @return the user with the given ID. May return null or throw an exception
      * if none exists.
      */
-    public UserEntity getUser(String id);
+    public UserEntity getUser(String id) throws Exception;
     
     
     /*
@@ -46,7 +46,7 @@ public interface DatabaseInterface {
      * @param photo the new photograph to store in the database
      * @return the photograph's ID in the database
      */
-    public String storePhotograph(PhotographEntity photo);
+    public String storePhotograph(PhotographEntity photo) throws Exception;
     
     /**
      * 
@@ -57,7 +57,7 @@ public interface DatabaseInterface {
      * @return the photograph with the given ID. May return null or throw an
      *  Exception if none exists.
      */
-    public PhotographEntity getPhotograph(String id, boolean withWatermark);
+    public PhotographEntity getPhotograph(String id, boolean withWatermark) throws Exception;
     
     // Temporary method added by Daniel R
     public int deletePhotoByID(String id);

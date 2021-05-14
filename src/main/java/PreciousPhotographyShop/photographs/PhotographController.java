@@ -60,7 +60,7 @@ public class PhotographController {
         @ModelAttribute PhotoFormResponse photoFormResp,
         @RequestParam(name="sellerId") String sellerId,
         Model model
-    ) throws IOException{
+    ) throws Exception{
         MultipartFile file = photoFormResp.getFile();
         List<String> categories = photoFormResp.getCategoryList();
 
@@ -110,7 +110,8 @@ public class PhotographController {
             BufferedImage buff = this.databaseInterface.getPhotograph(id, true).getPhoto();
             ImageIO.write(buff, "jpg", baos);
             ret = baos.toByteArray();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            System.err.printf("Couldn't find image for photo %d\n", id);
             ex.printStackTrace();
         }
         return ret;
@@ -121,8 +122,13 @@ public class PhotographController {
         @RequestParam(name="photo_id") String id,
         RedirectAttributes redirectAttrs
     ){
-        this.photoService.addToCart(id);
-        redirectAttrs.addFlashAttribute("message", "Added to cart");
+        try {
+            this.photoService.addToCart(id);
+            redirectAttrs.addFlashAttribute("message", "Added to cart");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            redirectAttrs.addFlashAttribute("message", "Failed to add to cart");
+        }
         redirectAttrs.addAttribute("id", id);
         return new RedirectView("viewPhoto");
     }
@@ -152,11 +158,15 @@ public class PhotographController {
         
         List<ReviewWidgetInfo> reviews = new LinkedList<>();
         reviewRepository.findAllByReviewedId(id).forEach((ReviewEntity asEntity)->{
-            reviews.add(new ReviewWidgetInfo(
-                this.databaseInterface.getUser(asEntity.getReviewerId()).getUsername(),
-                asEntity.getText(),
-                asEntity.getRating()
-            ));
+            try {
+                reviews.add(new ReviewWidgetInfo(
+                    this.databaseInterface.getUser(asEntity.getReviewerId()).getUsername(),
+                    asEntity.getText(),
+                    asEntity.getRating()
+                ));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
         
         model.addAttribute(

@@ -1,10 +1,5 @@
 
 
-Category list insert before may not work: still need to try.
-need ability to remove those categories
-how to collect those cats in the form response?
-
-
 Todo: email five factors instead of displaying in web page
 
 

@@ -34,7 +34,7 @@ public class ReviewController {
     */
     
     @GetMapping("/newPhotoReview")
-    public String iWantToRoastSomething(@RequestParam(name="id") String whatToRoast, Model model){
+    public String iWantToRoastSomething(@RequestParam(name="id") String whatToRoast, Model model) throws Exception{
         UserEntity reviewer = loginService.getLoggedInUser();
         
         ReviewEntity theReview = new ReviewEntity();

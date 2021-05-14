@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,9 +26,15 @@ import org.springframework.stereotype.Service;
 
 @Service // "Yo! Spring! This class can be used when I Autowire a DatabaseInterface!"
 public class RealDatabaseInterface implements DatabaseInterface {
-    @Autowired UserRepository userRepository;
-    @Autowired PhotographRepository photographRepository;
-    @Autowired CategoryRepository categoryRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final PhotographRepository photographRepository;
+    
+    public RealDatabaseInterface(UserRepository userRepository, CategoryRepository categoryRepository, PhotographRepository photographRepository){
+        this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
+        this.photographRepository = photographRepository;
+    }
     
     @Override
     public String storeUser(UserEntity user) {
@@ -48,7 +53,7 @@ public class RealDatabaseInterface implements DatabaseInterface {
     }
     
     @Override
-    public String storePhotograph(PhotographEntity photo){
+    public String storePhotograph(PhotographEntity photo) throws Exception {
         /*
         create categories this photo belongs to
         */
@@ -67,21 +72,19 @@ public class RealDatabaseInterface implements DatabaseInterface {
         */
         PhotographEntity withId = this.photographRepository.save(photo); // save() returns the changed pe
         photo.setId(withId.getId());
-        try {
-            LocalFileSystem.getInstance().store(photo);
-            /*
-            Create bridge table entries 
-            */
-            UserEntity owner = null;
-            if(photo.getOwnerId() != null){
-                owner = getUser(photo.getOwnerId());
-            }
-            if(owner != null && owner.getId() != null){
-                owner.getPhotoIds().add(withId.getId());
-                owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        
+        // if this call fails, doesn't create seller to photo entries, which is good
+        LocalFileSystem.getInstance().store(photo);
+        /*
+        Create bridge table entries 
+        */
+        UserEntity owner = null;
+        if(photo.getOwnerId() != null){
+            owner = getUser(photo.getOwnerId());
+        }
+        if(owner != null && owner.getId() != null){
+            owner.getPhotoIds().add(withId.getId());
+            owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
         }
         
         return withId.getId();
@@ -98,20 +101,14 @@ public class RealDatabaseInterface implements DatabaseInterface {
      * 
      * @return the PhotographEntity with its image set, or null.
      */
-    private PhotographEntity attachImage(PhotographEntity asEntity, boolean withWatermark){
-        PhotographEntity ret = null;
-        try {
-            BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
-            asEntity.setPhoto(img);
-            ret = asEntity;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return ret;
+    private PhotographEntity attachImage(PhotographEntity asEntity, boolean withWatermark) throws IOException{
+        BufferedImage img = LocalFileSystem.getInstance().load(asEntity.getId(), withWatermark);
+        asEntity.setPhoto(img);
+        return asEntity;
     }
     
     @Override 
-    public PhotographEntity getPhotograph(String id, boolean withWatermark) {
+    public PhotographEntity getPhotograph(String id, boolean withWatermark) throws Exception {
         return attachImage(photographRepository.findById(id).get(), withWatermark);
     }
     
@@ -139,7 +136,12 @@ public class RealDatabaseInterface implements DatabaseInterface {
         PhotographEntity curr = null;
         
         for(PhotographEntity pe : getPhotoBySupercategory(category)){
-            curr = this.attachImage(pe, true);
+            curr = null;
+            try {
+                curr = this.attachImage(pe, true);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
             if(curr != null){
                 ret.add(curr);
             }
@@ -171,7 +173,11 @@ public class RealDatabaseInterface implements DatabaseInterface {
     public HashMap<String, PhotographEntity> getAllPhotos() {
         HashMap<String, PhotographEntity> ret = new HashMap<>();
         this.photographRepository.findAll().forEach((photoEntity)->{
-            ret.put(photoEntity.getId(), getPhotograph(photoEntity.getId(), true));
+            try {
+                ret.put(photoEntity.getId(), getPhotograph(photoEntity.getId(), true));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });        
         return ret;
     }
