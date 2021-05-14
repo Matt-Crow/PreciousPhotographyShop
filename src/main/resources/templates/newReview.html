@@ -10,7 +10,7 @@
         <form action="#" th:action="@{'/reviews/newPhotoReview?id=' + ${reviewingId} + '&reviewer=' + ${reviewer}}" th:object="${review}" method="post">
             <div>
                 <label for="text">Write your Review</label>
-                <input type="text" name="text" th:field="*{text}"/>
+                <textarea name="text" th:field="*{text}"/>
             </div>
             <div>
                 <label for="rating">Your Rating</label>

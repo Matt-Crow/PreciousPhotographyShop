@@ -1,4 +1,4 @@
-package PreciousPhotographyShop.temp;
+package PreciousPhotographyShop.security;
 
 import PreciousPhotographyShop.users.UserEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;

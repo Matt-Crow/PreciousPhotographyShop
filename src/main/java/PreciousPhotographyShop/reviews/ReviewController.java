@@ -1,7 +1,7 @@
 package PreciousPhotographyShop.reviews;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.temp.BadLoginService;
+import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class ReviewController {
     private ReviewRepository reviews;
     
     @Autowired
-    private BadLoginService loginService;
+    private LoginService loginService;
     
     /*
     Reviews for photographs

@@ -4,7 +4,7 @@ import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
-import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;

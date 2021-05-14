@@ -3,7 +3,6 @@ package PreciousPhotographyShop.security;
 import PreciousPhotographyShop.logging.LogService;
 import PreciousPhotographyShop.logging.events.LoginEvent;
 import PreciousPhotographyShop.logging.events.LogoutEvent;
-import PreciousPhotographyShop.temp.LoginService;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import javax.servlet.ServletException;

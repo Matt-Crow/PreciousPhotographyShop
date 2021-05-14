@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //anyRequest().authenticated().
                 antMatchers("/newPhoto").authenticated().
                 antMatchers("/log/personal").authenticated().
+                antMatchers("/reviews/newPhotoReview").authenticated().
                 anyRequest().permitAll().
             and().
                 formLogin().permitAll().successHandler(loginLogoutHandler).

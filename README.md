@@ -30,9 +30,6 @@ changing primary key columns, so might need to rename or drop things
 Need to figure out how to clear the entity manager cache for if database updates
 and an Entity needs the new data
 
-Might be able to use without the database by commenting out the "@Service" in 
-RealDatabaseInterface, and uncommenting "@Service" in BadExampleDatabase
-
 
 
 ## Where Does the Website Store Files?

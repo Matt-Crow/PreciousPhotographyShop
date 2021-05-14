@@ -5,7 +5,7 @@ import PreciousPhotographyShop.logging.encryption.EncryptionKeys;
 import PreciousPhotographyShop.logging.encryption.EncryptionProvider;
 import PreciousPhotographyShop.logging.encryption.FiveFactorAuthenticator;
 import PreciousPhotographyShop.logging.website.WebsiteLogFolder;
-import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import java.io.IOException;
 import javax.annotation.Resource;
