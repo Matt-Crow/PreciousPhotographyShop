@@ -20,6 +20,10 @@ if (!hasProperty('mainClass')) {
     ext.mainClass = project.mainClassName
 }
 
+bootJar {
+    exclude("**/application.properties")
+}
+
 // disabled by Spring:
 // https://stackoverflow.com/questions/62360840/gradle-task-jar-skipped-while-i-get-my-jar-with-gradlew-build
 jar {
