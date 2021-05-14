@@ -1,7 +1,8 @@
 package PreciousPhotographyShop.photographs;
 
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -10,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class PhotoFormResponse {
     private MultipartFile file;
-    private List<String> categories = new LinkedList<>();
+    private String categories;
     private PhotographEntity containedEntity;
     
     public PhotoFormResponse(){
@@ -21,7 +22,7 @@ public class PhotoFormResponse {
         this.file = file;
     }
     
-    public void setCategories(List<String> categories){
+    public void setCategories(String categories){
         this.categories = categories;
     }
     
@@ -29,8 +30,12 @@ public class PhotoFormResponse {
         return file;
     }
     
-    public List<String> getCategories(){
+    public String getCategories(){
         return categories;
+    }
+    
+    public List<String> getCategoryList(){// split on whitespace
+        return Arrays.stream(categories.split("\\s+")).collect(Collectors.toList());
     }
     
     public PhotographEntity getContainedEntity(){
@@ -43,7 +48,7 @@ public class PhotoFormResponse {
         sb.append("PhotoFormResponse:\n");
         sb.append(String.format("\tFile: %s\n", file.getOriginalFilename()));
         sb.append("\tCategories: \n");
-        categories.forEach((category)->{
+        getCategoryList().forEach((category)->{
             sb.append(String.format("\t\t%s\n", category));
         });
         sb.append(containedEntity.toString());

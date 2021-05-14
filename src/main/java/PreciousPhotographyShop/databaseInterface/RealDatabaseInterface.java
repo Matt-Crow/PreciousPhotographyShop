@@ -50,17 +50,6 @@ public class RealDatabaseInterface implements DatabaseInterface {
     @Override
     public String storePhotograph(PhotographEntity photo){
         /*
-        Create new file for the photo
-        */
-        PhotographEntity withId = this.photographRepository.save(photo); // save() returns the changed pe
-        try { 
-            photo.setId(withId.getId());
-            LocalFileSystem.getInstance().store(photo);
-        } catch (IOException ex) { 
-            ex.printStackTrace();
-        }
-        
-        /*
         create categories this photo belongs to
         */
         photo.getCategoryNames().stream().forEach((categoryName)->{
@@ -74,15 +63,25 @@ public class RealDatabaseInterface implements DatabaseInterface {
         });
         
         /*
-        Create bridge table entries 
+        Create new file for the photo
         */
-        UserEntity owner = null;
-        if(photo.getOwnerId() != null){
-            owner = getUser(photo.getOwnerId());
-        }
-        if(owner != null && owner.getId() != null){
-            owner.getPhotoIds().add(withId.getId());
-            owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
+        PhotographEntity withId = this.photographRepository.save(photo); // save() returns the changed pe
+        photo.setId(withId.getId());
+        try {
+            LocalFileSystem.getInstance().store(photo);
+            /*
+            Create bridge table entries 
+            */
+            UserEntity owner = null;
+            if(photo.getOwnerId() != null){
+                owner = getUser(photo.getOwnerId());
+            }
+            if(owner != null && owner.getId() != null){
+                owner.getPhotoIds().add(withId.getId());
+                owner.setId(storeUser(owner)); // may have infinite recursion. Not sure
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         
         return withId.getId();

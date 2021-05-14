@@ -9,6 +9,7 @@ import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,23 +60,20 @@ public class PhotographController {
         @ModelAttribute PhotoFormResponse photoFormResp,
         @RequestParam(name="sellerId") String sellerId,
         Model model
-    ){
-        try {
-            MultipartFile file = photoFormResp.getFile();
-            List<String> categories = photoFormResp.getCategories();
-            
-            BufferedImage buff = ImageIO.read(file.getInputStream());
-            PhotographEntity photo = photoFormResp.getContainedEntity();
-            photo.setOwnerId(sellerId);
-            photo.setPhoto(buff);
-            photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
-            photo.setIsRecurring(false); // todo set recurring
-            photo.setPostedDate(new Date());
-            databaseInterface.storePhotograph(photo);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return "redirect:/";
+    ) throws IOException{
+        MultipartFile file = photoFormResp.getFile();
+        List<String> categories = photoFormResp.getCategoryList();
+
+        BufferedImage buff = ImageIO.read(file.getInputStream());
+        PhotographEntity photo = photoFormResp.getContainedEntity();
+        photo.setOwnerId(sellerId);
+        photo.setPhoto(buff);
+        photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
+        photo.setIsRecurring(false); // todo set recurring
+        photo.setPostedDate(new Date());
+        photo.setId(databaseInterface.storePhotograph(photo));
+        
+        return String.format("redirect:/viewPhoto?id=%s", photo.getId());
     }
     
     @GetMapping("/allPhotos")
