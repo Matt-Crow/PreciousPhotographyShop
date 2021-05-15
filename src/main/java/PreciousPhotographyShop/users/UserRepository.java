@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
     Optional<UserEntity> findUserByEmail(String email);
     Iterable<UserEntity> findAllByUsernameContainingIgnoreCase(String username);
 
+    UserEntity findUserEntityByEmail(String email);
+
     @Transactional
     @Modifying
     @Query("UPDATE UserEntity a SET a.enabled = TRUE WHERE a.email = ?1")
