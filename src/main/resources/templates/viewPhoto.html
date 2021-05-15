@@ -29,8 +29,8 @@
         <div style="border: 5px outset white">
             <h2>Categories</h2>
             <ul>
-                <li th:each="catName : ${categoryNames}">
-                    <p th:text="${catName}"><p/>
+                <li th:each="catName : *{categoryNames}">
+                    <a th:value="${catName}" th:text="${catName}" th:href="@{'/allPhotos?category=' + ${catName}}"></a>
                 </li>
             </ul>
         </div>

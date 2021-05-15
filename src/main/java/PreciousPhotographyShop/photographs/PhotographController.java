@@ -4,11 +4,12 @@ import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
-import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,23 +60,20 @@ public class PhotographController {
         @ModelAttribute PhotoFormResponse photoFormResp,
         @RequestParam(name="sellerId") String sellerId,
         Model model
-    ){
-        try {
-            MultipartFile file = photoFormResp.getFile();
-            List<String> categories = photoFormResp.getCategories();
-            
-            BufferedImage buff = ImageIO.read(file.getInputStream());
-            PhotographEntity photo = photoFormResp.getContainedEntity();
-            photo.setOwnerId(sellerId);
-            photo.setPhoto(buff);
-            photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
-            photo.setIsRecurring(false); // todo set recurring
-            photo.setPostedDate(new Date());
-            databaseInterface.storePhotograph(photo);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return "redirect:/";
+    ) throws Exception{
+        MultipartFile file = photoFormResp.getFile();
+        List<String> categories = photoFormResp.getCategoryList();
+
+        BufferedImage buff = ImageIO.read(file.getInputStream());
+        PhotographEntity photo = photoFormResp.getContainedEntity();
+        photo.setOwnerId(sellerId);
+        photo.setPhoto(buff);
+        photo.setCategoryNames(categories.stream().collect(Collectors.toSet()));
+        photo.setIsRecurring(false); // todo set recurring
+        photo.setPostedDate(new Date());
+        photo.setId(databaseInterface.storePhotograph(photo));
+        
+        return String.format("redirect:/viewPhoto?id=%s", photo.getId());
     }
     
     @GetMapping("/allPhotos")
@@ -112,7 +110,8 @@ public class PhotographController {
             BufferedImage buff = this.databaseInterface.getPhotograph(id, true).getPhoto();
             ImageIO.write(buff, "jpg", baos);
             ret = baos.toByteArray();
-        } catch (IOException ex) {
+        } catch (Exception ex) {
+            System.err.printf("Couldn't find image for photo %d\n", id);
             ex.printStackTrace();
         }
         return ret;
@@ -123,8 +122,13 @@ public class PhotographController {
         @RequestParam(name="photo_id") String id,
         RedirectAttributes redirectAttrs
     ){
-        this.photoService.addToCart(id);
-        redirectAttrs.addFlashAttribute("message", "Added to cart");
+        try {
+            this.photoService.addToCart(id);
+            redirectAttrs.addFlashAttribute("message", "Added to cart");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            redirectAttrs.addFlashAttribute("message", "Failed to add to cart");
+        }
         redirectAttrs.addAttribute("id", id);
         return new RedirectView("viewPhoto");
     }
@@ -154,11 +158,15 @@ public class PhotographController {
         
         List<ReviewWidgetInfo> reviews = new LinkedList<>();
         reviewRepository.findAllByReviewedId(id).forEach((ReviewEntity asEntity)->{
-            reviews.add(new ReviewWidgetInfo(
-                this.databaseInterface.getUser(asEntity.getReviewerId()).getUsername(),
-                asEntity.getText(),
-                asEntity.getRating()
-            ));
+            try {
+                reviews.add(new ReviewWidgetInfo(
+                    this.databaseInterface.getUser(asEntity.getReviewerId()).getUsername(),
+                    asEntity.getText(),
+                    asEntity.getRating()
+                ));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
         
         model.addAttribute(

@@ -74,7 +74,16 @@ public class LocalFileSystem {
     }
     
     public final BufferedImage load(String id, boolean withWatermark) throws IOException{
-        BufferedImage orig = ImageIO.read(new File(idToFilePath(id)));
+        String path = idToFilePath(id);
+        BufferedImage orig;
+        
+        try {
+            orig = ImageIO.read(new File(path));
+        } catch (IOException ex) {
+            System.err.printf("Couldn't find file %s\n", path);
+            throw ex;
+        }
+        
         if(withWatermark){
             Graphics vandalizeMe = orig.createGraphics();
             vandalizeMe.setColor(Color.PINK);

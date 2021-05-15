@@ -32,8 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             authorizeRequests().
                 //antMatchers("/", "/index", "/search", "/login", "/allPhotos", "/api/registration/**", "/resources/**").permitAll().
                 //anyRequest().authenticated().
-                antMatchers("/newPhoto").authenticated().
-                antMatchers("/log/personal").authenticated().
+                antMatchers("/newPhoto", "/addToCart", "/reviews/newPhotoReview", "/log/personal").authenticated().
                 anyRequest().permitAll().
             and().
                 formLogin().permitAll().successHandler(loginLogoutHandler).
