@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,6 +46,9 @@ public class UserEntity implements UserDetails {
     
     @Column(name="profile_picture_id", nullable=true, unique=false)
     private String profilePictureId;
+    
+    @Column(name="description", nullable=true, unique=false)
+    private String description = "No description";
 
     private String password;
 
@@ -56,6 +60,7 @@ public class UserEntity implements UserDetails {
     private Boolean enabled = true;
     
     @ElementCollection
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name="photo_id")
     Set<String> photoIds;
@@ -131,6 +136,10 @@ public class UserEntity implements UserDetails {
     public String getProfilePictureId(){
         return profilePictureId;
     }
+    
+    public String getDescription(){
+        return description;
+    }
 
     public Set<String> getPhotoIds(){ return photoIds; }
 
@@ -150,6 +159,10 @@ public class UserEntity implements UserDetails {
     
     public void setPassword(String password) { 
         this.password = password; 
+    }
+    
+    public void setDescription(String description){
+        this.description = description;
     }
 
     public void setPhotoIds(Set<String> photoIds){ this.photoIds = photoIds; }
@@ -175,13 +188,11 @@ public class UserEntity implements UserDetails {
         return String.format(
             "User{" +
                 "Username='%s'," +
-                "Password='%s'" + 
-                "email='%s'" +
+                "description='%s'" +
                 "id='%s'"+
             "}",
             username,
-            password,
-            email,
+            description,
             id
         );
     }

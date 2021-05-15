@@ -23,7 +23,7 @@
         
         <div style="border: 5px outset white">
             <h2>Seller</h2>
-            <a th:href="@{'/api/findUser?userID=' + *{ownerId}}" th:text="${sellerName}"></a>
+            <a th:href="@{'/seller/sellerPage?id=' + *{ownerId}}" th:text="${sellerName}"></a>
         </div>
         
         <div style="border: 5px outset white">
