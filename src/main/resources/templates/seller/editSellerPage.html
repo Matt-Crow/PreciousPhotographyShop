@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="${'Editting ' + sellerPageInfo.username + '''s Profile'}"></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        
+        <div style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
+            <form th:action="@{'/seller/updateSellerInfo?sellerId=' + ${sellerId}}" th:object="${sellerPageInfo}" method="post" style="display: flex; flex-direction: column; align-content:center; justify-content: space-around;">
+                <label for='username'>Username</label>
+                <input th:field="*{username}" name='username' type='text'/>
+                
+                <!-- How to do profile picture? -->
+                
+                <label for='description'>Description</label>
+                <textarea th:field="*{description}" name='description' />
+                
+                <!-- How to do password? -->
+                
+                <input type="submit" value="Save Changes"/>
+            </form>
+        </div>
+        
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

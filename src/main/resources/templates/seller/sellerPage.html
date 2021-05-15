@@ -12,7 +12,7 @@
             <h1 th:text="*{username}"></h1>
             
             <!-- Only sellers can edit their pages -->
-            <a style="float: right" th:if="${canEdit}" th:href="@{'/seller/editProfile?id=' + *{id}}">Edit</a>
+            <a style="float: right" th:if="${canEdit}" th:href="@{'/seller/editSellerPage?sellerId=' + *{id}}">Edit</a>
             
             <img th:src="@{'/seller/profilePicture?id=' + *{id}}" alt="The seller's profile picture"/>
             <div style="background-color: white; border: 5px outset white">

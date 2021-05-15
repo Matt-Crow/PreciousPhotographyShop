@@ -32,7 +32,7 @@ public class UserService implements UserDetailsService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
 
-    UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService){
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService){
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.confirmationTokenService = confirmationTokenService;
@@ -79,7 +79,20 @@ public class UserService implements UserDetailsService {
         }
         userRepository.deleteById(id);
     }
-
+    
+    public final void updateUser(String id, SellerPageInfo newInfo) throws Exception {
+        UserEntity user = userRepository.findById(id).get();
+        user.setUsername(newInfo.getUsername());
+        user.setDescription(newInfo.getDescription());
+        if(newInfo.isProfilePictureIdSet()){
+            user.setProfilePictureId(newInfo.getProfilePictureId());
+        }
+        if(newInfo.isPasswordSet()){
+            throw new UnsupportedOperationException("Changing password not supported yet");
+        }
+        userRepository.save(user); // update the user in the database
+    }
+    
     /**
      * This is an @PUT HTTP call that updates either the name, email, or both entries on a user.
      * @param id The id for searching in the Database
@@ -157,8 +170,8 @@ public class UserService implements UserDetailsService {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if(!(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated()){
-            Object d = auth.getPrincipal();
-            e = (UserEntity) auth.getPrincipal();
+            Object p = auth.getPrincipal();
+            e = (UserEntity)p;
         }
         return e;
     }

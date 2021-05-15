@@ -19,6 +19,8 @@ import javax.imageio.ImageIO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,13 +39,15 @@ public class SellerController {
     private final PhotographRepository photos;
     private final PhotoService photoService;
     private final ReviewService reviews;
+    private final UserService users;
     
-    public SellerController(LoginService login, DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews){
+    public SellerController(LoginService login, DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews, UserService users){
         this.login = login;
         this.db = db;
         this.photos = photos;
         this.photoService = photoService;
         this.reviews = reviews;
+        this.users = users;
     }
     
     @GetMapping("/sellerPage")
@@ -51,7 +55,7 @@ public class SellerController {
         @RequestParam(name="id", required=true) String id,
         Model model
     ) {
-        if(login.getLoggedInUser() != null && login.getLoggedInUser().getId().equals(id)){
+        if(isLoggedIn(id)){
             model.addAttribute("canEdit", true);
         }
         
@@ -75,9 +79,37 @@ public class SellerController {
         return viewName;
     }
     
-    @GetMapping("editProfile")
-    public String getEditProfilePage(@RequestParam("id") String sellerId, Model model){
-        throw new UnsupportedOperationException();
+    @GetMapping("editSellerPage")
+    public String getEditSellerPage(@RequestParam("sellerId") String sellerId, Model model){
+        String url = "seller/editSellerPage";
+        try {
+            if(!isLoggedIn(sellerId)){
+                throw new Exception("Only the seller can edit their own seller page");
+            }
+            model.addAttribute("sellerId", sellerId);
+            model.addAttribute("sellerPageInfo", new SellerPageInfo(db.getUser(sellerId)));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            url = String.format("redirect:/seller/sellerPage?id=%s", sellerId);
+        }
+        return url;
+    }
+    
+    @PostMapping("updateSellerInfo")
+    public String postEditSellerPage(
+        @RequestParam("sellerId") String sellerId,
+        @ModelAttribute() SellerPageInfo updatedInfo
+    ){
+        if(isLoggedIn(sellerId)){
+            try {
+                // only update if the post request was made for the logged in user
+                // prevents sellers from manipulating other sellers' info
+                users.updateUser(sellerId, updatedInfo);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }        
+        return String.format("redirect:/seller/sellerPage?id=%s", sellerId);
     }
     
     /**
@@ -140,5 +172,8 @@ public class SellerController {
         return ret;
     }
     
-    
+    private boolean isLoggedIn(String sellerId){
+        UserEntity user = this.login.getLoggedInUser();
+        return user != null && user.getId().equals(sellerId);
+    }
 }

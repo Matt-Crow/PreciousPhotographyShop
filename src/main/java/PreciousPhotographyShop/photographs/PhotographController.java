@@ -1,18 +1,13 @@
 package PreciousPhotographyShop.photographs;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.reviews.ReviewEntity;
-import PreciousPhotographyShop.reviews.ReviewRepository;
 import PreciousPhotographyShop.reviews.ReviewService;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
 import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;

@@ -50,6 +50,7 @@ public class UserEntity implements UserDetails {
     @Column(name="description", nullable=true, unique=false)
     private String description = "No description";
 
+    @Column(name="password", nullable=false, unique=false)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -86,7 +87,41 @@ public class UserEntity implements UserDetails {
         this(username, email);
         this.password = password;
     }
+    
+    /*
+        Getters
+     */
 
+    public String getId(){ 
+        return id; 
+    }
+    
+    @Override
+    public String getUsername(){ 
+        return username; 
+    }
+    
+    public String getEmail(){
+        return email;
+    }
+    
+    public String getProfilePictureId(){
+        return profilePictureId;
+    }
+    
+    public String getDescription(){
+        return description;
+    }
+    
+    @Override
+    public String getPassword() { 
+        return password; 
+    }
+    
+    public Set<String> getPhotoIds(){ 
+        return photoIds; 
+    }
+    
     /*
     Spring Security
      */
@@ -100,73 +135,56 @@ public class UserEntity implements UserDetails {
         return !locked;
     }
     
-    public String getEmail(){
-        return email;
-    }
-    
-    @Override
-    public String getPassword() { 
-        return password; 
-    }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { 
+        return true; 
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
-    /*
-        Getters
-     */
-
-    public String getId(){ return id; }
-
-    @Override
-    public String getUsername(){ 
-        return username; 
-    }
     
-    public String getProfilePictureId(){
-        return profilePictureId;
-    }
     
-    public String getDescription(){
-        return description;
-    }
-
-    public Set<String> getPhotoIds(){ return photoIds; }
-
+    
     /*
         Setters
      */
 
-    public void setId(String id){ this.id = id; }
-
-    public void setUsername(String username){ this.username = username; }
+    public void setId(String id){ 
+        this.id = id; 
+    }
     
-    public void setEmail(String email){ this.email = email; }
+    public void setUsername(String username){ 
+        this.username = username; 
+    }
+    
+    public void setEmail(String email){ 
+        this.email = email; 
+    }
     
     public void setProfilePictureId(String profilePictureId){
         this.profilePictureId = profilePictureId;
+    }
+    
+    public void setDescription(String description){
+        this.description = description;
     }
     
     public void setPassword(String password) { 
         this.password = password; 
     }
     
-    public void setDescription(String description){
-        this.description = description;
+    public void setPhotoIds(Set<String> photoIds){ 
+        this.photoIds = photoIds; 
     }
-
-    public void setPhotoIds(Set<String> photoIds){ this.photoIds = photoIds; }
-
+    
     @Override
     public boolean equals(Object obj){
         if( this == obj ) return true;
