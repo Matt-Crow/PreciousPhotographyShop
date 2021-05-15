@@ -10,6 +10,10 @@
         
         <div th:object="${seller}" style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
             <h1 th:text="*{username}"></h1>
+            
+            <!-- Only sellers can edit their pages -->
+            <a style="float: right" th:if="${canEdit}" th:href="@{'/seller/editProfile?id=' + *{id}}">Edit</a>
+            
             <img th:src="@{'/seller/profilePicture?id=' + *{id}}" alt="The seller's profile picture"/>
             <div style="background-color: white; border: 5px outset white">
                 <p style="color: black; word-wrap: break-word; white-space: pre-wrap" th:text="*{description}"></p>

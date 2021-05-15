@@ -7,18 +7,15 @@ import PreciousPhotographyShop.photographs.PhotoService;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import PreciousPhotographyShop.reviews.ReviewService;
+import PreciousPhotographyShop.security.LoginService;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,13 +32,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("seller")
 public class SellerController {
-    
+    private final LoginService login;
     private final DatabaseInterface db;
     private final PhotographRepository photos;
     private final PhotoService photoService;
     private final ReviewService reviews;
     
-    public SellerController(DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews){
+    public SellerController(LoginService login, DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews){
+        this.login = login;
         this.db = db;
         this.photos = photos;
         this.photoService = photoService;
@@ -53,6 +51,10 @@ public class SellerController {
         @RequestParam(name="id", required=true) String id,
         Model model
     ) {
+        if(login.getLoggedInUser() != null && login.getLoggedInUser().getId().equals(id)){
+            model.addAttribute("canEdit", true);
+        }
+        
         String viewName = "seller/sellerPage";
         try {
             UserEntity user = db.getUser(id);
@@ -71,6 +73,11 @@ public class SellerController {
             viewName = "redirect:/";
         }
         return viewName;
+    }
+    
+    @GetMapping("editProfile")
+    public String getEditProfilePage(@RequestParam("id") String sellerId, Model model){
+        throw new UnsupportedOperationException();
     }
     
     /**
