@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class PhotographController {
@@ -87,17 +89,9 @@ public class PhotographController {
         );
         
         if(category == null){
-            //model.addAttribute("photos", this.databaseInterface.getAllPhotoIds());
             model.addAttribute("photos", photoService.getBrowseWidgetsForAllPhotos());
         } else {
             model.addAttribute("photos", photoService.getBrowseWidgetsByCategory(category));
-            /*
-            model.addAttribute(
-                "photos", 
-                this.databaseInterface.getPhotographsByCategory(category).stream().map((photo)->{
-                   return photo.getId(); 
-                }).collect(Collectors.toList())
-            );*/
         }
         return "allPhotos";
     }
@@ -122,6 +116,17 @@ public class PhotographController {
             ex.printStackTrace();
         }
         return ret;
+    }
+    
+    @PostMapping("/addToCart")
+    public RedirectView addToCart(
+        @RequestParam(name="photo_id") String id,
+        RedirectAttributes redirectAttrs
+    ){
+        this.photoService.addToCart(id);
+        redirectAttrs.addFlashAttribute("message", "Added to cart");
+        redirectAttrs.addAttribute("id", id);
+        return new RedirectView("viewPhoto");
     }
     
     @GetMapping("/viewPhoto")

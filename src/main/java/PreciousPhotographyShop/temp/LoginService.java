@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.temp;
 
 import PreciousPhotographyShop.users.UserEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ public class LoginService {
     public final UserEntity getLoggedInUser(){
         UserEntity e = null;
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth.isAuthenticated()){
+        if(!(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated()){
             Object d = auth.getPrincipal();
-            e = (UserEntity)auth.getPrincipal();
+            e = (UserEntity)d;
         }
         return e;
     }
