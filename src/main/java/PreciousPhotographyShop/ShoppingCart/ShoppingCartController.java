@@ -1,6 +1,6 @@
 package PreciousPhotographyShop.ShoppingCart;
 
-import PreciousPhotographyShop.temp.LoginService;
+import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
 import PreciousPhotographyShop.users.UserRepository;
 import PreciousPhotographyShop.users.UserService;
@@ -25,8 +25,8 @@ public class ShoppingCartController {
 
     @GetMapping("/cart")
     public List<CartItem> showShoppingCart() {
-//        UserEntity userEntity = userService.getLoggedInUser();
-        UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
+        UserEntity userEntity = userService.getLoggedInUser();
+        //UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
         List<CartItem> cartItems = cartServices.listCartItems(userEntity);
         return cartItems;
     }
