@@ -70,12 +70,12 @@ you will need to kill the java subprocess of the terminal to shut Spring down
 Before running the project, you'll need to set up a database on your computer.
 
 ## Using mySQL as a Database
-1. First, create the database in the mySQL console using `create database [DB_NAME];`
-   where [DB_NAME] is the name you want the database to have.
-2. Create the Spring user with `create user '[NAME]'@'%' identified by '[PASSWORD]';`
-   where [NAME] is the name you want for Spring's user, 
-   and [PASSWORD] is a password you want for them
-3. Give Spring permissions using `grant all on [DB_NAME].* to '[NAME]'@'%';`
+1. First, create the database in the mySQL console using `create database DB_NAME;`
+   where DB_NAME is the name you want the database to have.
+2. Create the Spring user with `create user 'NAME'@'%' identified by 'PASSWORD';`
+   where NAME is the name you want for Spring's user, 
+   and PASSWORD is a password you want for them
+3. Give Spring permissions using `grant all on DB_NAME.* to 'NAME'@'%';`
 4. Create a file, `application.properties` under `src/main/resources`
 5. Copy and paste the template I've created under `templatesForUs`
 6. For now, I'm not sure if we should include the properties file in the Git repo,
@@ -86,8 +86,8 @@ Before running the project, you'll need to set up a database on your computer.
 # Getting Ready for Distribution
 In mySQL, do the following...
 ```
-revoke all on [DB_NAME].* from '[NAME]'@'%';
-grant select, insert, delete, update on [DB_NAME].* to '[NAME]'@'%';
+revoke all on DB_NAME.* from 'NAME'@'%';
+grant select, insert, delete, update on DB_NAME.* to 'NAME'@'%';
 ```
 Commit the application.properties file, with 
 `spring.jpa.hibernate.ddl-auto=update`
