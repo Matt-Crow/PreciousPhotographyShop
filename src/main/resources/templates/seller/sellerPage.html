@@ -11,12 +11,24 @@
         <div th:object="${seller}" style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
             <h1 th:text="*{username}"></h1>
             <img th:src="@{'/seller/profilePicture?id=' + *{id}}" alt="The seller's profile picture"/>
-            <div>
-                <p th:text="*{description}"></p>
+            <div style="background-color: white; border: 5px outset white">
+                <p style="color: black; word-wrap: break-word; white-space: pre-wrap" th:text="*{description}"></p>
             </div>
-            <h2>Recent Uploads</h2>
-            <div th:each="photo : ${photos}" style="display: inline-block">
-                <div th:replace="fragments.html :: browsePhotoWidget(widgetInfo=${photo})" class="align-self-center"></div>
+            <div style="border: 5px outset white">
+                <h2>Recent Uploads</h2>
+                <div th:each="photo : ${photos}">
+                    <div th:replace="fragments.html :: browsePhotoWidget(widgetInfo=${photo})" class="align-self-center"></div>
+                </div>
+            </div>
+            
+            <div style="border: 5px outset white">
+                <a th:href="@{'/reviews/newSellerReview?id=' + *{id}}">Review this Seller</a>
+                <h2>Reviews</h2>
+                <ul>
+                    <li th:each="review : ${reviews}">
+                        <div th:replace="fragments.html :: reviewWidget(reviewerName=${review.reviewerName}, text=${review.reviewText}, rating=${review.rating})"></div>
+                    </li>
+                </ul>
             </div>
         </div>
         

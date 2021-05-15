@@ -48,6 +48,7 @@ public class ReviewController {
         model.addAttribute("reviewer", reviewer.getId());
         model.addAttribute("reviewingId", whatToRoast);
         model.addAttribute("reviewing", database.getPhotograph(whatToRoast, true).getName());
+        model.addAttribute("type", "photo");
         return "newReview";
     }
     
@@ -55,7 +56,8 @@ public class ReviewController {
     public String somethingWasRoasted(
         @ModelAttribute ReviewEntity theRoast,
         @RequestParam(name="id") String whatWasRoasted,
-        @RequestParam(name="reviewer") String whoRoasted
+        @RequestParam(name="reviewer") String whoRoasted,
+        @RequestParam(name="type") String photoOrSeller
     ){
         try {
             theRoast.setReviewerId(whoRoasted);
@@ -65,6 +67,26 @@ public class ReviewController {
         } catch(Exception ex){
             ex.printStackTrace();
         }
-        return String.format("redirect:/viewPhoto?id=%s", whatWasRoasted);
+        String redirectUrl = null;
+        if(photoOrSeller.equals("photo")){
+            redirectUrl = String.format("redirect:/viewPhoto?id=%s", whatWasRoasted);
+        } else {
+            redirectUrl = String.format("redirect:/seller/sellerPage?id=%s", whatWasRoasted);
+        }
+        return redirectUrl; 
+    }
+    
+    @GetMapping("/newSellerReview")
+    public String getSellerReviewForm(
+        @RequestParam(value="id", required=true) String sellerId,
+        Model model
+    ) throws Exception {
+        UserEntity reviewer = loginService.getLoggedInUser();
+        model.addAttribute("review", new ReviewEntity());
+        model.addAttribute("reviewer", reviewer.getId());
+        model.addAttribute("reviewingId", sellerId);
+        model.addAttribute("reviewing", database.getUser(sellerId).getUsername());
+        model.addAttribute("type", "seller");
+        return "newReview";
     }
 }

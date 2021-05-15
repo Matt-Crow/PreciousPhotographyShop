@@ -6,6 +6,7 @@ import PreciousPhotographyShop.photographs.BrowsePhotoWidgetInfo;
 import PreciousPhotographyShop.photographs.PhotoService;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.photographs.PhotographRepository;
+import PreciousPhotographyShop.reviews.ReviewService;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,11 +39,13 @@ public class SellerController {
     private final DatabaseInterface db;
     private final PhotographRepository photos;
     private final PhotoService photoService;
+    private final ReviewService reviews;
     
-    public SellerController(DatabaseInterface db, PhotographRepository photos, PhotoService photoService){
+    public SellerController(DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews){
         this.db = db;
         this.photos = photos;
         this.photoService = photoService;
+        this.reviews = reviews;
     }
     
     @GetMapping("/sellerPage")
@@ -61,6 +64,7 @@ public class SellerController {
                 mostRecent.add(photoService.mapPhotoToBrowseWidget(it.next()));
             }
             model.addAttribute("photos", mostRecent);
+            model.addAttribute("reviews", reviews.getReviewWidgetsFor(user));
         } catch (Exception ex) {
             System.err.printf("Couldn't get user with ID of \"%s\"\n", id);
             ex.printStackTrace();

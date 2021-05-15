@@ -35,7 +35,7 @@
             </ul>
         </div>
         <div style="border: 5px outset white">
-            <a th:href="@{'reviews/newPhotoReview?id=' + *{id}}">Review this Photograph</a>
+            <a th:href="@{'/reviews/newPhotoReview?id=' + *{id}}">Review this Photograph</a>
             <h2>Reviews</h2>
             <ul>
                 <li th:each="review : ${reviews}">

@@ -7,7 +7,7 @@
     </head>
     <body>
         <nav th:insert="fragments.html :: pages-nav"></nav>
-        <form action="#" th:action="@{'/reviews/newPhotoReview?id=' + ${reviewingId} + '&reviewer=' + ${reviewer}}" th:object="${review}" method="post">
+        <form action="#" th:action="@{'/reviews/newPhotoReview?id=' + ${reviewingId} + '&reviewer=' + ${reviewer} + '&type=' + ${type}}" th:object="${review}" method="post">
             <div>
                 <label for="text">Write your Review</label>
                 <textarea name="text" th:field="*{text}"/>

@@ -3,6 +3,7 @@ package PreciousPhotographyShop.photographs;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.reviews.ReviewEntity;
 import PreciousPhotographyShop.reviews.ReviewRepository;
+import PreciousPhotographyShop.reviews.ReviewService;
 import PreciousPhotographyShop.reviews.ReviewWidgetInfo;
 import PreciousPhotographyShop.security.LoginService;
 import PreciousPhotographyShop.users.UserEntity;
@@ -34,7 +35,7 @@ public class PhotographController {
     private DatabaseInterface databaseInterface;
     
     @Autowired
-    private ReviewRepository reviewRepository;
+    private ReviewService reviews;
     
     @Autowired
     private LoginService loginService;
@@ -156,22 +157,11 @@ public class PhotographController {
             model.addAttribute("sellerName", "no seller specified");
         }
         
-        List<ReviewWidgetInfo> reviews = new LinkedList<>();
-        reviewRepository.findAllByReviewedId(id).forEach((ReviewEntity asEntity)->{
-            try {
-                reviews.add(new ReviewWidgetInfo(
-                    this.databaseInterface.getUser(asEntity.getReviewerId()).getUsername(),
-                    asEntity.getText(),
-                    asEntity.getRating()
-                ));
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        });
+        List<ReviewWidgetInfo> reviewWidgets = reviews.getReviewWidgetsFor(photo);
         
         model.addAttribute(
             "reviews", 
-            reviews
+            reviewWidgets
         );
         return "viewPhoto";
     }
