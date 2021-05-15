@@ -2,6 +2,9 @@ package PreciousPhotographyShop.users;
 
 import PreciousPhotographyShop.registration.token.ConfirmationTokenService;
 import PreciousPhotographyShop.registration.token.ConfirmationToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -146,5 +149,17 @@ public class UserService implements UserDetailsService {
 
     public int enableUser(String email) {
         return userRepository.enableUser(email);
+    }
+
+    public final UserEntity getLoggedInUser(){
+
+        UserEntity e = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(!(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated()){
+            Object d = auth.getPrincipal();
+            e = (UserEntity) auth.getPrincipal();
+        }
+        return e;
     }
 }

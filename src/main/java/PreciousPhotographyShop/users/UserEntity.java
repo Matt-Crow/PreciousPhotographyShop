@@ -25,8 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 @Table(name="user")
 public class UserEntity implements UserDetails {
-    // https://stackoverflow.com/questions/40177865/hibernate-unknown-integral-data-type-for-ids
-    // denotes this is the primary key
 
     @Id
     @Column(name="user_id")
@@ -39,12 +37,9 @@ public class UserEntity implements UserDetails {
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
     
-    /*@Pattern(regexp = "^(?=[a-zA-Z0-9._]{8,20}$)(?!.*[_.]{2})[^_.].*[^_.]$",
-            message = "Username should only contain alphanumeric characters, periods and underscores")*/
     @Column(name="username", nullable=false, unique=false)
     private String username;
-    // Philip says he wants to allow duplicate usernames to encourage exploration
-    
+
     @Column(name="email", nullable=false, unique=true)
     private String email;
     
@@ -63,18 +58,16 @@ public class UserEntity implements UserDetails {
     @ElementCollection
     @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name="photo_id")
-    Set<String> photoIds = new HashSet<>();
-    
+    Set<String> photoIds;
+
     public UserEntity(){
-        // requires no-arg ctro
-        // I hate reflection
         this.email = "";
         this.username = "";
         this.password = "";
         this.profilePictureId = null;
         photoIds = new HashSet<>();
     }
-    
+
     public UserEntity(String username, String email){
         this();
         this.username = username;
@@ -124,6 +117,9 @@ public class UserEntity implements UserDetails {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.name());
         return Collections.singletonList(authority);
     }
+    /*
+        Getters
+     */
 
     public String getId(){ return id; }
 
@@ -136,21 +132,19 @@ public class UserEntity implements UserDetails {
         return profilePictureId;
     }
 
-    public Set<String> getPhotoIds(){
-        return photoIds;
-    }
+    public String getPassword() { return password; }
+
+    public Set<String> getPhotoIds(){ return photoIds; }
+
+    /*
+        Setters
+     */
+
+    public void setId(String id){ this.id = id; }
+
+    public void setUsername(String username){ this.username = username; }
     
-    public void setId(String id){
-        this.id = id;
-    }
-    
-    public void setUsername(String username){
-        this.username = username;
-    }
-    
-    public void setEmail(String email){
-        this.email = email;
-    }
+    public void setEmail(String email){ this.email = email; }
     
     public void setProfilePictureId(String profilePictureId){
         this.profilePictureId = profilePictureId;
@@ -160,9 +154,7 @@ public class UserEntity implements UserDetails {
         this.password = password; 
     }
 
-    public void setPhotoIds(Set<String> photoIds){
-        this.photoIds = photoIds;
-    }
+    public void setPhotoIds(Set<String> photoIds){ this.photoIds = photoIds; }
 
     @Override
     public boolean equals(Object obj){
