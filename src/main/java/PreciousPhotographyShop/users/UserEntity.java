@@ -132,8 +132,6 @@ public class UserEntity implements UserDetails {
         return profilePictureId;
     }
 
-    public String getPassword() { return password; }
-
     public Set<String> getPhotoIds(){ return photoIds; }
 
     /*
