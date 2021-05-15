@@ -2,15 +2,20 @@ package PreciousPhotographyShop.users;
 
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.databaseInterface.LocalFileSystem;
+import PreciousPhotographyShop.photographs.BrowsePhotoWidgetInfo;
+import PreciousPhotographyShop.photographs.PhotoService;
 import PreciousPhotographyShop.photographs.PhotographEntity;
 import PreciousPhotographyShop.photographs.PhotographRepository;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,10 +37,12 @@ public class SellerController {
     
     private final DatabaseInterface db;
     private final PhotographRepository photos;
+    private final PhotoService photoService;
     
-    public SellerController(DatabaseInterface db, PhotographRepository photos){
+    public SellerController(DatabaseInterface db, PhotographRepository photos, PhotoService photoService){
         this.db = db;
         this.photos = photos;
+        this.photoService = photoService;
     }
     
     @GetMapping("/sellerPage")
@@ -45,15 +52,13 @@ public class SellerController {
     ) {
         String viewName = "seller/sellerPage";
         try {
-            // todo: apply seller info to the model
             UserEntity user = db.getUser(id);
             model.addAttribute("seller", user);
-            
-            Iterator<PhotographEntity> allTheirPhotos = photos.findAllByOwnerId(id);
             // get their 4 most recent
-            List<PhotographEntity> mostRecent = new LinkedList<>();
-            for(int i = 0; i < 4 && allTheirPhotos.hasNext(); ++i){
-                mostRecent.add(allTheirPhotos.next());
+            List<BrowsePhotoWidgetInfo> mostRecent = new LinkedList<>();
+            Iterator<PhotographEntity> it = photos.findAllByOwnerIdOrderByPostedDateDesc(id).iterator();
+            for(int i = 0; i < 4 && it.hasNext(); i++){
+                mostRecent.add(photoService.mapPhotoToBrowseWidget(it.next()));
             }
             model.addAttribute("photos", mostRecent);
         } catch (Exception ex) {

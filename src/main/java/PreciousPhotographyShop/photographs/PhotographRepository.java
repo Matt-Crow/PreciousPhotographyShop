@@ -1,6 +1,5 @@
 package PreciousPhotographyShop.photographs;
 
-import java.util.Iterator;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -11,6 +10,5 @@ public interface PhotographRepository extends CrudRepository<PhotographEntity, S
     public Iterable<PhotographEntity> findAllByCategoryNames(String categoryName);
     public Iterable<PhotographEntity> findAllByNameContainingIgnoreCase(String name);
     public Iterable<PhotographEntity> findAllByDescriptionContainingIgnoreCase(String desc);
-    public Iterator<PhotographEntity> findAllByOwnerId(String id);
-    //public Iterator<PhotographEntity> findAllByOwnerIdOrderByPostedDateDesc(String id);
+    public Iterable<PhotographEntity> findAllByOwnerIdOrderByPostedDateDesc(String ownerId);
 }

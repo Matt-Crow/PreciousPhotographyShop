@@ -55,7 +55,7 @@ public class PhotoService {
         return photoDB.updatePhotoByID(id, newPhoto);
     }
     
-    private BrowsePhotoWidgetInfo mapPhotoToBrowseWidget(PhotographEntity photo){
+    public final BrowsePhotoWidgetInfo mapPhotoToBrowseWidget(PhotographEntity photo){
         String sellerName = "Unknown Seller";
         try {
             sellerName = photoDB.getUser(photo.getOwnerId()).getUsername();

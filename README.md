@@ -5,6 +5,7 @@ Todo: email five factors instead of displaying in web page
 
 /contact
 
+Escape single quote in Thymeleaf: 'Matt''s example'
 
 After merging, you'll need to rename a few tables if you want to keep using the same data:
 photograph_entity => photo
