@@ -40,14 +40,16 @@ public class SellerController {
     private final PhotoService photoService;
     private final ReviewService reviews;
     private final UserService users;
+    private final UserRepository userRepository;
     
-    public SellerController(LoginService login, DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews, UserService users){
+    public SellerController(LoginService login, DatabaseInterface db, PhotographRepository photos, PhotoService photoService, ReviewService reviews, UserService users, UserRepository userRepository){
         this.login = login;
         this.db = db;
         this.photos = photos;
         this.photoService = photoService;
         this.reviews = reviews;
         this.users = users;
+        this.userRepository = userRepository;
     }
     
     @GetMapping("/sellerPage")
@@ -104,12 +106,26 @@ public class SellerController {
             try {
                 // only update if the post request was made for the logged in user
                 // prevents sellers from manipulating other sellers' info
-                users.updateUser(sellerId, updatedInfo);
+                //users.updateUser(sellerId, updatedInfo);
+                updateUser(sellerId, updatedInfo);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }        
         return String.format("redirect:/seller/sellerPage?id=%s", sellerId);
+    }
+    
+    private void updateUser(String id, SellerPageInfo newInfo){
+        UserEntity user = userRepository.findById(id).get();
+        user.setUsername(newInfo.getUsername());
+        user.setDescription(newInfo.getDescription());
+        if(newInfo.isProfilePictureIdSet()){
+            user.setProfilePictureId(newInfo.getProfilePictureId());
+        }
+        if(newInfo.isPasswordSet()){
+            throw new UnsupportedOperationException("Changing password not supported yet");
+        }
+        userRepository.save(user); // update the user in the database
     }
     
     /**

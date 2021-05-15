@@ -59,6 +59,6 @@ public class SellerPageInfo {
     }
     
     public boolean isPasswordSet(){
-        return password == null;
+        return password != null;
     }
 }
