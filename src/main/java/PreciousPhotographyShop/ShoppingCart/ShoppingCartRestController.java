@@ -39,7 +39,6 @@ public class ShoppingCartRestController {
     @PostMapping("/cart/update/{pid}/{qty}")
     public String updateQuantity(@PathVariable("pid") String photoId, @PathVariable("qty") int quantity){
 
-//        UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
         UserEntity userEntity = userService.getLoggedInUser();
 
         if (userEntity == null) {
@@ -52,8 +51,6 @@ public class ShoppingCartRestController {
 
     @PostMapping("/cart/remove/{pid}")
     public String removePhotoFromCart(@PathVariable("pid") String photoId){
-
-//        UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
 
         UserEntity userEntity = userService.getLoggedInUser();
 

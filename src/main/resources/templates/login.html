@@ -1,20 +1,30 @@
-<html xmlns:th="http://www.thymeLeaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum scale=1.0" >
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <title>Login - Precious Photogrpahy </title>
+    <title>Login - Precious Photography </title>
 </head>
 <body>
 <div class="container-fluid text-center">
     <div>
-        <img th:src="@{/images/photography_icon.png}" />
+        <img th:src="@{/Webpage/images/beach.jpeg}" />
     </div>
-    <form th:action="@{/login}" method="post">
-        <div class="border">
+    <div th:if="${param.error}">
+        <p class="text-danger">Invalid username or password</p>
+    </div>
+    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0">
+        <div class="border border-secondary p-3 rounded">
             <p>Precious</p>
             <p>
                 <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus />
+            </p>
+            <p>
+                <input type="password" name="password" class="form-control" placeholder="Password" required />
+            </p>
+            <p>
+                <input type = "submit" value="Login" class="btn btn-primary " />
             </p>
         </div>
     </form>
