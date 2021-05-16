@@ -1,11 +1,7 @@
 package PreciousPhotographyShop.users;
 
-import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
-import PreciousPhotographyShop.databaseInterface.LocalFileSystem;
-import PreciousPhotographyShop.photographs.BrowsePhotoWidgetInfo;
-import PreciousPhotographyShop.photographs.PhotoService;
-import PreciousPhotographyShop.photographs.PhotographEntity;
-import PreciousPhotographyShop.photographs.PhotographRepository;
+import PreciousPhotographyShop.databaseInterface.*;
+import PreciousPhotographyShop.photographs.*;
 import PreciousPhotographyShop.reviews.ReviewService;
 import PreciousPhotographyShop.security.LoginService;
 import java.awt.image.BufferedImage;
@@ -18,12 +14,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * I'm currently just using this class instead of the UserController to 
@@ -50,6 +41,11 @@ public class SellerController {
         this.reviews = reviews;
         this.users = users;
         this.userRepository = userRepository;
+    }
+    
+    @GetMapping("/yourSellerPage")
+    public String getYourSellerPage(){
+        return String.format("redirect:/seller/sellerPage?id=%s", login.getLoggedInUser().getId());
     }
     
     @GetMapping("/sellerPage")
@@ -115,6 +111,13 @@ public class SellerController {
         return String.format("redirect:/seller/sellerPage?id=%s", sellerId);
     }
     
+    /*
+    While this should be stored in the UserService, I had an issue where the 
+    UserService passed into this' constructor would have all of its fields set
+    to null. The only difference I could find between this UserService is how
+    it says something involving "enchancerbyspringcglib" in the UserService
+    field of this class. Not sure why it wasn't wiring up properly
+    */
     private void updateUser(String id, SellerPageInfo newInfo){
         UserEntity user = userRepository.findById(id).get();
         user.setUsername(newInfo.getUsername());

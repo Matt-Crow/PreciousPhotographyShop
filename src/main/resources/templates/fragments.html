@@ -20,8 +20,8 @@
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-home}">Home</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/allPhotos}">Photos</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-search}">Search</a></div>
+        <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/seller/yourSellerPage}">Profile</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/newPhoto}">Upload</a></div>
-        <div class="pages-nav__item"><a class="link link-page" th:href="@{/api/users}">User</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/log/index}">Logs</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-training}">About Us</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-contact}">Contact</a></div>

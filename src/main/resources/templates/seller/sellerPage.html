@@ -14,7 +14,9 @@
             <!-- Only sellers can edit their pages -->
             <a style="float: right" th:if="${canEdit}" th:href="@{'/seller/editSellerPage?sellerId=' + *{id}}">Edit</a>
             
-            <img th:src="@{'/seller/profilePicture?id=' + *{id}}" alt="The seller's profile picture"/>
+            <div>
+                <img style="max-height: 50vh; width: auto" th:src="@{'/seller/profilePicture?id=' + *{id}}" alt="The seller's profile picture"/>
+            </div>
             <div style="background-color: white; border: 5px outset white">
                 <p style="color: black; word-wrap: break-word; white-space: pre-wrap" th:text="*{description}"></p>
             </div>
