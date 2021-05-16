@@ -9,14 +9,14 @@
 <body>
 <div class="container-fluid text-center">
     <div>
-        <img th:src="@{/Webpage/images/beach.jpeg}" />
+        <img src="../static/images/icon.jpg" th:src="@{/images/icon.jpg}" width="160" />
     </div>
     <div th:if="${param.error}">
         <p class="text-danger">Invalid username or password</p>
     </div>
-    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0">
+    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto;">
         <div class="border border-secondary p-3 rounded">
-            <p>Precious</p>
+            <p>Login</p>
             <p>
                 <input type="email" name="email" class="form-control" placeholder="E-mail" required autofocus />
             </p>
