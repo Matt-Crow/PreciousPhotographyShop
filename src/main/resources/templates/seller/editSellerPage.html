@@ -13,7 +13,11 @@
                 <label for='username'>Username</label>
                 <input th:field="*{username}" name='username' type='text'/>
                 
-                <!-- How to do profile picture? -->
+                <label for="profilePictureId">Profile Picture</label>
+                <select name="profilePictureId" th:field="*{profilePictureId}">
+                    <option th:each="photo : *{photos}" th:value="${photo.id}" th:text="${photo.name + ' - ' + photo.description}"></option>
+                    <option value="">none</option>
+                </select>
                 
                 <label for='description'>Description</label>
                 <textarea th:field="*{description}" name='description' />

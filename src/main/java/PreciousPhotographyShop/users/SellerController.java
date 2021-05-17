@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,7 +58,7 @@ public class SellerController {
             model.addAttribute("canEdit", true);
         }
         
-        String viewName = "seller/Account";//"seller/sellerPage";
+        String viewName = "seller/sellerPage"; //"seller/Account";
         try {
             UserEntity user = db.getUser(id);
             model.addAttribute("seller", user);
@@ -85,12 +86,28 @@ public class SellerController {
                 throw new Exception("Only the seller can edit their own seller page");
             }
             model.addAttribute("sellerId", sellerId);
-            model.addAttribute("sellerPageInfo", new SellerPageInfo(db.getUser(sellerId)));
+            model.addAttribute("sellerPageInfo", getInfoFor(sellerId));
         } catch (Exception ex) {
             ex.printStackTrace();
             url = String.format("redirect:/seller/sellerPage?id=%s", sellerId);
         }
         return url;
+    }
+    
+    private SellerPageInfo getInfoFor(String sellerId) throws Exception{
+        UserEntity user = db.getUser(sellerId);
+        SellerPageInfo info = new SellerPageInfo(user);
+        List<PhotographEntity> theirPhotos = user.getPhotoIds().stream().map((photoId)->{
+            PhotographEntity pe = null;
+            try {
+                pe = this.photoService.getPhotoByID(photoId);
+            } catch(Exception ex){
+                System.err.printf("Failed to get photo with ID %s", photoId);
+            }
+            return pe;
+        }).filter((pe)->pe != null).collect(Collectors.toList());
+        info.setPhotos(theirPhotos);
+        return info;
     }
     
     @PostMapping("updateSellerInfo")

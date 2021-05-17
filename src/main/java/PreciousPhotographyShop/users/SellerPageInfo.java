@@ -1,5 +1,9 @@
 package PreciousPhotographyShop.users;
 
+import PreciousPhotographyShop.photographs.PhotographEntity;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Used for collecting form responses from editting a seller's page
  * @author Matt Crow
@@ -10,6 +14,7 @@ public class SellerPageInfo {
     private String profilePictureId;
     private String description;
     private String password;
+    private List<PhotographEntity> photos;
     
     public SellerPageInfo(){
         
@@ -20,6 +25,7 @@ public class SellerPageInfo {
         this.profilePictureId = seller.getProfilePictureId();
         this.description = seller.getDescription();
         this.password = null; // don't set to user password!
+        this.photos = new LinkedList<>();
     }
     
     public String getUsername(){
@@ -38,6 +44,10 @@ public class SellerPageInfo {
         return password;
     }
     
+    public List<PhotographEntity> getPhotos(){
+        return photos;
+    }
+    
     public void setUsername(String username){
         this.username = username;
     }
@@ -54,8 +64,12 @@ public class SellerPageInfo {
         this.password = password;
     }
     
+    public void setPhotos(List<PhotographEntity> photos){
+        this.photos = photos;
+    }
+    
     public boolean isProfilePictureIdSet(){
-        return profilePictureId != null;
+        return profilePictureId != null && !profilePictureId.trim().equals("");
     }
     
     public boolean isPasswordSet(){
