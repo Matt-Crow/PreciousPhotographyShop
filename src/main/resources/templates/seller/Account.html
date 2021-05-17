@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	
 	<!--Links to style sheets-->
-    <link rel="stylesheet" type="text/css" href="BackEnd.css" />
-	<link rel="stylesheet" type="text/css" href="font-awesome.css" />
-	<link rel="stylesheet" type="text/css" href="min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/BackEnd.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/font-awesome.css}" />
+	<link rel="stylesheet" type="text/css" th:href="@{/min.css}" />
     <title>User Account Page</title> 
 
 	<style>
@@ -86,7 +86,7 @@
 		left:0;
 		right:0;
 		padding-bottom: 50px;
-		paddig-top: 50px;
+		padding-top: 50px;
 	}
 	.container img 
 	{
@@ -111,36 +111,44 @@
 	
 	
 	</style>
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
 </head>
 <!--
 
 -->
 <body>
-<!-- The Modal -->
-<div id="myModal" class="modal">
+    <nav th:insert="fragments.html :: pages-nav"></nav>
+    
+    
+    
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
 
-  <!-- Modal content -->
-  <div class="modal-content">
-    <span class="close">&times;</span>
-	 <h3> <em> <center> About Veronica </center> </em> </h3>
-     <p class="font-italic mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
-  </div>
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+         <h3> <em> <p style="text-align: center" th:text="${'About ' + seller.username}"></p> </em> </h3>
+         <p class="font-italic mb-0" th:text="${seller.description}"></p>
+      </div>
 
-</div>
-
+    </div>
+    
+    <!-- Only sellers can edit their pages -->
+    <a style="float: right" th:if="${canEdit}" th:href="@{'/seller/editSellerPage?sellerId=' + ${seller.id}}">Edit</a>
+            
     <div class="col-xl-16 col-xl-16 col-xl-16 mx-auto">
 
         <!-- Profile widget -->
         <div class="bg-white shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 bg-dark">
                 <div class="media align-items-end profile-header">
-                    <div class="profile mr-3"><img src="https://d19m59y37dris4.cloudfront.net/university/1-1-1/img/teacher-4.jpg" alt="..." width="130" class="rounded mb-2 img-thumbnail"><button id="myBtn" href="#" class="btn btn-dark btn-sm btn-block">About Veronica</button></div>
+                    <div class="profile mr-3"><img th:src="@{'/seller/profilePicture?id=' + ${seller.id}}" alt="..." width="130" class="rounded mb-2 img-thumbnail"><button id="myBtn" href="#" class="btn btn-dark btn-sm btn-block" th:text="${'About ' + seller.username}"></button></div>
                     <div class="media-body mb-1 text-white">
-                        <h4 class="mt-0 mb-0">Veronica Smith</h4>
-                        <p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>Nature Photographer</p>
+                        <h4 class="mt-0 mb-0" th:text="${seller.username}"></h4>
+                        <!--<p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>Nature Photographer</p>
 						<p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>UC Berkely Student</p>
-						<p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>Occupation: Adminstrative Analyst</p>
-						<p style= text-align:center><span style="font-size: 25px; color: black; margin: auto;"> <a href="index-2.html"> <em> Precious Photography </em> </a> </span></p>
+						<p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>Occupation: Adminstrative Analyst</p>-->
+						<p style= text-align:center><span style="font-size: 25px; color: black; margin: auto;"> <a th:href="@{/}"> <em> Precious Photography </em> </a> </span></p>
                     </div>
 				   <div class="bg-light p-4 d-flex justify-content-end text-center">
                    <ul class="list-inline mb-0">
@@ -171,11 +179,25 @@
                     <h5 class="mb-0">Recent photos</h5><a href="#" class="btn btn-link text-muted">Show all</a>
                 </div>
                 <div class="row">
+                    <!--<div th:each="photo : ${photos}">
+                        <div th:replace="fragments.html :: browsePhotoWidget(widgetInfo=${photo})" class="align-self-center"></div>
+                    </div>-->
+                    
+                    <div th:each="photo : ${photos}">
+                        <div class="col-sm">
+                            <a th:href="@{'/viewPhoto?id=' + ${photo.photoId}}">
+                                <img th:src="@{'/photo?id=' + ${photo.photoId}}" height="300" width="200" alt="" class="img-fluid rounded shadow-sm">
+                                <h4 class="bottom-right" th:text="${photo.priceStr}"></h4> 
+                            </a>
+                        </div>
+                    </div>
+                    <!--
 					<div class="col-sm"><img src="images/Forest.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$500.00</h4> </div>
 					<div class="col-sm"><img src="images/Canal.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$300.00</h4> </div>
 					<div class="col-sm"><img src="images/Desert.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$100.00</h4> </div>
 					<div class="col-sm"><img src="images/beach.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$20.00</h4> </div>
 					<div class="col-sm"><img src="images/green_sky.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$80.00</h4> </div>
+                    -->
                 </div>
             </div>
         </div>
@@ -183,86 +205,95 @@
 
 		<h2><center><em>Featured Content </em></center></h2>	
 		<div id="myCarousel" class="carousel slide" data-ride="carousel">
-									<ol class = "carousel-indicators">
-										<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-										<li data-target="#myCarousel" data-slide-to="1"></li>
-									</ol>
-								<div class = "carousel-inner">
-									<div class="carousel-item active">
-										<div class="container">
-											<img src="https://images.unsplash.com/photo-1588392382834-a891154bca4d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1955&q=80">
-											<h3 class="bottom-right-2" >$400.00</h3>	
-											<div class="bottom-left">
-											<a class = "btn btn-small btn-primary" href="#">
-											Purchase
-											</a>
-										</div>
-									</div>
-								</div>
-						
-								<div class="carousel-item">
-										<div class="container">
-											<img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1140&q=80">
-											<h3 class="bottom-right-2" >$300.00</h3>	
-											<div class="bottom-left">
-											<a class = "btn btn-small btn-primary" href="#">
-											Purchase
-											</a>
-										</div>
-								</div>
-				
-					</div>
-					<a href="#myCarousel" class="carousel-control-prev" role="button" data-slide="prev">
-				
-						<span class="sr-only">Previous</span>
-						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-					
-					</a>
-				
-					<a href="#myCarousel" class="carousel-control-next" role="button" data-slide="next">
-				
-						<span class="sr-only">Previous</span>
-						<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				
-					</a>
-				
-				</div>
+            <ol class = "carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+            </ol>
+            <div class = "carousel-inner">
+                <div class="carousel-item active">
+                    <div class="container">
+                        <img src="https://images.unsplash.com/photo-1588392382834-a891154bca4d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1955&q=80">
+                        <h3 class="bottom-right-2" >$400.00</h3>	
+                        <div class="bottom-left">
+                        <a class = "btn btn-small btn-primary" href="#">
+                        Purchase
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-item">
+                    <div class="container">
+                        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1140&q=80">
+                        <h3 class="bottom-right-2" >$300.00</h3>	
+                        <div class="bottom-left">
+                        <a class = "btn btn-small btn-primary" href="#">
+                        Purchase
+                        </a>
+                    </div>
+            </div>
+        </div>
+        <a href="#myCarousel" class="carousel-control-prev" role="button" data-slide="prev">
+            <span class="sr-only">Previous</span>
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+
+        <a href="#myCarousel" class="carousel-control-next" role="button" data-slide="next">
+            <span class="sr-only">Previous</span>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
+	</div>
+            
+            
+            
+    <div style="border: 5px outset white">
+        <a th:href="@{'/reviews/newSellerReview?id=' + ${seller.id}}">Review this Seller</a>
+        <h2>Reviews</h2>
+        <ul>
+            <li th:each="review : ${reviews}">
+                <div th:replace="fragments.html :: reviewWidget(reviewerName=${review.reviewerName}, text=${review.reviewText}, rating=${review.rating})"></div>
+            </li>
+        </ul>
+    </div>
+
 	<script>
-// Get the modal
-var modal = document.getElementById("myModal");
+        // Get the modal
+        var modal = document.getElementById("myModal");
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-// When the user clicks the button, open the modal 
-btn.onclick = function() {
-  modal.style.display = "block";
-}
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+          modal.style.display = "block";
+        }
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
-}
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+          modal.style.display = "none";
+        }
 
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+          }
+        }
 	</script>
 	
-	<script src="bundle.js"></script>
-	<script src="J_Query.js"></script>
+	<script th:src="@{/bundle.js}"></script>
+	<script th:src="@{/J_Query.js}"></script>
 	
 	<!--Carousel Scrip -->
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	
+    
+    <div th:insert="fragments.html :: end"></div>
 </body>
 
 </html>
