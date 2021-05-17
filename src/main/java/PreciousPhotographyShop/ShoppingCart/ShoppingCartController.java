@@ -26,7 +26,6 @@ public class ShoppingCartController {
     @GetMapping("/cart")
     public List<CartItem> showShoppingCart() {
         UserEntity userEntity = userService.getLoggedInUser();
-        //UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
         List<CartItem> cartItems = cartServices.listCartItems(userEntity);
         return cartItems;
     }
