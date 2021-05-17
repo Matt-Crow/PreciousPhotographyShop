@@ -9,62 +9,60 @@
 </head>
 <body>
 <nav th:insert="fragments.html :: pages-nav"></nav>
-  <div class="container">
-    <div class="mdl-typography--text-center">
-      <h2>Contact Us</h2>
-      <p></p>
-    </div>
-
-    <div>
-      <form th:action="@{/contact}" method="post"
-            style="max-width: 600px; margin: 0 auto;"
-            enctype="multipart/form-data">
-        <div class="form-group row">
-          <label for="fullName" class="col-sm-4 col-form-label">Full Name:</label>
-          <div class="col-sm-8">
-            <input type="text" name="fullName" class="form-control" required minlength="3" maxlength="45">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label for="email" class="col-sm-4 col-form-label">Email:</label>
-          <div class="col-sm-8">
-            <input type="email" name="email" class="form-control"  maxlength="45">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label for="subject" class="col-sm-4 col-form-label">Subject:</label>
-          <div class="col-sm-8">
-            <input type="text" name="subject" class="form-control" required minlength="15" maxlength="100">
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label for="content" class="col-sm-4 col-form-label">Content:</label>
-          <div class="col-sm-8">
-            <textarea name="content" rows="10" class="form-control" required></textarea>
-          </div>
-        </div>
-
-        <div class="form-group row">
-          <label for="attachment" class="col-sm-4 col-form-label">Attachment:</label>
-          <div class="col-sm-8">
-            <input type="file" name="attachment" />
-          </div>
-        </div>
-
-        <div class="mdl-typography--text-center">
-          <input type="submit" value="Send Message" class="btn btn-primary" />
-        </div>
-
-
-
-      </form>
-    </div>
-
-
+<div>
+  <div class="mdl-typography--text-center">
+    <h2>Contact Us</h2>
+    <p></p>
   </div>
+
+  <div>
+    <form th:action="@{/contact}" method="post"
+          style="max-width: 600px; margin: 0 auto;"
+          enctype="multipart/form-data">
+      <div class="form-group row">
+        <label for="fullName" class="col-sm-4 col-form-label">Full Name:</label>
+        <div class="col-sm-8">
+          <input type="text" name="fullName" class="form-control" required minlength="3" maxlength="45">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="email" class="col-sm-4 col-form-label">Email:</label>
+        <div class="col-sm-8">
+          <input type="email" name="email" class="form-control"  maxlength="45">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="subject" class="col-sm-4 col-form-label">Subject:</label>
+        <div class="col-sm-8">
+          <input type="text" name="subject" class="form-control" required minlength="15" maxlength="100">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="content" class="col-sm-4 col-form-label">Content:</label>
+        <div class="col-sm-8">
+          <textarea name="content" rows="10" class="form-control" required></textarea>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="attachment" class="col-sm-4 col-form-label">Attachment:</label>
+        <div class="col-sm-8">
+          <input type="file" name="attachment" />
+        </div>
+      </div>
+
+      <div class="mdl-typography--text-center">
+        <input type="submit" value="Send Message" class="btn btn-primary" />
+      </div>
+
+    </form>
+  </div>
+
+
+</div>
 
 
 </form>

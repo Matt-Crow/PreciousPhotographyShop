@@ -58,4 +58,3 @@ public class CartItem {
         return this.photographEntity.getPrice() * quantity;
     }
 }
-

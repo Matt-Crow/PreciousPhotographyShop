@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up For an Account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="signUp.css">
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+<nav th:insert="fragments.html :: pages-nav"></nav>
+<div>
+
+
+    <div class="sign-up-form">
+        <form th:action="@{/api/registration/submit}" enctype="multipart/form-data" method="post">
+            <h2>Sign Up Now</h2>
+            <input name="firstName" type="text" placeholder="Your first name"/>
+            <input name="lastName" type="text" placeholder="Your last name"/>
+            <input name="username" type="text" placeholder="Your username"/>
+            <input name="password" type="password" placeholder="Create a password"/>
+            <input name="email" type="text" placeholder="Your email"/>
+            <p><span><input type="checkbox"></span>I agree to the terms of service</p>
+            <button type="Submit" class="signup-btn">Sign Up</button>
+            <hr>
+            <p class="or">OR</p>
+            <p>Do you have an account? <a href="#">Sign In</a> </p>
+        </form>
+    </div>
+
+
+</div>
+
+
+</form>
+<div th:insert="fragments.html :: end"></div>
+</body>
+</html>

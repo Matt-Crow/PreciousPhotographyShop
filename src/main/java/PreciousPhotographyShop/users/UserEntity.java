@@ -16,10 +16,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * Previously split into user and user entity classes
- * 
+ *
  * VERY IMPORTANT: a user's primary key is their ID, as their username and email
  * can change.
- * 
+ *
  * @author Matt Crow, Daniel V
  */
 
@@ -37,13 +37,13 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(generator="system-uuid")
     @GenericGenerator(name="system-uuid", strategy = "uuid")
     private String id;
-    
+
     @Column(name="username", nullable=false, unique=false)
     private String username;
 
     @Column(name="email", nullable=false, unique=true)
     private String email;
-    
+
     @Column(name="profile_picture_id", nullable=true, unique=false)
     private String profilePictureId;
     
@@ -59,7 +59,7 @@ public class UserEntity implements UserDetails {
     private Boolean locked = false;
 
     private Boolean enabled = true;
-    
+
     @ElementCollection
     @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     @CollectionTable(name = "seller_to_photo", joinColumns = @JoinColumn(name = "user_id"))
@@ -79,7 +79,7 @@ public class UserEntity implements UserDetails {
         this.username = username;
         this.email = email;
     }
-    
+
     /*
         Default Constructor
      */
@@ -100,7 +100,7 @@ public class UserEntity implements UserDetails {
     public String getUsername(){ 
         return username; 
     }
-    
+
     public String getEmail(){
         return email;
     }
@@ -114,8 +114,8 @@ public class UserEntity implements UserDetails {
     }
     
     @Override
-    public String getPassword() { 
-        return password; 
+    public String getPassword() {
+        return password;
     }
     
     public Set<String> getPhotoIds(){ 
@@ -157,6 +157,7 @@ public class UserEntity implements UserDetails {
         Setters
      */
 
+    
     public void setId(String id){ 
         this.id = id; 
     }
@@ -200,7 +201,7 @@ public class UserEntity implements UserDetails {
         hash = 71 * hash + java.util.Objects.hashCode(this.id);
         return hash;
     }
-    
+
     @Override
     public String toString() {
         return String.format(
