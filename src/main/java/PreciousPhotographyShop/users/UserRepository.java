@@ -19,7 +19,8 @@ public interface UserRepository extends JpaRepository<UserEntity, String> {
 
     Optional<UserEntity> findUserByEmail(String email);
     Iterable<UserEntity> findAllByUsernameContainingIgnoreCase(String username);
-
+    Iterable<UserEntity> findAllByDescriptionContainingIgnoreCase(String desc);
+    
     UserEntity findUserEntityByEmail(String email);
 
     @Transactional
