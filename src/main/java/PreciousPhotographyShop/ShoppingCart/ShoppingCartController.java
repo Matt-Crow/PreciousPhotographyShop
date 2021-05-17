@@ -7,6 +7,7 @@ import PreciousPhotographyShop.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
@@ -24,10 +25,12 @@ public class ShoppingCartController {
     private UserRepository userRepository;
 
     @GetMapping("/cart")
-    public List<CartItem> showShoppingCart() {
+    public String showShoppingCart(Model model) {
         UserEntity userEntity = userService.getLoggedInUser();
-        //UserEntity userEntity = userRepository.findUserEntityByEmail("deaht3099@gmail.com");
         List<CartItem> cartItems = cartServices.listCartItems(userEntity);
-        return cartItems;
+
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("pageTitle", "Shopping Cart");
+        return "shopping_cart";
     }
 }

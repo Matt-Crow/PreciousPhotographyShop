@@ -24,7 +24,7 @@
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/api/users}">User</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/log/index}">Logs</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-training}">About Us</a></div>
-        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-contact}">Contact</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/contact}">Contact</a></div>
         <div class="pages-nav__item pages-nav__item--social">
             <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
@@ -32,6 +32,7 @@
             <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
         </div>
         <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/login}">Log in</a></div>
+        <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/register}">Sign Up</a></div>
         <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
     </nav>
     <!-- /navigation-->
