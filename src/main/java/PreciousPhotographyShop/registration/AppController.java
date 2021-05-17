@@ -12,6 +12,6 @@ public class AppController {
     public String showSignUpForm(Model model){
         model.addAttribute("user", new UserEntity());
 
-        return "create_account";
+        return "registration";
     }
 }

@@ -7,17 +7,16 @@
 </head>
 <body>
 <nav th:insert="fragments.html :: pages-nav"></nav>
-<div class="container">
-    <div class="mdl-typography--text-center">
+<div >
+    <div >
         <h2>Your Shopping Cart</h2>
         <p></p>
     </div>
 
-
     <!-- Product Column -->
     <div class="row m-1">
         <div class="col-sm-8">
-            <th:block th:each="item, status: ${cartItems}">
+            <th:block th:each="item, status : ${cartItems}">
                 <div class="row border rounded" th:with="product = ${item.photographEntity}">
                     <div class="col-1">
                         <div>[[${status.count}]]</div>
