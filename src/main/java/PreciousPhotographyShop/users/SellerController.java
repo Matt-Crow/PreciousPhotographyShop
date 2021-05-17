@@ -141,6 +141,8 @@ public class SellerController {
         user.setDescription(newInfo.getDescription());
         if(newInfo.isProfilePictureIdSet()){
             user.setProfilePictureId(newInfo.getProfilePictureId());
+        } else {
+            user.setProfilePictureId(null); // sets back to default profile pic
         }
         if(newInfo.isPasswordSet()){
             throw new UnsupportedOperationException("Changing password not supported yet");
