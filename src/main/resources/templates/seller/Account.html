@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<!--Meta Tags for Carousel -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	
+	<!--Links to style sheets-->
+    <link rel="stylesheet" type="text/css" href="BackEnd.css" />
+	<link rel="stylesheet" type="text/css" href="font-awesome.css" />
+	<link rel="stylesheet" type="text/css" href="min.css" />
+    <title>User Account Page</title> 
+
+	<style>
+	
+	<!--Model Stuff -->
+	body {font-family: Arial, Helvetica, sans-serif;}
+
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: fixed; /* Stay in place */
+	  z-index: 1; /* Sit on top */
+	  padding-top: 100px; /* Location of the box */
+	  left: 0;
+	  top: 0;
+	  width: 100%; /* Full width */
+	  height: 100%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content */
+	.modal-content {
+	  background-color: white;
+	  margin: auto;
+	  padding: 20px;
+	  border: 1px solid #888;
+	  width: 600px;
+	  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	  border-radius: 5px;
+	  max-width 100%;
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaaaaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: #000;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	<!--Carousel Stuff -->
+	.bottom-right
+	{
+		position: absolute;
+		bottom: 8px;
+		right: 50px;
+		color: white;
+		font: bold;
+	}
+	
+	
+	.carousel-item
+	{
+	height:45rem;
+	background: #777;
+	color: white;
+	position: relative;
+	margin: auto;
+	}
+	
+	.container
+	{
+		position: absolute;
+		bottom: 0;
+		left:0;
+		right:0;
+		padding-bottom: 50px;
+		paddig-top: 50px;
+	}
+	.container img 
+	{
+		width:100%;
+		height:100%;
+		object-fit:cover;
+	}
+	
+	.bottom-right-2
+	{
+		position: absolute;
+		bottom: 6px;
+		right: 16px;
+	}
+	
+	.bottom-left
+	{
+		position: absolute;
+		bottom: 8px;
+		left: 16px;
+	}
+	
+	
+	</style>
+</head>
+<!--
+
+-->
+<body>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+	 <h3> <em> <center> About Veronica </center> </em> </h3>
+     <p class="font-italic mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
+  </div>
+
+</div>
+
+    <div class="col-xl-16 col-xl-16 col-xl-16 mx-auto">
+
+        <!-- Profile widget -->
+        <div class="bg-white shadow rounded overflow-hidden">
+            <div class="px-4 pt-0 pb-4 bg-dark">
+                <div class="media align-items-end profile-header">
+                    <div class="profile mr-3"><img src="https://d19m59y37dris4.cloudfront.net/university/1-1-1/img/teacher-4.jpg" alt="..." width="130" class="rounded mb-2 img-thumbnail"><button id="myBtn" href="#" class="btn btn-dark btn-sm btn-block">About Veronica</button></div>
+                    <div class="media-body mb-1 text-white">
+                        <h4 class="mt-0 mb-0">Veronica Smith</h4>
+                        <p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>Nature Photographer</p>
+						<p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>UC Berkely Student</p>
+						<p class="small mb-0"> <i class="fa fa-map-marker mr-2"></i>Occupation: Adminstrative Analyst</p>
+						<p style= text-align:center><span style="font-size: 25px; color: black; margin: auto;"> <a href="index-2.html"> <em> Precious Photography </em> </a> </span></p>
+                    </div>
+				   <div class="bg-light p-4 d-flex justify-content-end text-center">
+                   <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">241</h5><small class="text-muted"> </i>Photos</small>
+                    </li>
+                    <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">84K</h5><small class="text-muted"> </i>Followers</small>
+                    </li>
+						<li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">4.8</h5><small class="text-muted"> </i>Rating</small>
+                    </li>
+					 </li>
+						<li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">No</h5><small class="text-muted"> </i>Subscribed</small>
+                    </li>
+                </ul>
+				</div>
+                </div>
+				</div>
+
+				<div class="py-4 px-4">
+					<div class="py-4">
+						<p class="font-italic mb-0"> </p>
+				</div>
+								
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="mb-0">Recent photos</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                </div>
+                <div class="row">
+					<div class="col-sm"><img src="images/Forest.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$500.00</h4> </div>
+					<div class="col-sm"><img src="images/Canal.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$300.00</h4> </div>
+					<div class="col-sm"><img src="images/Desert.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$100.00</h4> </div>
+					<div class="col-sm"><img src="images/beach.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$20.00</h4> </div>
+					<div class="col-sm"><img src="images/green_sky.jpeg" height="300" width="200" alt="" class="img-fluid rounded shadow-sm"><h4 class="bottom-right">$80.00</h4> </div>
+                </div>
+            </div>
+        </div>
+		<!-- End profile widget -->
+
+		<h2><center><em>Featured Content </em></center></h2>	
+		<div id="myCarousel" class="carousel slide" data-ride="carousel">
+									<ol class = "carousel-indicators">
+										<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+										<li data-target="#myCarousel" data-slide-to="1"></li>
+									</ol>
+								<div class = "carousel-inner">
+									<div class="carousel-item active">
+										<div class="container">
+											<img src="https://images.unsplash.com/photo-1588392382834-a891154bca4d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1955&q=80">
+											<h3 class="bottom-right-2" >$400.00</h3>	
+											<div class="bottom-left">
+											<a class = "btn btn-small btn-primary" href="#">
+											Purchase
+											</a>
+										</div>
+									</div>
+								</div>
+						
+								<div class="carousel-item">
+										<div class="container">
+											<img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1140&q=80">
+											<h3 class="bottom-right-2" >$300.00</h3>	
+											<div class="bottom-left">
+											<a class = "btn btn-small btn-primary" href="#">
+											Purchase
+											</a>
+										</div>
+								</div>
+				
+					</div>
+					<a href="#myCarousel" class="carousel-control-prev" role="button" data-slide="prev">
+				
+						<span class="sr-only">Previous</span>
+						<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					
+					</a>
+				
+					<a href="#myCarousel" class="carousel-control-next" role="button" data-slide="next">
+				
+						<span class="sr-only">Previous</span>
+						<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				
+					</a>
+				
+				</div>
+	<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+	</script>
+	
+	<script src="bundle.js"></script>
+	<script src="J_Query.js"></script>
+	
+	<!--Carousel Scrip -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	
+</body>
+
+</html>

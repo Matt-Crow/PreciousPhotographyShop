@@ -10,3 +10,4 @@
 #!**/build/docs
 gradle.properties
 **application.properties
+**.DS_Store
