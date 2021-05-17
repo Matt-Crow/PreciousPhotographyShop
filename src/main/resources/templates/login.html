@@ -9,9 +9,12 @@
 </head>
 <body>
 <div class="container-fluid text-center">
-    <div>
-        <img src="../static/images/icon2.png" th:src="@{/images/icon2.png}" width="320" />
-    </div>
+
+
+    <header class="bp-header cf">
+        <h1 class="bp-header__title">Precious Photography</h1>
+    </header>
+    <!-- <img src="../static/images/loginIcon.png.png" th:src="@{/images/loginIcon.png}" width="320" /> -->
     <div th:if="${param.error}">
         <p class="text-danger">Invalid username or password</p>
     </div>
