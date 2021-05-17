@@ -90,7 +90,7 @@ public class UserService implements UserDetailsService {
             user.setProfilePictureId(newInfo.getProfilePictureId());
         }
         if(newInfo.isPasswordSet()){
-            throw new UnsupportedOperationException("Changing password not supported yet");
+            user.setPassword(bCryptPasswordEncoder.encode(newInfo.getPassword()));
         }
         userRepository.save(user); // update the user in the database
     }

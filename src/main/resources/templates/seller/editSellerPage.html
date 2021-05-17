@@ -22,7 +22,8 @@
                 <label for='description'>Description</label>
                 <textarea th:field="*{description}" name='description' />
                 
-                <!-- How to do password? -->
+                <label for="password">Password</label>
+                <input th:field="*{password}" name="password" type="password"/>
                 
                 <input type="submit" value="Save Changes"/>
             </form>

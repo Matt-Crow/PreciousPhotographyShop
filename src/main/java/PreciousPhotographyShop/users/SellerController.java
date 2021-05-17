@@ -78,6 +78,36 @@ public class SellerController {
         return viewName;
     }
     
+    // Steven's template. I couldn't get this working
+    @GetMapping("/sellerPage2")
+    public String sellerPage2(
+        @RequestParam(name="id", required=true) String id,
+        Model model
+    ) {
+        if(isLoggedIn(id)){
+            model.addAttribute("canEdit", true);
+        }
+        
+        String viewName = "seller/Account";
+        try {
+            UserEntity user = db.getUser(id);
+            model.addAttribute("seller", user);
+            // get their 4 most recent
+            List<BrowsePhotoWidgetInfo> mostRecent = new LinkedList<>();
+            Iterator<PhotographEntity> it = photos.findAllByOwnerIdOrderByPostedDateDesc(id).iterator();
+            for(int i = 0; i < 4 && it.hasNext(); i++){
+                mostRecent.add(photoService.mapPhotoToBrowseWidget(it.next()));
+            }
+            model.addAttribute("photos", mostRecent);
+            model.addAttribute("reviews", reviews.getReviewWidgetsFor(user));
+        } catch (Exception ex) {
+            System.err.printf("Couldn't get user with ID of \"%s\"\n", id);
+            ex.printStackTrace();
+            viewName = "redirect:/";
+        }
+        return viewName;
+    }
+    
     @GetMapping("editSellerPage")
     public String getEditSellerPage(@RequestParam("sellerId") String sellerId, Model model){
         String url = "seller/editSellerPage";
@@ -119,8 +149,8 @@ public class SellerController {
             try {
                 // only update if the post request was made for the logged in user
                 // prevents sellers from manipulating other sellers' info
-                //users.updateUser(sellerId, updatedInfo);
-                updateUser(sellerId, updatedInfo);
+                users.updateUser(sellerId, updatedInfo);
+                //updateUser(sellerId, updatedInfo);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -134,6 +164,8 @@ public class SellerController {
     to null. The only difference I could find between this UserService is how
     it says something involving "enchancerbyspringcglib" in the UserService
     field of this class. Not sure why it wasn't wiring up properly
+    
+    It looks like the UserService works now, but I'm not sure why
     */
     private void updateUser(String id, SellerPageInfo newInfo){
         UserEntity user = userRepository.findById(id).get();
