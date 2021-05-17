@@ -1,74 +1,74 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Contact Us</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    <title>Contact Us</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
 </head>
 <body>
 <nav th:insert="fragments.html :: pages-nav"></nav>
 <div class="container">
-  <div class="mdl-typography--text-center">
-    <h2>Your Shopping Cart</h2>
-    <p></p>
-  </div>
+    <div class="mdl-typography--text-center">
+        <h2>Your Shopping Cart</h2>
+        <p></p>
+    </div>
 
 
-  <!-- Product Column -->
-  <div class="row m-1">
-    <div class="col-sm-8">
-      <th:block th:each="item, status: ${cartItems}">
-        <div class="row border rounded" th:with="product = ${item.photographEntity}">
-          <div class="col-1">
-            <div>[[${status.count}]]</div>
-            <div>Remove Icon</div> <!--Update with 'remove' if not working -->
-          </div>
+    <!-- Product Column -->
+    <div class="row m-1">
+        <div class="col-sm-8">
+            <th:block th:each="item, status: ${cartItems}">
+                <div class="row border rounded" th:with="product = ${item.photographEntity}">
+                    <div class="col-1">
+                        <div>[[${status.count}]]</div>
+                        <div>Remove Icon</div> <!--Update with 'remove' if not working -->
+                    </div>
 
-          <div class = "col-3">
-            <img th:src="@{'/photo?id=' + *{product.getId()}}"/>
-          </div>
+                    <div class = "col-3">
+                        <img th:src="@{'/photo?id=' + *{product.getId()}}"/>
+                    </div>
 
 
-          <div class="col-6">
-            <div>
-              <a th:href="@{${product.name}}" th:title="${product.name}" target="_blank"> <!--to set link to product page-->
-                <b>[[${product.name}]]</b>
-              </a>
-            </div>
-            <div><input type="number" th:value="${item.quantity}" class="form-control" /> </div>
-            <div>
-              <span>X</span>
-              <span>$[[${product.price}]]</span>
-            </div>
-            <div>
-              <span>= </span><span class="h4">[Subtotal]</span>
-            </div>
+                    <div class="col-6">
+                        <div>
+                            <a th:href="@{${product.name}}" th:title="${product.name}" target="_blank"> <!--to set link to product page-->
+                                <b>[[${product.name}]]</b>
+                            </a>
+                        </div>
+                        <div><input type="number" th:value="${item.quantity}" class="form-control" /> </div>
+                        <div>
+                            <span>X</span>
+                            <span>$[[${product.price}]]</span>
+                        </div>
+                        <div>
+                            <span>= </span><span class="h4">[Subtotal]</span>
+                        </div>
 
-          </div>
+                    </div>
 
+                </div>
+
+                <div class="row m-1">&nbsp;</div>
+
+            </th:block>
         </div>
 
-        <div class="row m-1">&nbsp;</div>
+        <!-- Subtotal Column -->
 
-      </th:block>
+        <div class="col-sm-4">
+            <div>
+                <span class="h3">Estimated Total:</span>
+            </div>
+            <div class="mt-2">
+                <span class="h2">[Total Amount]</span>
+            </div>
+            <div class="mt-2">
+                <button class="btn btn-danger p-3 mt-2">Check Out</button>
+            </div>
+            <div class="col"></div>
+        </div>
+
     </div>
-
-    <!-- Subtotal Column -->
-
-    <div class="col-sm-4">
-      <div>
-        <span class="h3">Estimated Total:</span>
-      </div>
-      <div class="mt-2">
-        <span class="h2">[Total Amount]</span>
-      </div>
-      <div class="mt-2">
-        <button class="btn btn-danger p-3 mt-2">Check Out</button>
-      </div>
-      <div class="col"></div>
-    </div>
-
-  </div>
 
 
 </div>

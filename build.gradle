@@ -51,6 +51,8 @@ repositories {
 }
 
 dependencies {
+    implementation 'junit:junit:4.13.1'
+
     // This dependency is used by the application.
     annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -72,6 +74,7 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'junit:junit:4.12'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-test-autoconfigure', version: '2.4.5'
 }
 
 application {
