@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Enter Authentication</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        <form th:action="@{/log/submit-auth}" method="POST">
+            <table>
+                <tr>
+                    <td><label for="initKey">Initiator Key</label></td>
+                    <td><input type="text" name="initKey"/></td>
+                </tr>
+                <tr>
+                    <td><label for="factor1">Factor 1</label></td>
+                    <td><input type="text" name="factor1"/></td>
+                </tr>
+                <tr>
+                    <td><label for="factor2">Factor 2</label></td>
+                    <td><input type="text" name="factor2"/></td>
+                </tr>
+                <tr>
+                    <td><label for="factor3">Factor 3</label></td>
+                    <td><input type="text" name="factor3"/></td>
+                </tr>
+                <tr>
+                    <td><label for="factor4">Factor 4</label></td>
+                    <td><input type="text" name="factor4"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input type="submit" value="View Website Log"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

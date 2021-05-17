@@ -1,9 +1,28 @@
+
+
+Todo: email five factors instead of displaying in web page
+
+
+/contact
+
+
+After merging, you'll need to rename a few tables if you want to keep using the same data:
+photograph_entity => photo
+user_entity => user
+category_entity => category
+reviews => review
+
+
+Add to cart only works if logged in
+
+Need to finish PurchaseDetails
+Move PurchaseEvent creation from PhotoService
+
 Pro-tip: put testing code in testsAndExamples/TestController::main
     view in localhost:8080/main
 
-/staticHome.html
-/newPhoto
-/allPhotos
+Pro-tip: after restarting the server, don't use the back button in your browser:
+that will retrieve the cached webpage.
 
 Having issues with Entity classes after changing them? Spring has issues with 
 changing primary key columns, so might need to rename or drop things
@@ -11,8 +30,28 @@ changing primary key columns, so might need to rename or drop things
 Need to figure out how to clear the entity manager cache for if database updates
 and an Entity needs the new data
 
-Might be able to use without the database by commenting out the "@Service" in 
-RealDatabaseInterface, and uncommenting "@Service" in BadExampleDatabase
+
+
+## Where Does the Website Store Files?
+Files created by the program are stored in
+```
+%your home%/.preciousPhotographyShop
+```
+For example,
+```
+C:\Users\JohnDoe\.preciousPhotographyShop
+```
+You may need to enable hidden folders to view it
+
+## Where are the Website Logs?
+The website logs are stored in the ```logs``` folder of the 
+```.preciousPhotographyShop``` folder. User and Transaction logs are NOT 
+encrypted, while the Website logs are. You can decrypt the logs via the website.
+Note that the decryption keys provided by 'request log access' are never 
+regenerated: whoever gets access to these keys can use them for however long
+they want, and still view the decrypted log using them.
+
+
 
 HOW TO RUN:
 1. Run from your IDE, or via the command line with "gradle bootRun"

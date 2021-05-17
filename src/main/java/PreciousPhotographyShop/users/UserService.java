@@ -1,30 +1,47 @@
 package PreciousPhotographyShop.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import PreciousPhotographyShop.registration.token.ConfirmationTokenService;
+import PreciousPhotographyShop.registration.token.ConfirmationToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @Author: Daniel V
- * Contains all the business logic within the HTTP calls in @UserController
+ * Contains all the business logic within the HTTP calls in
+ * @UserController + login verification and authentication
  */
 
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final String USER_NOT_FOUND_MSG = "Could not find an account associated with this email";
 
-    public UserEntity getSingleUser(String id) {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final ConfirmationTokenService confirmationTokenService;
 
-        UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException((
-                "User with id " + id + " cannot be found"
+    UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, ConfirmationTokenService confirmationTokenService){
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.confirmationTokenService = confirmationTokenService;
+    }
+
+    public UserEntity getSingleUser(String email) {
+
+        UserEntity user = userRepository.findUserByEmail(email).orElseThrow(() -> new IllegalStateException((
+                "User with id " + email + " cannot be found"
                 )));
         return user;
     }
@@ -34,7 +51,7 @@ public class UserService implements UserDetailsService {
      * @return Returns a list of all user by name and email
      */
     public List<UserEntity> getAllUsers(){
-        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
+        List<UserEntity> users = userRepository.findAll();
         return users;
     }
 
@@ -66,17 +83,23 @@ public class UserService implements UserDetailsService {
     /**
      * This is an @PUT HTTP call that updates either the name, email, or both entries on a user.
      * @param id The id for searching in the Database
-     * @param name The name that potentially will be updated
+     * @param password The password that potentially will be updated
      * @param email The email that potentially will be updated
+     * @param username The username that potentially will be updated
      */
     @Transactional
-    public void updateUser(String id, String name, String email){
+    public void updateUser(String id, String password,
+                           String email, String username){
         UserEntity user = userRepository.findById(id).orElseThrow(() -> new IllegalStateException(
                 "User with id " + id + " does not exist"
         ));
 
-        if(name != null && name.length() > 0 && !Objects.equals(user.getFirst_name(), name)){
-            user.setFirst_name(name);
+        if(password != null && password.length() > 0 && !Objects.equals(user.getPassword(), password)){
+            user.setPassword(password);
+        }
+
+        if(username != null && username.length() > 0 && !Objects.equals(user.getUsername(), username)){
+            user.setUsername(username);
         }
 
         if(email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)){
@@ -89,7 +112,54 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return userRepository.findUserByEmail(email).orElseThrow(() ->
+                new UsernameNotFoundException(
+                        String.format(USER_NOT_FOUND_MSG, email)
+                ));
+    }
+
+    public String signUpUser(UserEntity userEntity){
+        boolean userExists = userRepository.findUserByEmail(userEntity.getEmail()).isPresent();
+
+        if(userExists){
+            throw new IllegalStateException("Email is already taken!");
+        }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
+
+        userEntity.setPassword(encodedPassword);
+
+        userRepository.save(userEntity);
+
+        String token = UUID.randomUUID().toString();
+
+        ConfirmationToken confirmationToken = new ConfirmationToken(
+                token,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusMinutes(15),
+                userEntity
+        );
+
+        confirmationTokenService.saveConfirmationToken(confirmationToken);
+
+        // TODO: Send email
+        return token;
+    }
+
+    public int enableUser(String email) {
+        return userRepository.enableUser(email);
+    }
+
+    public final UserEntity getLoggedInUser(){
+
+        UserEntity e = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(!(auth instanceof AnonymousAuthenticationToken) && auth.isAuthenticated()){
+            Object d = auth.getPrincipal();
+            e = (UserEntity) auth.getPrincipal();
+        }
+        return e;
     }
 }

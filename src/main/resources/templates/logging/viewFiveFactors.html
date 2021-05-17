@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>This Would be Replaced with Emails to Five People</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+        <style>
+            td {
+                border: 3px solid black;
+                padding: 1px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        <table>
+            <tr>
+                <th colspan="2">Five Factor Authentication</th>
+            </tr>
+            <tr><td>Initiator Key</td><td th:text="${ffa[0]}"></td></tr>
+            <tr><td>Factor 1</td><td th:text="${ffa[1]}"></td></tr>
+            <tr><td>Factor 2</td><td th:text="${ffa[2]}"></td></tr>
+            <tr><td>Factor 3</td><td th:text="${ffa[3]}"></td></tr>
+            <tr><td>Factor 4</td><td th:text="${ffa[4]}"></td></tr>
+        </table>
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

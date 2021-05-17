@@ -1,6 +1,5 @@
 package PreciousPhotographyShop.users;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -24,19 +22,19 @@ public class UserController {
     /**
      *  Returns a list of all users in the Database
      **/
-    @GetMapping("/users")
+    @GetMapping("/users/{token}")
     public List<UserEntity> getUsers(){
         return userService.getAllUsers();
     }
 
     /**
      * Searches for a single user in the database by id
-     * @param id searches for a user by id
+     * @param email searches for a user by id
      * @return returns the user's information
      */
     @GetMapping("/findUser")
-    public UserEntity findUser(@PathVariable("userID") String id){
-        return userService.getSingleUser(id);
+    public UserEntity findUser(@PathVariable("email") String email){
+        return userService.getSingleUser(email);
     }
 
     /**
@@ -51,12 +49,17 @@ public class UserController {
     /**
      * Updated user given the name or email
      * @param id Main entry for searching
-     * @param name Doesn't require updating name
+     * @param password Doesn't require updating password
+     * @param username Doesn't require updating username
      * @param email Doesn't require updating email
      */
     @PutMapping(path = "{userID}")
-    public void updateUser(@PathVariable("userID") String id, @RequestParam(required = false) String name, @RequestParam(required = false) String email){
-        userService.updateUser(id, name, email);
+    public void updateUser(@PathVariable("userID") String id,
+                           @RequestParam(required = false) String password,
+                           @RequestParam(required = false) String username,
+                           @RequestParam(required = false) String email){
+
+        userService.updateUser(id, password, email, username);
     }
 
     /**

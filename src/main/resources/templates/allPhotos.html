@@ -1,15 +1,147 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head> 
-    <title>Example Photograph Listing</title> 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-    <h1>All Photographs</h1>
-    <div th:each="photoId : ${photos}">
-        <hr/>
-        <img th:src="${'/photo?id=' + photoId}"/>
-        <hr/>
-    </div>
-</body>
+    <head>
+        <title>Example Photograph Listing</title> 
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    
+        <!-- from Stevin's allPhotos -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="demo.css" />
+        <link rel="stylesheet" type="text/css" href="component.css" />
+        <style type="text/css">
+            <!-- table css -->
+            td {color:white; font-family:arialblack; font-size: 12px; font-weight: bold;}
+            table.center 
+            {
+            margin-left: auto;
+            margin-right: auto;
+            }
+            .container
+            {
+            position: relative;
+            text-align: center;
+            color: white;
+            }
+            .bottom-right
+            {
+            position: absolute;
+            bottom: 8px;
+            right: 50px;
+            }
+
+            body 
+            {
+            font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .navbar 
+            {
+            overflow: hidden;
+            background-color: #333;
+            }
+
+            .navbar a 
+            {
+            float: left;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            }
+
+            .dropdown 
+            {
+            float: left;
+            overflow: hidden;
+            }
+
+            .dropdown .dropbtn 
+            {
+            font-size: 16px;  
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+              margin: 0;
+            }
+
+            .navbar a:hover, .dropdown:hover .dropbtn {
+              background-color: red;
+            }
+
+            .dropdown-content {
+              display: none;
+              position: absolute;
+              background-color: #f9f9f9;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+              z-index: 1;
+            }
+
+                    .dropdown-content a {
+                  float: none;
+                  color: black;
+                  padding: 12px 16px;
+                  text-decoration: none;
+                  display: block;
+                  text-align: left;
+            }
+
+            .dropdown-content a:hover {
+              background-color: #ddd;
+            }
+
+            .dropdown:hover .dropdown-content {
+              display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        
+        <!-- Stevin -->
+        <!--Header with link to homepage -->
+        <p style= text-align:center><span style="font-size: 25px; color: black;"> <a href="index-2.html"> <em> Precious Photography </em> </a> </span></p>
+
+        <!--Simple navigation bar -->
+
+        <div class="navbar">
+          <a th:href="@{/allPhotos}">Browse All</a>
+          <div class="dropdown">
+            <button class="dropbtn">Categories 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a th:each="categoryName : ${categoryNames}" th:value="${categoryName}" th:text="${categoryName}" th:href="@{'/allPhotos?category=' + ${categoryName}}"></a>
+            </div>
+          </div> 
+          <div class="dropdown">
+
+            <button class="dropbtn">Size 
+              <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+              <a href="#">Large</a>
+              <a href="#">Medium</a>
+              <a href="#">Small</a>
+            </div>
+          </div>
+          <a style="float:right" th:href="@{/index#page-search}"> Search </a>
+
+        </div>
+        
+        <div class="d-flex flex-wrap p-2 flex-row justify-content-around align-items-center align-content-around">
+            <div th:each="photo : ${photos}" style="display: inline-block">
+                <div th:replace="fragments.html :: browsePhotoWidget(widgetInfo=${photo})" class="align-self-center"></div>
+            </div>
+        </div>
+        
+        <div th:insert="fragments.html :: end"></div>
+    </body>
 </html>

@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>View Photograph</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+</head>
+<body>
+    <nav th:insert="fragments.html :: pages-nav"></nav>
+    <div th:object="${photo}" style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
+        <h1 th:text="*{name}"></h1>
+        <img th:src="@{'/photo?id=' + *{id}}"/>
+        <div>
+            <p th:text="*{description}"></p>
+        </div>
+        <!--<p th:text="${#numbers.formatCurrency(*{price})}"-->
+        <div style="border: 5px outset white">
+            <form action="#" th:action="@{'/addToCart?photo_id=' + *{id}}" method="POST">
+                <input type="submit" value="Add to Cart"/>
+            </form>
+            <p th:if="${message}" th:text="${message}"></p>
+        </div>
+        
+        <div style="border: 5px outset white">
+            <h2>Seller</h2>
+            <a th:href="@{'/api/findUser?userID=' + *{ownerId}}" th:text="${sellerName}"></a>
+        </div>
+        
+        <div style="border: 5px outset white">
+            <h2>Categories</h2>
+            <ul>
+                <li th:each="catName : *{categoryNames}">
+                    <a th:value="${catName}" th:text="${catName}" th:href="@{'/allPhotos?category=' + ${catName}}"></a>
+                </li>
+            </ul>
+        </div>
+        <div style="border: 5px outset white">
+            <a th:href="@{'reviews/newPhotoReview?id=' + *{id}}">Review this Photograph</a>
+            <h2>Reviews</h2>
+            <ul>
+                <li th:each="review : ${reviews}">
+                    <div th:replace="fragments.html :: reviewWidget(reviewerName=${review.reviewerName}, text=${review.reviewText}, rating=${review.rating})"></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <div th:insert="fragments.html :: end"></div>
+</body>
+</html>

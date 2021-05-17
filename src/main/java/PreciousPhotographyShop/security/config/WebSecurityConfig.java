@@ -1,9 +1,8 @@
 package PreciousPhotographyShop.security.config;
 
 
-import PreciousPhotographyShop.users.UserEntity;
+import PreciousPhotographyShop.security.LoginLogoutHandler;
 import PreciousPhotographyShop.users.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -14,29 +13,35 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
-@AllArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+    private final LoginLogoutHandler loginLogoutHandler;
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/v*/registration/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated().and()
-                .formLogin();
+    public WebSecurityConfig(LoginLogoutHandler loginLogoutHandler, UserService userService, BCryptPasswordEncoder bCryptPasswordEncoder){
+        this.loginLogoutHandler = loginLogoutHandler;
+        this.userService = userService;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
+        // todo: probably should secure some of the API so nobody can delete users...
+        http.csrf().disable().
+            authorizeRequests().
+                //antMatchers("/", "/index", "/search", "/login", "/allPhotos", "/api/registration/**", "/resources/**").permitAll().
+                //anyRequest().authenticated().
+                antMatchers("/newPhoto", "/addToCart", "/reviews/newPhotoReview", "/log/personal").authenticated().
+                anyRequest().permitAll().
+            and().
+                formLogin().permitAll().successHandler(loginLogoutHandler).
+            and().
+                logout().permitAll().addLogoutHandler(loginLogoutHandler);
+    }
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 

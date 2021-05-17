@@ -2,27 +2,35 @@
 <html lang="en" class="no-js">
 
 <head>
+    <title>Precious</title>
+    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    
+    
+    <!--
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Precious</title>
-    <meta name="description" content="Blueprint: A basic template for a page stack navigation effect" />
-    <meta name="keywords" content="blueprint, template, html, css, page stack, 3d, perspective, navigation, menu" />
-    <meta name="author" content="Codrops" />
+    
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="demo.css" />
     <link rel="stylesheet" type="text/css" href="component.css" />
-    <script src="js/modernizr-custom.js"></script>
+    <link rel="stylesheet" type="text/css" href="search.css" />
+    <script src="js/modernizr-custom.js"></script>-->
 </head>
 
 <body>
 <!-- navigation -->
+<nav th:insert="fragments.html :: pages-nav"></nav>
+
+<!--
 <nav class="pages-nav">
     <div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
     <div class="pages-nav__item"><a class="link link-page" href="allPhotos">Photos</a></div>
+    <div class="pages-nav__item"><a class="link link--page" href="#page-search">Search</a></div>
     <div class="pages-nav__item"><a class="link link-page" href="newPhoto">Upload</a></div>
     <div class="pages-nav__item"><a class="link link-page" href="api/users">User</a></div>
+    <div class="pages-nav__item"><a class="link link-page" href="log/index">Logs</a></div>
     <div class="pages-nav__item"><a class="link link--page" href="#page-training">About Us</a></div>
     <div class="pages-nav__item"><a class="link link--page" href="#page-contact">Contact</a></div>
     <div class="pages-nav__item pages-nav__item--social">
@@ -31,12 +39,13 @@
         <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
         <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
     </div>
-</nav>
+    <div class="pages-nav__item"><a class="link link-page" href="login">Log in</a></div>
+</nav>-->
 <!-- /navigation-->
 <!-- pages stack -->
 <div class="pages-stack">
     <!-- page -->
-    <div class="page" id="page-home">
+    <div class="page page-back" id="page-home">
         <!-- Blueprint header -->
         <header class="bp-header cf">
             <span class="bp-header__present">Welcome</span>
@@ -44,6 +53,22 @@
 
         </header>
         <img class="poster-main" src="images/galaxy-1.jpg" alt="galaxy" />
+    </div>
+    <!-- /page -->
+    <div class="page page-back" id="page-search">
+        <!-- Blueprint header -->
+        <header class="bp-header cf">
+            <h1 class="bp-header__title">Search</h1>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="container">
+            <form action="/search" method="get" role="search">
+                <input name="search-terms" type="text" placeholder="Search...">
+                <div class="search"></div>
+            </form>
+        </div>
+        
     </div>
     <!-- /page -->
     <div class="page" id="page-training">
@@ -72,9 +97,12 @@
     </div>
 </div>
 <!-- /pages-stack -->
+
+<div th:insert="fragments.html :: end"></div>
+<!--
 <button class="menu-button"><span>Menu</span></button>
 <script src="js/classie.js"></script>
-<script src="js/main.js"></script>
+<script src="js/main.js"></script>-->
 </body>
 
 </html>

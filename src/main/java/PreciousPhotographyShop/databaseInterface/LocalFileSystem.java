@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.imageio.ImageIO;
 
@@ -13,27 +14,47 @@ import javax.imageio.ImageIO;
  * 
  * @author Matt
  */
-class LocalFileSystem {
+public class LocalFileSystem {
+    public static final String MAIN_PATH = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();;
     private final String photoPath;
+    private final String logPath;
     
     private static LocalFileSystem instance;
     
-    private LocalFileSystem(){
-        photoPath = Paths.get(System.getProperty("user.home"), ".preciousPhotographShop").toString();
+    private LocalFileSystem() throws IOException{
+        photoPath = MAIN_PATH;
+        logPath = Paths.get(MAIN_PATH, "logs").toString();
         getPhotoFolder(); // create folder if it does not yet exist
+        getLogFolder();
     }
     
-    public static final LocalFileSystem getInstance(){
+    public static final LocalFileSystem getInstance() throws IOException{
         if(instance == null){
             instance = new LocalFileSystem();
         }
         return instance;
     }
     
-    private File getPhotoFolder(){
+    public final File getMainFolder(){
+        File f = new File(MAIN_PATH);
+        if(!f.exists()){
+            f.mkdirs();
+        }
+        return f;
+    }
+    
+    public final File getPhotoFolder(){
         File f = new File(this.photoPath);
         if(!f.exists()){
             f.mkdirs();
+        }
+        return f;
+    }
+    
+    public final File getLogFolder() throws IOException{
+        File f = new File(this.logPath);
+        if(!f.exists()){
+            Files.createDirectories(f.toPath());
         }
         return f;
     }
@@ -47,8 +68,22 @@ class LocalFileSystem {
         ImageIO.write(photo.getPhoto(), "jpg", newFile);
     }
     
-    BufferedImage load(String id, boolean withWatermark) throws IOException{
-        BufferedImage orig = ImageIO.read(new File(idToFilePath(id)));
+    final void delete(String id) throws IOException {
+        File itsFile = new File(idToFilePath(id));
+        itsFile.delete();
+    }
+    
+    public final BufferedImage load(String id, boolean withWatermark) throws IOException{
+        String path = idToFilePath(id);
+        BufferedImage orig;
+        
+        try {
+            orig = ImageIO.read(new File(path));
+        } catch (IOException ex) {
+            System.err.printf("Couldn't find file %s\n", path);
+            throw ex;
+        }
+        
         if(withWatermark){
             Graphics vandalizeMe = orig.createGraphics();
             vandalizeMe.setColor(Color.PINK);
