@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum scale=1.0" >
@@ -15,7 +15,7 @@
     <div th:if="${param.error}">
         <p class="text-danger">Invalid username or password</p>
     </div>
-    <form th:action="@{/login}" method="post" style="max-width: 350px; margin: 0 auto;">
+    <form th:action="@{/login}" method="post" style="max-height: 400px; max-width: 360px; margin: 0 auto;">
         <div class="border border-secondary p-3 rounded">
             <p>Login</p>
             <p>
@@ -26,7 +26,14 @@
             </p>
             <p>
                 <input type = "submit" value="Login" class="btn btn-primary " />
-            </p>
+            </p>Not registered? Sign up!</p>
+            <p><a href="/register">Create new account</a> </p>
+            <div>
+                <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
+                <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
+                <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
+                <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
+            </div>
         </div>
     </form>
 </div>
