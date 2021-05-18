@@ -21,6 +21,9 @@ public class UserMatcher extends AbstractMatcher<UserEntity> {
         users.findAllByUsernameContainingIgnoreCase(term).forEach((user)->{
             matches.add(user);
         });
+        users.findAllByDescriptionContainingIgnoreCase(term).forEach((user)->{
+            matches.add(user);
+        });
         return matches;
     }
 

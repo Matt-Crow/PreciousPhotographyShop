@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="${'Editting ' + sellerPageInfo.username + '''s Profile'}"></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
+    </head>
+    <body>
+        <nav th:insert="fragments.html :: pages-nav"></nav>
+        
+        <div style="display: flex; flex-direction: column; align-content:center; justify-content: space-around; align-items:stretch; width:80%; margin:auto">
+            <form th:action="@{'/seller/updateSellerInfo?sellerId=' + ${sellerId}}" th:object="${sellerPageInfo}" method="post" style="display: flex; flex-direction: column; align-content:center; justify-content: space-around;">
+                <label for='username'>Username</label>
+                <input th:field="*{username}" name='username' type='text'/>
+                
+                <label for="profilePictureId">Profile Picture</label>
+                <select name="profilePictureId" th:field="*{profilePictureId}">
+                    <option th:each="photo : *{photos}" th:value="${photo.id}" th:text="${photo.name + ' - ' + photo.description}"></option>
+                    <option value="">none</option>
+                </select>
+                
+                <label for='description'>Description</label>
+                <textarea th:field="*{description}" name='description' />
+                
+                <label for="password">Password</label>
+                <input th:field="*{password}" name="password" type="password"/>
+                
+                <input type="submit" value="Save Changes"/>
+            </form>
+        </div>
+        
+        <div th:insert="fragments.html :: end"></div>
+    </body>
+</html>

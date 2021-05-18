@@ -86,8 +86,8 @@ public class IndexController {
     
     private SearchResultInfo resultFor(UserEntity user){
         return new SearchResultInfo(
-            String.format("Seller: %s \n", user.getUsername()),
-            String.format("/seller?id=%s", user.getId())
+            String.format("Seller: %s \n%s", user.getUsername(), user.getDescription()),
+            String.format("/seller/sellerPage?id=%s", user.getId())
         );
     }
 }
