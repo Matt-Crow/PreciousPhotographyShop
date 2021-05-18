@@ -88,7 +88,7 @@ public class SellerController {
             model.addAttribute("canEdit", true);
         }
         
-        String viewName = "seller/Account";
+        String viewName = "Account";
         try {
             UserEntity user = db.getUser(id);
             model.addAttribute("seller", user);

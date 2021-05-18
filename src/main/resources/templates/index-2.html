@@ -3,10 +3,7 @@
 
 <head>
     <title>Precious</title>
-    <!--/*/ <th:block th:include="fragments.html :: headerfiles"></th:block> /*/-->
     
-    
-    <!--
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,31 +13,30 @@
     <link rel="stylesheet" type="text/css" href="demo.css" />
     <link rel="stylesheet" type="text/css" href="component.css" />
     <link rel="stylesheet" type="text/css" href="search.css" />
-    <script src="js/modernizr-custom.js"></script>-->
+    <script src="js/modernizr-custom.js"></script>
 </head>
 
 <body>
-<!-- navigation -->
-<nav th:insert="fragments.html :: pages-nav"></nav>
 
-<!--
 <nav class="pages-nav">
     <div class="pages-nav__item"><a class="link link--page" href="#page-home">Home</a></div>
     <div class="pages-nav__item"><a class="link link-page" href="allPhotos">Photos</a></div>
     <div class="pages-nav__item"><a class="link link--page" href="#page-search">Search</a></div>
+    <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/seller/yourSellerPage}">Profile</a></div>
     <div class="pages-nav__item"><a class="link link-page" href="newPhoto">Upload</a></div>
-    <div class="pages-nav__item"><a class="link link-page" href="api/users">User</a></div>
     <div class="pages-nav__item"><a class="link link-page" href="log/index">Logs</a></div>
     <div class="pages-nav__item"><a class="link link--page" href="#page-training">About Us</a></div>
-    <div class="pages-nav__item"><a class="link link--page" href="#page-contact">Contact</a></div>
+    <div class="pages-nav__item"><a class="link link--page" th:href="@{/contact}">Contact</a></div>
     <div class="pages-nav__item pages-nav__item--social">
         <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
         <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
         <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
         <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
     </div>
-    <div class="pages-nav__item"><a class="link link-page" href="login">Log in</a></div>
-</nav>-->
+    <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/login}">Log in</a></div>
+    <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/register}">Sign Up</a></div>
+    <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
+</nav>
 <!-- /navigation-->
 <!-- pages stack -->
 <div class="pages-stack">
@@ -98,11 +94,9 @@
 </div>
 <!-- /pages-stack -->
 
-<div th:insert="fragments.html :: end"></div>
-<!--
 <button class="menu-button"><span>Menu</span></button>
 <script src="js/classie.js"></script>
-<script src="js/main.js"></script>-->
+<script src="js/main.js"></script>
 </body>
 
 </html>

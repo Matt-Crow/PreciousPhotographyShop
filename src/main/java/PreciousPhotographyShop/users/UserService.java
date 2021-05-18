@@ -90,7 +90,7 @@ public class UserService implements UserDetailsService {
             user.setProfilePictureId(newInfo.getProfilePictureId());
         }
         if(newInfo.isPasswordSet()){
-            user.setPassword(bCryptPasswordEncoder.encode(newInfo.getPassword()));
+            //user.setPassword(bCryptPasswordEncoder.encode(newInfo.getPassword()));
         }
         userRepository.save(user); // update the user in the database
     }

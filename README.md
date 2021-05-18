@@ -1,3 +1,7 @@
+/cart
+
+Password field is disabled
+
 # Configuring the Database
 Before running the project, you'll need to set up a database on your computer.
 
