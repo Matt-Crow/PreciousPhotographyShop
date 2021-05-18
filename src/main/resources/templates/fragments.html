@@ -17,23 +17,24 @@
 </head>
 <body>
     <nav class="pages-nav" th:fragment="pages-nav">
-        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-home}">Home</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/}">Home</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/allPhotos}">Photos</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-search}">Search</a></div>
         <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/seller/yourSellerPage}">Profile</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/newPhoto}">Upload</a></div>
+        <div class="pages-nav__item"><a class="link link-page" th:href="@{/cart}">Cart</a></div>
         <div class="pages-nav__item"><a class="link link-page" th:href="@{/log/index}">Logs</a></div>
         <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-training}">About Us</a></div>
-        <div class="pages-nav__item"><a class="link link--page" th:href="@{/contact}">Contact</a></div>
+        <div class="pages-nav__item"><a class="link link--page" th:href="@{/#page-contact}">Contact</a></div>
         <div class="pages-nav__item pages-nav__item--social">
             <a class="link link--social link--faded" href="#"><i class="fa fa-twitter"></i><span class="text-hidden">Twitter</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-linkedin"></i><span class="text-hidden">LinkedIn</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
             <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
         </div>
-        <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/login}">Log in</a></div>
-        <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/register}">Sign Up</a></div>
-        <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
+        <div class="pages-nav__item" sec:authorize="isAnonymous()"><a class="link link-page" th:href="@{/login}">Log in</a></div>
+        <div class="pages-nav__item" sec:authorize="isAnonymous()"><a class="link link-page" th:href="@{/register}">Sign Up</a></div>
+        <div class="pages-nav__item" sec:authorize="isAuthenticated()"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
     </nav>
     <!-- /navigation-->
     

@@ -35,10 +35,9 @@
         <a class="link link--social link--faded" href="#"><i class="fa fa-facebook"></i><span class="text-hidden">Facebook</span></a>
         <a class="link link--social link--faded" href="#"><i class="fa fa-youtube-play"></i><span class="text-hidden">YouTube</span></a>
     </div>
-    <div class="pages-nav__item"><a class="link link-page" href="login">Log in</a></div>
-    <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/login}">Log in</a></div>
-    <div sec:authorize="isAnonymous()" class="pages-nav__item"><a class="link link-page" th:href="@{/register}">Sign Up</a></div>
-    <div sec:authorize="isAuthenticated()" class="pages-nav__item"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
+    <div class="pages-nav__item" sec:authorize="isAnonymous()"><a class="link link-page" th:href="@{/login}">Log in</a></div>
+    <div class="pages-nav__item" sec:authorize="isAnonymous()"><a class="link link-page" th:href="@{/register}">Sign Up</a></div>
+    <div class="pages-nav__item" sec:authorize="isAuthenticated()"><a class="link link-page" th:href="@{/logout}">Log out</a></div>
 
 </nav>
 <!-- /navigation-->
@@ -132,7 +131,8 @@
         </header>
         <img class="poster-cont" src="images/northern-lights.jpg" alt="northern-lights" />
 
-        <div class="container">
+        <!-- Can't do class="container" here, as the search bar styling would apply to the fields -->
+        <div>
             <div class="mdl-typography--text-center">
                 <h2>Contact Us</h2>
                 <p></p>
