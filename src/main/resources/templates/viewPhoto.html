@@ -23,7 +23,7 @@
         
         <div style="border: 5px outset white">
             <h2>Seller</h2>
-            <a th:href="@{'/api/findUser?userID=' + *{ownerId}}" th:text="${sellerName}"></a>
+            <a th:href="@{'/seller/sellerPage?id=' + *{ownerId}}" th:text="${sellerName}"></a>
         </div>
         
         <div style="border: 5px outset white">
@@ -35,7 +35,7 @@
             </ul>
         </div>
         <div style="border: 5px outset white">
-            <a th:href="@{'reviews/newPhotoReview?id=' + *{id}}">Review this Photograph</a>
+            <a th:href="@{'/reviews/newPhotoReview?id=' + *{id}}">Review this Photograph</a>
             <h2>Reviews</h2>
             <ul>
                 <li th:each="review : ${reviews}">

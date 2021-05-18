@@ -1,6 +1,7 @@
 package PreciousPhotographyShop.photographs;
 
 
+import PreciousPhotographyShop.ShoppingCart.ShoppingCartServices;
 import PreciousPhotographyShop.databaseInterface.DatabaseInterface;
 import PreciousPhotographyShop.logging.LogService;
 import PreciousPhotographyShop.logging.events.PurchaseEvent;
@@ -26,6 +27,9 @@ public class PhotoService {
     
     @Autowired
     private LogService logService;
+    
+    @Autowired
+    private ShoppingCartServices cart;
     
     /*
     @Autowired
@@ -55,7 +59,7 @@ public class PhotoService {
         return photoDB.updatePhotoByID(id, newPhoto);
     }
     
-    private BrowsePhotoWidgetInfo mapPhotoToBrowseWidget(PhotographEntity photo){
+    public final BrowsePhotoWidgetInfo mapPhotoToBrowseWidget(PhotographEntity photo){
         String sellerName = "Unknown Seller";
         try {
             sellerName = photoDB.getUser(photo.getOwnerId()).getUsername();
@@ -88,5 +92,7 @@ public class PhotoService {
             details
         );
         logService.logEvent(evt);
+        
+        cart.addProduct(id, 1, loginService.getLoggedInUser());
     }
 }

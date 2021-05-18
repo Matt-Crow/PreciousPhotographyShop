@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  * This is the database entry class for categories.
@@ -33,6 +35,7 @@ public class CategoryEntity {
     Setup will look similar in PhotographEntity
     */
     @ElementCollection
+    @Cascade(CascadeType.DELETE)
     @CollectionTable(
         name = "photo_to_category",
         joinColumns = @JoinColumn(name = "category_name")
